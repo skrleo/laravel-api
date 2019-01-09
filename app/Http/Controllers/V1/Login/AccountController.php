@@ -16,9 +16,12 @@ use App\Logic\V1\Login\AccountLogic;
 class AccountController extends Controller
 {
     /**
-     * @return string
+     * 登录
+     * @return array
+     * @throws \App\Logic\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
      */
-
     public function login(){
         $this->validate(null, [
             'account' => 'required|string',
@@ -26,7 +29,12 @@ class AccountController extends Controller
         ]);
         $articleLogic = new AccountLogic();
         $articleLogic->load($this->verifyData);
-        return '123';
+        if ($articleLogic->login()){
+            return [
+                'statusCode' => 'ok',
+                'data' => ''
+            ];
+        }
     }
 
 
