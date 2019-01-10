@@ -36,17 +36,7 @@ class Handler extends ExceptionHandler
         if($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException||
             $exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException){
             \DdvPhp\DdvRestfulApi::getInstance()->echo404();
-        }else{
-
-//            var_dump('123');
-//            if(PHP_SAPI === 'cli' OR defined('STDIN')){
-//                parent::report($exception);
-//            }else{
-//                \DdvPhp\DdvException\Handler::exceptionHandler($exception);
-//            }
-
         }
-        // 不使用自带的异常模块
 //        parent::report($exception);
     }
 
@@ -74,7 +64,6 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
-
         return redirect()->guest(route('login'));
     }
 
