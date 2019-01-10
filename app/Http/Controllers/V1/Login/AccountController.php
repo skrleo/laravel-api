@@ -30,10 +30,7 @@ class AccountController extends Controller
         $articleLogic = new AccountLogic();
         $articleLogic->load($this->verifyData);
         if ($articleLogic->login()){
-            return [
-                'statusCode' => 'ok',
-                'data' => ''
-            ];
+            return [];
         }
     }
 

@@ -26,9 +26,6 @@ class RoleController extends Controller
         ]);
         $roleLogic = new RoleLogic();
         $roleLogic->load($this->verifyData);
-        return [
-            'statusCode' => 'ok',
-            'lists' => $roleLogic->index()
-        ];
+        return $roleLogic->index();
     }
 }
