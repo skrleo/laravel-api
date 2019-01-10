@@ -16,7 +16,7 @@ class NodeController extends Controller
 {
     /**
      * 节点列表
-     * @return array
+     * @return \DdvPhp\DdvPage
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
@@ -27,10 +27,7 @@ class NodeController extends Controller
         ]);
         $nodeLogic = new NodeLogic();
         $nodeLogic->load($this->verifyData);
-        return [
-            'statusCode' => 'ok',
-            'lists' => $nodeLogic->index()
-        ];
+        return $nodeLogic->index();
     }
 
     /**

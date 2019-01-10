@@ -1,12 +1,16 @@
 <?php
 
+use DdvPhp\DdvRestfulApi\Middleware\Laravel\RestfulApi;
+
 /**
  * 后台接口
  */
 Route::group([
     // 命名空间前缀
-    'namespace'=>'V1'
-//    'middleware' => ['api', 'cors'],
+    'namespace'=>'V1',
+    'middleware' => [
+        RestfulApi::class,
+    ],
 ], function ($router) {
     Route::get('hello', function () {
         return 'Hello, Welcome to Laravel';
