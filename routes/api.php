@@ -43,10 +43,16 @@ Route::group([
                 // path地址前缀
                 'prefix'=>'node',
             ],function(){
-                /**
-                 * 节点列表
-                 */
+                // 节点列表
                 Route::get('/lists', 'NodeController@index');
+                //添加节点
+                Route::post('/', 'NodeController@store');
+                //编辑节点
+                Route::put('/{nodeId}', 'NodeController@update');
+                //节点详情
+                Route::get('/{nodeId}', 'NodeController@show');
+                // 删除节点
+                Route::delete('/', 'NodeController@destroy');
             });
         });
     });
