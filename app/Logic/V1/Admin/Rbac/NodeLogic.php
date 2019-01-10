@@ -47,7 +47,7 @@ class NodeLogic extends LoadDataLogic
                 $query->where('name','like','%' . $this->name .'%');
             })
             ->when(isset($this->state),function (EloquentBuilder $query){
-                $query->where('name',$this->state );
+                $query->where('state',$this->state );
             })
             ->getDdvPage();
         return $res->toHump();
