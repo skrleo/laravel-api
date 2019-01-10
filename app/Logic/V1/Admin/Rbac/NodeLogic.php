@@ -39,11 +39,18 @@ class NodeLogic extends LoadDataLogic
 
     /**
      * 节点列表
-     * @return \DdvPhp\DdvPage
+     * @return mixed
      */
     public function index(){
-        $res = (new NodeModel())->getDdvPage();
-        return $res;
+        $res = (new NodeModel())
+            ->when(!empty($this->name),function (EloquentBuilder $query){
+                $query->where('name','like','%' . $this->name .'%');
+            })
+            ->when(isset($this->state),function (EloquentBuilder $query){
+                $query->where('name',$this->state );
+            })
+            ->getDdvPage();
+        return $res->toHump();
     }
 
     /**

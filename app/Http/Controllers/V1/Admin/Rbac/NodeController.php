@@ -51,15 +51,15 @@ class NodeController extends Controller
         $nodeLogic = new NodeLogic();
         $nodeLogic->load($this->verifyData);
         if ($nodeLogic->store()){
-            return [
-                'statusCode' => 'ok'
-            ];
+            return [];
         }
     }
 
     /**
      * 节点编辑
+     * @param $nodeId
      * @return array
+     * @throws \App\Logic\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
@@ -78,15 +78,15 @@ class NodeController extends Controller
         $nodeLogic = new NodeLogic();
         $nodeLogic->load($this->verifyData);
         if ($nodeLogic->update()){
-            return [
-                'statusCode' => 'ok'
-            ];
+            return [];
         }
     }
 
     /**
      * 节点详情
+     * @param $nodeId
      * @return array
+     * @throws \App\Logic\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
@@ -97,7 +97,6 @@ class NodeController extends Controller
         $nodeLogic = new NodeLogic();
         $nodeLogic->load($this->verifyData);
         return [
-            'statusCode' => 'ok',
             'data' => $nodeLogic->show()
         ];
     }
@@ -105,6 +104,7 @@ class NodeController extends Controller
     /**
      * 节点删除
      * @return array
+     * @throws \App\Logic\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
@@ -115,9 +115,7 @@ class NodeController extends Controller
         $nodeLogic = new NodeLogic();
         $nodeLogic->load($this->verifyData);
         if ($nodeLogic->destroy()){
-            return [
-                'statusCode' => 'ok'
-            ];
+            return [];
         }
     }
 }
