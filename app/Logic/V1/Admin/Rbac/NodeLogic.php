@@ -12,6 +12,7 @@ namespace App\Logic\V1\Admin\Rbac;
 use App\Logic\Exception;
 use App\Logic\LoadDataLogic;
 use App\Model\V1\Rbac\Node\NodeModel;
+use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
 
 class NodeLogic extends LoadDataLogic
 {
@@ -38,11 +39,18 @@ class NodeLogic extends LoadDataLogic
 
     /**
      * 节点列表
-     * @return \DdvPhp\DdvPage
+     * @return mixed
      */
     public function index(){
-        $res = (new NodeModel())->getDdvPage();
-        return $res;
+        $res = (new NodeModel())
+            ->when(!empty($this->name),function (EloquentBuilder $query){
+                $query->where('name','like','%' . $this->name .'%');
+            })
+            ->when(isset($this->state),function (EloquentBuilder $query){
+                $query->where('name',$this->state );
+            })
+            ->get();
+        return $res->toHump();
     }
 
     /**

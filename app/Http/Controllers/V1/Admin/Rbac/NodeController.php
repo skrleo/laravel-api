@@ -22,8 +22,8 @@ class NodeController extends Controller
      */
     public function index(){
         $this->validate(null, [
-            'account' => 'required|string',
-            'password' => 'required|string',
+            'name' => 'string',
+            'state' => 'integer',
         ]);
         $nodeLogic = new NodeLogic();
         $nodeLogic->load($this->verifyData);
