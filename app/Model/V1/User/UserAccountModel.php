@@ -22,10 +22,6 @@ class UserAccountModel extends Model
      * 邮箱号
      */
     const ACCOUNT_TYPE_EMAIL = 3;
-    /**
-     * 账号启用
-     */
-    const ACCOUNT_START_ENABLE = 1;
 
     protected $table = 'user_account';
 

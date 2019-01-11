@@ -16,4 +16,10 @@ class UserBaseModel extends Model
     protected $table = 'user_base';
 
     protected $primaryKey = 'uid';
+
+
+    /**
+     * 账号启用
+     */
+    const ACCOUNT_START_ENABLE = 0;
 }

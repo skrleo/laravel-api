@@ -29,10 +29,10 @@ class AccountLogic extends LoadDataLogic
         if (empty($userAccountModel)){
             throw new Exception('用户账号不存在', 'USER_NOT_FIND');
         }
-        if ($userAccountModel->state <> UserAccountModel::ACCOUNT_START_ENABLE){
+        $userBaseModel = (new UserBaseModel())->where('uid',$userAccountModel->uid)->first();
+        if ($userBaseModel->state <> UserBaseModel::ACCOUNT_START_ENABLE){
             throw new Exception('账号异常,请联系管理员', 'ACCOUNT_ABNORMAL_ERROR');
         }
-        $userBaseModel = (new UserBaseModel())->where('uid',$userAccountModel->uid)->first();
         // 判断传进来的密码跟基本信息表中的密码是否相等
         if (md5($this->password)!== $userBaseModel->password){
             throw new Exception('密码错误,请重试！', 'USER_PASSWORD_ERROR');
