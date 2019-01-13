@@ -16,7 +16,7 @@ class NodeController extends Controller
 {
     /**
      * 节点列表
-     * @return \DdvPhp\DdvPage
+     * @return array
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
@@ -24,6 +24,8 @@ class NodeController extends Controller
         $this->validate(null, [
             'name' => 'string',
             'state' => 'integer',
+            'isPage' => 'integer',
+            'parentId' => 'integer',
         ]);
         $nodeLogic = new NodeLogic();
         $nodeLogic->load($this->verifyData);

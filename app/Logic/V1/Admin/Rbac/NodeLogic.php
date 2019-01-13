@@ -36,21 +36,29 @@ class NodeLogic extends LoadDataLogic
 
     protected $nodeIds = [];
 
+    protected $isPage = 0;
 
     /**
-     * 节点列表
-     * @return mixed
+     * @return array
      */
     public function index(){
         $res = (new NodeModel())
+            ->when(isset($this->parentId),function (EloquentBuilder $query){
+                $query->where('parent_id',$this->parentId);
+            })
             ->when(!empty($this->name),function (EloquentBuilder $query){
                 $query->where('name','like','%' . $this->name .'%');
             })
             ->when(isset($this->state),function (EloquentBuilder $query){
                 $query->where('state',$this->state );
-            })
-            ->getDdvPage();
-        return $res->toHump();
+            });
+        if (!empty($this->isPage)){
+            return [
+                'lists' => $res->get()->toHump()
+            ];
+        }else{
+            return $res->getDdvPage();
+        }
     }
 
     /**
@@ -60,7 +68,7 @@ class NodeLogic extends LoadDataLogic
      */
     public function store(){
         $nodeModel = (new NodeModel());
-        $nodeData = $this->getAttributes(['name', 'icon', 'sort', 'state', 'isShow', 'path', 'parentId', 'description'], ['', null]);
+        $nodeData = $this->getAttributes(['name', 'icon', 'sort', 'state', 'path', 'parentId', 'description'], ['', null]);
         $nodeModel->setDataByHumpArray($nodeData);
         if (!$nodeModel->save()){
             throw new Exception('添加节点失败','ERROR_STORE_FAIL');
@@ -92,7 +100,7 @@ class NodeLogic extends LoadDataLogic
         if (empty($nodeModel)){
             throw new Exception('节点信息不存在','NOT_FIND_NODE');
         }
-        $nodeData = $this->getAttributes(['name', 'icon', 'sort', 'state', 'isShow', 'path', 'parentId', 'description'], ['', null]);
+        $nodeData = $this->getAttributes(['name', 'icon', 'sort', 'state', 'path', 'parentId', 'description'], ['', null]);
         $nodeModel->setDataByHumpArray($nodeData);
         if (!$nodeModel->save()){
             throw new Exception('编辑节点失败','ERROR_UPDATE_FAIL');
