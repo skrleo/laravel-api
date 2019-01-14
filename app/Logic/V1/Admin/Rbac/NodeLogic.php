@@ -57,7 +57,7 @@ class NodeLogic extends LoadDataLogic
                 'lists' => $res->get()->toHump()
             ];
         }else{
-            return $res->getDdvPage();
+            return $res->getDdvPage()->toHump();
         }
     }
 
