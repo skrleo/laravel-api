@@ -11,13 +11,25 @@ return [
     | to accept any value.
     |
     */
-   
+
     'supportsCredentials' => false,
     'allowedOrigins' => ['*'],
     'allowedOriginsPatterns' => [],
-    'allowedHeaders' => ['*'],
+    // 授权请求头
+    'allowedHeaders' => [
+        'accept-language',
+        'x-ddv-*',
+        'authorization'
+    ],
+    // 授权请求
     'allowedMethods' => ['*'],
-    'exposedHeaders' => [],
-    'maxAge' => 0,
+    // 授权响应头读取
+    'exposedHeaders' => [
+        'set-cookie',
+        'x-ddv-request-id',
+        'x-ddv-session-sign'
+    ],
+    // 缓存时间
+    'maxAge' => 7200,
 
 ];
