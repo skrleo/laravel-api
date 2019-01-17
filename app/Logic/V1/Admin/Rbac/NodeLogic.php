@@ -39,26 +39,32 @@ class NodeLogic extends LoadDataLogic
     protected $isPage = 0;
 
     /**
-     * @return array
+     * @return mixed
      */
     public function index(){
-        $res = (new NodeModel())
-            ->when(isset($this->parentId),function (EloquentBuilder $query){
-                $query->where('parent_id',$this->parentId);
-            })
-            ->when(!empty($this->name),function (EloquentBuilder $query){
-                $query->where('name','like','%' . $this->name .'%');
-            })
-            ->when(isset($this->state),function (EloquentBuilder $query){
-                $query->where('state',$this->state );
-            });
-        if (!empty($this->isPage)){
-            return [
-                'lists' => $res->get()->toHump()
-            ];
-        }else{
-            return $res->getDdvPage()->toHump();
+        $nodes = (new NodeModel())->orderBy('sort', 'DESC')->get()->toHump();
+        if (!empty($nodes)) {
+            $nodes = $this->_getNodeTree($nodes, 0);
         }
+        return $nodes;
+    }
+
+    /**
+     * 递归权限树
+     * @param $nodes
+     * @param $nodeId
+     * @return array
+     */
+    public function _getNodeTree($nodes, $nodeId)
+    {
+        $tree = [];
+        foreach ($nodes as $node) {
+            if ($node->parentId == $nodeId) {
+                $node->children = $this->_getNodeTree($nodes, $node->nodeId);
+                $tree[] = $node;
+            }
+        }
+        return $tree;
     }
 
     /**

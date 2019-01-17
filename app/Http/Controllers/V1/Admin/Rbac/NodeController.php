@@ -22,14 +22,13 @@ class NodeController extends Controller
      */
     public function index(){
         $this->validate(null, [
-            'name' => 'string',
-            'state' => 'integer',
-            'isPage' => 'integer',
             'parentId' => 'integer',
         ]);
         $nodeLogic = new NodeLogic();
         $nodeLogic->load($this->verifyData);
-        return $nodeLogic->index();
+        return [
+            'lists' => $nodeLogic->index()
+        ];
     }
 
     /**
@@ -43,7 +42,7 @@ class NodeController extends Controller
         $this->validate(null, [
             'name' => 'required|string',
             'icon' => 'required|string',
-            'sort' => 'required|integer',
+            'sort' => 'integer',
             'state' => 'required|integer',
             'isShow' => 'required|integer',
             'path' => 'required|string',
