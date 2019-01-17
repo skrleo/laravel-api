@@ -12,23 +12,15 @@ return [
     |
     */
 
-    'supportsCredentials' => false,
+    'supportsCredentials' => true,
     'allowedOrigins' => ['*'],
     'allowedOriginsPatterns' => [],
     // 授权请求头
-    'allowedHeaders' => [
-        'accept-language',
-        'x-ddv-*',
-        'authorization'
-    ],
+    'allowedHeaders' => ['*'],
     // 授权请求
     'allowedMethods' => ['*'],
     // 授权响应头读取
-    'exposedHeaders' => [
-        'set-cookie',
-        'x-ddv-request-id',
-        'x-ddv-session-sign'
-    ],
+    'exposedHeaders' => ['*'],
     // 缓存时间
     'maxAge' => 7200,
 

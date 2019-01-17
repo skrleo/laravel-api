@@ -58,6 +58,21 @@ Route::group([
                 // 删除节点
                 Route::delete('/', 'NodeController@destroy');
             });
+            Route::group([
+                // path地址前缀
+                'prefix'=>'role',
+            ],function(){
+                // 角色列表
+                Route::get('/lists', 'RoleController@index');
+                // 添加角色
+                Route::post('/', 'RoleController@store');
+                // 角色详情
+                Route::get('/{roleId}', 'RoleController@show');
+                // 角色编辑
+                Route::put('/{roleId}', 'RoleController@update');
+                // 角色删除
+                Route::delete('/', 'RoleController@destroy');
+            });
         });
     });
 

@@ -21,11 +21,75 @@ class RoleController extends Controller
      */
     public function index(){
         $this->validate(null, [
-            'account' => 'required|string',
-            'password' => 'required|string',
+            'name' => 'string'
         ]);
         $roleLogic = new RoleLogic();
         $roleLogic->load($this->verifyData);
         return $roleLogic->index();
+    }
+
+    /**
+     * @return bool
+     * @throws \App\Model\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function store(){
+        $this->validate(null, [
+            'name' => 'required|string',
+            'introduction' => 'required|string',
+        ]);
+        $roleLogic = new RoleLogic();
+        $roleLogic->load($this->verifyData);
+        return $roleLogic->store();
+    }
+
+    /**
+     * @param $roleId
+     * @return \App\Model\V1\Rbac\Role\RoleModel|\Illuminate\Database\Eloquent\Model|null|object
+     * @throws \App\Model\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function show($roleId){
+        $this->validate(['roleId' => $roleId], [
+            'name' => 'required|string',
+            'introduction' => 'required|string',
+        ]);
+        $roleLogic = new RoleLogic();
+        $roleLogic->load($this->verifyData);
+        return $roleLogic->show();
+    }
+
+    /**
+     * @param $roleId
+     * @return bool
+     * @throws \App\Model\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function update($roleId){
+        $this->validate(['roleId' => $roleId], [
+            'roleId' => 'required|integer',
+            'name' => 'required|string',
+            'introduction' => 'required|string',
+        ]);
+        $roleLogic = new RoleLogic();
+        $roleLogic->load($this->verifyData);
+        return $roleLogic->update();
+    }
+
+    /**
+     * @throws \App\Model\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function destroy(){
+        $this->validate(null, [
+            'roleId' => 'required|integer'
+        ]);
+        $roleLogic = new RoleLogic();
+        $roleLogic->load($this->verifyData);
+        return $roleLogic->destroy();
     }
 }
