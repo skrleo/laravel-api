@@ -39,6 +39,23 @@ Route::group([
     ],function(){
         Route::group([
             // path地址前缀
+            'prefix'=>'user',
+            // 命名空间前缀
+            'namespace'=>'user'
+        ],function(){
+            // 用户列表
+            Route::get('/lists', 'UserController@index');
+            //添加用户
+            Route::post('/', 'UserController@store');
+            //用户详情
+            Route::get('/{uid}', 'UserController@show');
+            //用户编辑
+            Route::put('/{uid}', 'UserController@update');
+            // 删除用户
+            Route::delete('/', 'UserController@destroy');
+        });
+        Route::group([
+            // path地址前缀
             'prefix'=>'rbac',
             // 命名空间前缀
             'namespace'=>'Rbac'
