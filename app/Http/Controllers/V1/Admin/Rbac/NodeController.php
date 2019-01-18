@@ -40,11 +40,10 @@ class NodeController extends Controller
      */
     public function store(){
         $this->validate(null, [
-            'name' => 'required|string',
+            'label' => 'required|string',
             'icon' => 'required|string',
             'sort' => 'integer',
             'state' => 'required|integer',
-            'isShow' => 'required|integer',
             'path' => 'required|string',
             'parentId' => 'required|integer',
             'description' => 'required|string',
@@ -67,11 +66,10 @@ class NodeController extends Controller
     public function update($nodeId){
         $this->validate(['nodeId' => $nodeId], [
             'nodeId' => 'required|integer',
-            'name' => 'string',
+            'label' => 'string',
             'icon' => 'string',
             'sort' => 'integer',
             'state' => 'integer',
-            'isShow' => 'integer',
             'path' => 'string',
             'parentId' => 'integer',
             'description' => 'string',
