@@ -77,7 +77,7 @@ class NodeLogic extends LoadDataLogic
         if (!$nodeModel->save()){
             throw new Exception('添加节点失败','ERROR_STORE_FAIL');
         }
-        return true;
+        return [];
     }
 
     /**
