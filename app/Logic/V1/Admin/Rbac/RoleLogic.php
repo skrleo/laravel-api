@@ -19,7 +19,9 @@ class RoleLogic extends LoadDataLogic
 
     protected $roleId = 0;
 
-    protected $introduction = '';
+    protected $state = 0;
+
+    protected $description = '';
 
     /**
      * @return mixed
@@ -34,17 +36,18 @@ class RoleLogic extends LoadDataLogic
     }
 
     /**
-     * @return bool
+     * @return array
      * @throws Exception
      */
     public function store(){
         $roleModel = new RoleModel();
         $roleModel->name = $this->name;
-        $roleModel->introduction = $this->introduction;
+        $roleModel->state = $this->state;
+        $roleModel->description = $this->description;
         if (!$roleModel->save()){
             throw new Exception('添加角色','ROLE_STORE_FAIL');
         }
-        return true;
+        return [];
     }
 
     /**
@@ -69,7 +72,8 @@ class RoleLogic extends LoadDataLogic
             throw new Exception('角色不存在','NOT_FIND_ROLE');
         }
         $roleModel->name = $this->name;
-        $roleModel->introduction = $this->introduction;
+        $roleModel->state = $this->state;
+        $roleModel->description = $this->description;
         if (!$roleModel->save()){
             throw new Exception('编辑角色','ROLE_UPDATE_FAIL');
         }

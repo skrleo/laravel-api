@@ -37,7 +37,8 @@ class RoleController extends Controller
     public function store(){
         $this->validate(null, [
             'name' => 'required|string',
-            'introduction' => 'required|string',
+            'state' => 'required|integer',
+            'description' => 'required|string',
         ]);
         $roleLogic = new RoleLogic();
         $roleLogic->load($this->verifyData);
@@ -53,8 +54,7 @@ class RoleController extends Controller
      */
     public function show($roleId){
         $this->validate(['roleId' => $roleId], [
-            'name' => 'required|string',
-            'introduction' => 'required|string',
+            'roleId' => 'required|integer',
         ]);
         $roleLogic = new RoleLogic();
         $roleLogic->load($this->verifyData);
@@ -72,7 +72,8 @@ class RoleController extends Controller
         $this->validate(['roleId' => $roleId], [
             'roleId' => 'required|integer',
             'name' => 'required|string',
-            'introduction' => 'required|string',
+            'state' => 'required|integer',
+            'description' => 'required|string',
         ]);
         $roleLogic = new RoleLogic();
         $roleLogic->load($this->verifyData);
