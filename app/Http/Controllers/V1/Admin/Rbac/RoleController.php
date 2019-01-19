@@ -29,7 +29,7 @@ class RoleController extends Controller
     }
 
     /**
-     * @return bool
+     * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
