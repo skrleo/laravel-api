@@ -51,7 +51,9 @@ class UserController extends  Controller
     }
 
     /**
-     * @return mixed
+     * @param $uid
+     * @return array
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
@@ -61,7 +63,9 @@ class UserController extends  Controller
         ]);
         $userLogic = new UserLogic();
         $userLogic->load($this->verifyData);
-        return $userLogic->show();
+        return [
+            'data'=> $userLogic->show()
+        ];
     }
 
     /**

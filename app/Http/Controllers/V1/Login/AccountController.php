@@ -29,9 +29,10 @@ class AccountController extends Controller
         ]);
         $articleLogic = new AccountLogic();
         $articleLogic->load($this->verifyData);
-        if ($articleLogic->login()){
-            return [];
-        }
+
+        return [
+            'data'=> $articleLogic->login()
+        ];
     }
 
 

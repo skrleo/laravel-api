@@ -37,6 +37,6 @@ class AccountLogic extends LoadDataLogic
         if (md5($this->password)!== $userBaseModel->password){
             throw new Exception('密码错误,请重试！', 'USER_PASSWORD_ERROR');
         }
-        return true;
+        return $userBaseModel->toHump();
     }
 }
