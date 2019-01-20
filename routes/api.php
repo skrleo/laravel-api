@@ -54,6 +54,18 @@ Route::group([
             // 删除用户
             Route::delete('/', 'UserController@destroy');
         });
+
+        Route::group([
+            // path地址前缀
+            'prefix'=>'site',
+            // 命名空间前缀
+            'namespace'=>'site'
+        ],function(){
+            // 站点详情
+            Route::get('/{siteId}', 'SiteController@show');
+            // 站点编辑
+            Route::put('/{siteId}', 'SiteController@update');
+        });
         Route::group([
             // path地址前缀
             'prefix'=>'rbac',

@@ -20,8 +20,9 @@ class SiteController extends Controller
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
-    public function update(){
-        $this->validate(null, [
+    public function update($siteId){
+        $this->validate(['siteId' => $siteId], [
+            'siteId' => 'required|integer',
             'title' => 'required|string',
             'keywords' => 'required|string',
             'description' => 'required|string',
@@ -38,7 +39,7 @@ class SiteController extends Controller
 
     /**
      * @param $siteId
-     * @return \DdvPhp\DdvUtil\Laravel\Model
+     * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
@@ -49,6 +50,8 @@ class SiteController extends Controller
         ]);
         $siteLogic = new SiteLogic();
         $siteLogic->load($this->verifyData);
-        return $siteLogic->show();
+        return [
+            'data' => $siteLogic->show()
+        ];
     }
 }

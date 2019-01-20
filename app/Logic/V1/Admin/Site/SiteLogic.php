@@ -35,10 +35,13 @@ class SiteLogic extends LoadDataLogic
      * @throws \ReflectionException
      */
     public function update(){
-        $nodeModel = (new SiteConfigModel());
-        $nodeData = $this->getAttributes(['title', 'keywords', 'description', 'icpBeian', 'cover', 'logo'], ['', null]);
-        $nodeModel->setDataByHumpArray($nodeData);
-        if (!$nodeModel->save()){
+        $SiteConfigModel = (new SiteConfigModel())->where('site_id',$this->siteId)->first();
+        if (empty($SiteConfigModel)){
+            throw new Exception('站点配置不存在','NOT_FIND_SITE');
+        }
+        $siteData = $this->getAttributes(['title', 'keywords', 'description', 'icpBeian', 'cover', 'logo'], ['', null]);
+        $SiteConfigModel->setDataByHumpArray($siteData);
+        if (!$SiteConfigModel->save()){
             throw new Exception('添加节点失败','ERROR_STORE_FAIL');
         }
         return [];
