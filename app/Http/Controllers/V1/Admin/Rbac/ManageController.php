@@ -14,12 +14,23 @@ use App\Logic\V1\Admin\Rbac\ManageLogic;
 
 class ManageController extends Controller
 {
+    /**
+     * @return \DdvPhp\DdvPage
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
     public function index(){
-
+        $this->validate(null, [
+            'type' => 'integer'
+        ]);
+        $manageLogic = new ManageLogic();
+        $manageLogic->load($this->verifyData);
+        return $manageLogic->index();
     }
 
     /**
      * @return array
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
@@ -38,7 +49,8 @@ class ManageController extends Controller
 
     /**
      * @param $manageId
-     * @return mixed
+     * @return \DdvPhp\DdvUtil\Laravel\Model
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */

@@ -102,6 +102,30 @@ Route::group([
                 // 角色删除
                 Route::delete('/', 'RoleController@destroy');
             });
+            Route::group([
+                // path地址前缀
+                'prefix'=>'manage',
+            ],function(){
+                //管理员列表
+                Route::get('/lists', 'ManageController@index');
+                //添加管理员
+                Route::post('/', 'ManageController@store');
+                // 管理员详情
+                Route::get('/{manageId}', 'ManageController@show');
+                // 编辑管理员
+                Route::put('/{manageId}', 'ManageController@update');
+                // 删除管理员
+                Route::delete('/', 'ManageController@destroy');
+            });
+            Route::group([
+                // path地址前缀
+                'prefix'=>'purview',
+            ],function(){
+                // 添加用户角色关系
+                Route::put('/role', 'PurviewController@userToRole');
+                // 添加角色节点关系
+                Route::put('/node', 'PurviewController@roleToNode');
+            });
         });
     });
 
