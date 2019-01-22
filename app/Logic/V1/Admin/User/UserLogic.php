@@ -48,8 +48,9 @@ class UserLogic extends LoadDataLogic
      */
     public function store(){
         $userBaseModel = new UserBaseModel();
-        $userData = $this->getAttributes(['name', 'sex', 'status', 'email','headimg', 'phone', 'password', 'nickname'], ['', null]);
+        $userData = $this->getAttributes(['name', 'sex', 'status', 'email','headimg', 'phone', 'nickname'], ['', null]);
         $userBaseModel->setDataByHumpArray($userData);
+        $userBaseModel->password = md5($this->password);
         if (!$userBaseModel->save()){
             throw new Exception('添加节点失败','ERROR_STORE_FAIL');
         }
@@ -78,7 +79,8 @@ class UserLogic extends LoadDataLogic
         if (empty($userBaseModel)){
             throw new Exception('用户不存在','USER_NOT_FIND');
         }
-        $userData = $this->getAttributes(['name', 'sex', 'status', 'email','headimg', 'phone', 'password', 'nickname'], ['', null]);
+        $userData = $this->getAttributes(['name', 'sex', 'status', 'email','headimg', 'phone', 'nickname'], ['', null]);
+        $userBaseModel->password = md5($this->password);
         $userBaseModel->setDataByHumpArray($userData);
         if (!$userBaseModel->save()){
             throw new Exception('添加节点失败','ERROR_STORE_FAIL');
