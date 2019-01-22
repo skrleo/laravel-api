@@ -74,8 +74,15 @@ class ManageLogic extends LoadDataLogic
         return $manageModel->toHump();
     }
 
+    /**
+     * 编辑管理员
+     * @throws Exception
+     */
     public function update(){
-
+        $manageModel = (new ManageModel())->where('manageId',$this->manageId)->first();
+        if (empty($manageModel)){
+            throw new Exception('管理员不存在','NOT_FIND_MANAGE');
+        }
     }
 
     public function destroy(){
