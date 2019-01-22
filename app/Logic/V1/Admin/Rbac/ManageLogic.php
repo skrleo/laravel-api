@@ -12,6 +12,7 @@ namespace App\Logic\V1\Admin\Rbac;
 use App\Logic\LoadDataLogic;
 use App\Model\Exception;
 use App\Model\V1\Rbac\Purview\ManageModel;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
 class ManageLogic extends LoadDataLogic
 {
@@ -29,8 +30,18 @@ class ManageLogic extends LoadDataLogic
      */
     public function index(){
         $res = (new ManageModel())
+            ->with([
+                'hasManyUserToRoleModel' => function(HasOneOrMany $query){
+                    $query->select('uid','role_id')->with([
+                        'hasOneRoleModel' => function(HasOneOrMany $query){
+                            $query->select('role_id','name','state');
+                        }
+                    ]);
+                }
+            ])
+            ->orderByDesc('created_at')
             ->getDdvPage();
-        
+
         return $res->toHump();
     }
 

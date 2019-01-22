@@ -16,4 +16,8 @@ class ManageModel extends Model
     protected $table = 'rbac_manage';
 
     protected $primaryKey = 'manage_id';
+
+    public function hasManyUserToRoleModel(){
+        return $this->hasMany(UserToRoleModel::class,'uid','uid');
+    }
 }
