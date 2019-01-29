@@ -31,8 +31,9 @@ class PurviewController extends Controller
     }
 
     /**
-     * 添加用户角色关系
+     * 添加用户角色关系(添加管理员)
      * @return array
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
@@ -51,6 +52,7 @@ class PurviewController extends Controller
     /**
      * 添加角色节点关系
      * @return array
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
