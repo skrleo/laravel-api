@@ -16,9 +16,11 @@ class UserToRoleModel extends Model
 {
     protected $table = 'rbac_user_to_role';
 
-    protected $primaryKey = ['uid','role_id'];
+    protected $primaryKey = 'uid';
 
     protected $fillable = ['uid','role_id'];
+
+    public $timestamps = false;
 
     public function hasOneRoleModel(){
         return $this->hasOne(RoleModel::class,'role_id','role_id');

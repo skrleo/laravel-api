@@ -38,7 +38,7 @@ class PurviewController extends Controller
      */
     public function userToRole(){
         $this->validate(null, [
-            'uids' => 'required|array',
+            'uid' => 'required|integer',
             'roleIds' => 'required|array'
         ]);
         $purviewLogic = new PurviewLogic();
