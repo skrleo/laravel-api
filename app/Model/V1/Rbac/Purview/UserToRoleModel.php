@@ -18,6 +18,8 @@ class UserToRoleModel extends Model
 
     protected $primaryKey = ['uid','role_id'];
 
+    protected $fillable = ['uid','role_id'];
+
     public function hasOneRoleModel(){
         return $this->hasOne(RoleModel::class,'role_id','role_id');
     }

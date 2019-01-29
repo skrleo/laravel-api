@@ -16,6 +16,8 @@ class PurviewLogic extends LoadDataLogic
 {
     protected $uid = 0;
 
+    protected $uids = [];
+
     protected $roleIds = [];
 
     protected $roleId = 0;
@@ -34,11 +36,13 @@ class PurviewLogic extends LoadDataLogic
      * @return array
      */
     public function userToRole(){
-        foreach ($this->roleIds as $roleId){
-            (new UserToRoleModel)->firstOrCreate([
-                'uid' => $this->uid,
-                'roleId' => $roleId
-            ]);
+        foreach ($this->uids as $uid){
+            foreach ($this->roleIds as $roleId){
+                (new UserToRoleModel)->firstOrCreate([
+                    'uid' => $uid,
+                    'role_id' => $roleId
+                ]);
+            }
         }
         return [];
     }

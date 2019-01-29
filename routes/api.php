@@ -122,7 +122,7 @@ Route::group([
                 'prefix'=>'purview',
             ],function(){
                 // 添加用户角色关系
-                Route::put('/role', 'PurviewController@userToRole');
+                Route::put('user/role', 'PurviewController@userToRole');
                 // 添加角色节点关系
                 Route::put('/node', 'PurviewController@roleToNode');
             });

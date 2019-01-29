@@ -69,7 +69,9 @@ class UserController extends  Controller
     }
 
     /**
-     * @return mixed
+     * @param $uid
+     * @return array
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
