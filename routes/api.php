@@ -12,6 +12,27 @@ Route::group([
         RestfulApi::class,
     ],
 ], function ($router) {
+
+    /**
+     * 文件上传
+     */
+    Route::group([
+        'prefix'=>'upload',
+        // 命名空间前缀
+        'namespace'=>'Common/Aliyun'
+    ],function(){
+        // 获取分块大小 接口
+        Route::get('filePartSize','UploadController@filePartSize');
+        // 获取文件id 接口
+        Route::get('fileId','UploadController@fileId');
+        // 获取成功上传的信息
+        Route::get('filePartInfo','UploadController@filePartInfo');
+        // 获取分块签名
+        Route::get('filePartMd5','UploadController@filePartMd5');
+        // 合并上传文件
+        Route::post('complete','Api\UploadController@complete');
+    });
+
     Route::get('hello', function () {
         return 'Hello, Welcome to Laravel';
     });
