@@ -37,6 +37,9 @@ class ManageLogic extends LoadDataLogic
                             $query->select('role_id','name','state');
                         }
                     ]);
+                },
+                'hasOneUserBaseModel' => function(HasOneOrMany $query){
+                    $query->select('uid','name');
                 }
             ])
             ->orderByDesc('created_at')

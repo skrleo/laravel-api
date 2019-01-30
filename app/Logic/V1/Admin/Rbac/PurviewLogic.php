@@ -30,6 +30,10 @@ class PurviewLogic extends LoadDataLogic
 
     protected $name = '';
 
+    protected $state = 0;
+
+    protected $type = 0;
+
     /**
      * 用户权限列表
      */
@@ -53,7 +57,11 @@ class PurviewLogic extends LoadDataLogic
                 'role_id' => $roleId
             ]);
         }
-        $manageModel->uid = $this->uid;
+        $manageModel = (new ManageModel())->firstOrNew([
+            'uid' => $this->uid
+        ]);
+        $manageModel->state = $this->state;
+        $manageModel->type = $this->type;
         if (!$manageModel->save()){
             throw new Exception('添加管理员失败','MANAGE_HAVE_EXISTED');
         }

@@ -10,6 +10,7 @@ namespace App\Model\V1\Rbac\Purview;
 
 
 use App\Model\Model;
+use App\Model\V1\User\UserBaseModel;
 
 class ManageModel extends Model
 {
@@ -17,7 +18,13 @@ class ManageModel extends Model
 
     protected $primaryKey = 'manage_id';
 
+    protected $fillable = ['uid'];
+
     public function hasManyUserToRoleModel(){
         return $this->hasMany(UserToRoleModel::class,'uid','uid');
+    }
+
+    public function hasOneUserBaseModel(){
+        return $this->hasOne(UserBaseModel::class,'uid','uid');
     }
 }
