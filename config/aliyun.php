@@ -9,7 +9,7 @@
 return  array(
     'oss' => array(
         //bucket 名称
-        'bucket'      =>'wangku-test',
+        'bucket'      =>'17wangku',
         //地区是深圳oss
         'region'      =>'cn-shenzhen',
         //bucket 地区的访问接口

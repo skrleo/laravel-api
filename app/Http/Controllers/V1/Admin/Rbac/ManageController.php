@@ -68,6 +68,7 @@ class ManageController extends Controller
     /**
      * @param $manageId
      * @return array
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */

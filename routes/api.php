@@ -19,7 +19,7 @@ Route::group([
     Route::group([
         'prefix'=>'upload',
         // 命名空间前缀
-        'namespace'=>'Common/Aliyun'
+        'namespace'=>'Common\Aliyun'
     ],function(){
         // 获取分块大小 接口
         Route::get('filePartSize','UploadController@filePartSize');
@@ -30,7 +30,9 @@ Route::group([
         // 获取分块签名
         Route::get('filePartMd5','UploadController@filePartMd5');
         // 合并上传文件
-        Route::post('complete','Api\UploadController@complete');
+        Route::post('complete','UploadController@complete');
+        // 图片上传
+        Route::post('img','UploadController@uploadImg');
     });
 
     Route::get('hello', function () {

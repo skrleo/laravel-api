@@ -8,6 +8,9 @@
 
 namespace App\Http\Controllers\V1\Common\Aliyun;
 
+use App\Logic\V1\Common\Aliyun\UploadLogic;
+use OSS\OssClient;
+use OSS\Core\OssException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DdvPhp\DdvFile;
@@ -91,8 +94,6 @@ class UploadController extends Controller
                 'fileMd5',
                 'fileSha1',
                 'fileCrc32',
-
-
                 'md5Base64',
                 'partLength',
                 'partNumber'
@@ -118,6 +119,24 @@ class UploadController extends Controller
         return [
             'data' => $data
 
+        ];
+    }
+
+    /**
+     * 图片上传
+     * @return array
+     * @throws \App\Logic\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function uploadImg(){
+        $this->validate([], [
+            'file' => 'required|string'
+        ]);
+        $uploadLogic = new UploadLogic();
+        $uploadLogic->load($this->verifyData);
+        return [
+            'data' => $uploadLogic->uploadImg()
         ];
     }
 }
