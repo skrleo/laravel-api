@@ -46,20 +46,17 @@ class UploadLogic extends LoadDataLogic
      * @throws Exception
      */
     public function uploadImg(){
-        $file1 = storage_path('1.txt');
-        $fp = fopen($file1, 'w');
-        fwrite($fp, $this->file);
-        fclose($fp);
-//        $extension = pathinfo( parse_url( $this->file, PHP_URL_PATH ), PATHINFO_EXTENSION );
-//        $fileName =  date("YmdHis").rand(100, 999) . '.' . $extension;
-//        try{
-//            $ossClient = new OssClient(config('aliyun.oss.accessKeyId'), config('aliyun.oss.accessKeySecret'), config('aliyun.oss.endpoint'));
-//            $ossClient->uploadFile(config('aliyun.oss.bucket'), $fileName, $this->file);
-//        } catch(OssException $e) {
-//            throw new Exception('文件上传失败','FILE_UPLOAD_FAIL');
-//        }
-//        return [
-//            'fileUrl' => config('aliyun.oss.urlRoot').$fileName
-//        ];
+
+        $extension = pathinfo( parse_url( $this->file, PHP_URL_PATH ), PATHINFO_EXTENSION );
+        $fileName =  date("YmdHis").rand(100, 999) . '.' . $extension;
+        try{
+            $ossClient = new OssClient(config('aliyun.oss.accessKeyId'), config('aliyun.oss.accessKeySecret'), config('aliyun.oss.endpoint'));
+            $ossClient->uploadFile(config('aliyun.oss.bucket'), $fileName, $this->file);
+        } catch(OssException $e) {
+            throw new Exception('文件上传失败','FILE_UPLOAD_FAIL');
+        }
+        return [
+            'fileUrl' => config('aliyun.oss.urlRoot').$fileName
+        ];
     }
 }

@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers\V1\Common\Aliyun;
 
-use App\Logic\V1\Common\Aliyun\UploadLogic;
+use App\Http\Controllers\Exception;
 use OSS\OssClient;
 use OSS\Core\OssException;
 use App\Http\Controllers\Controller;
@@ -19,6 +19,7 @@ use DdvPhp\DdvFile\Drivers\AliyunOssDrivers;
 
 class UploadController extends Controller
 {
+    public $file = '';
     /**
      * @var DdvFile
      */
@@ -124,19 +125,24 @@ class UploadController extends Controller
 
     /**
      * 图片上传
+     * @param Request $request
      * @return array
-     * @throws \App\Logic\Exception
-     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
-     * @throws \ReflectionException
+     * @throws Exception
      */
-    public function uploadImg(){
-        $this->validate([], [
-            'file' => 'required|string'
-        ]);
-        $uploadLogic = new UploadLogic();
-        $uploadLogic->load($this->verifyData);
-        return [
-            'data' => $uploadLogic->uploadImg()
-        ];
+    public function uploadImg(Request $request){
+        $imgBase64 = $request->input('file');
+        if (preg_match('/^(data:\s*image\/(\w+);base64,)/',$imgBase64,$res)) {
+            //图片保存路径
+            $new_file = storage_path("images/".date('Ymd',time()).'/');
+            if (!file_exists($new_file)) {
+                mkdir($new_file,0755,true);
+            }
+            //图片名字 + 获取图片类型
+            $new_file = $new_file.time().'.'.$res[2];
+            if (!file_put_contents($new_file,base64_decode(str_replace($res[1],'', $imgBase64)))) {
+               throw new Exception('图片保存失败','UPLOAD_IMAGE_FAIL');
+            }
+            return [];
+        }
     }
 }
