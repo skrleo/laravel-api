@@ -133,16 +133,27 @@ class UploadController extends Controller
         $imgBase64 = $request->input('file');
         if (preg_match('/^(data:\s*image\/(\w+);base64,)/',$imgBase64,$res)) {
             //图片保存路径
-            $new_file = storage_path("images/".date('Ymd',time()).'/');
-            if (!file_exists($new_file)) {
-                mkdir($new_file,0755,true);
+            if (!file_exists(storage_path('images/'))) {
+                mkdir(storage_path('images/'),0755,true);
             }
             //图片名字 + 获取图片类型
-            $new_file = $new_file.time().'.'.$res[2];
-            if (!file_put_contents($new_file,base64_decode(str_replace($res[1],'', $imgBase64)))) {
+            $fileName = date("YmdHis").rand(100, 999) . '.' . $res[2];
+            $filePath =  storage_path('images/') . $fileName;
+            if (!file_put_contents($filePath,base64_decode(str_replace($res[1],'', $imgBase64)))) {
                throw new Exception('图片保存失败','UPLOAD_IMAGE_FAIL');
             }
-            return [];
+            // 上传到阿里云 OSS存储
+            try{
+                $ossClient = new OssClient(config('aliyun.oss.accessKeyId'), config('aliyun.oss.accessKeySecret'), config('aliyun.oss.endpoint'));
+                $ossClient->uploadFile(config('aliyun.oss.bucket'), $fileName, $filePath);
+            } catch(OssException $e) {
+                throw new Exception('文件上传失败','FILE_UPLOAD_FAIL');
+            }
         }
+        return [
+            'data' => [
+                'filePath' =>  config('aliyun.oss.urlRoot'). $fileName
+            ]
+        ];
     }
 }
