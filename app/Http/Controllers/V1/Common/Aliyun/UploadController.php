@@ -19,7 +19,6 @@ use DdvPhp\DdvFile\Drivers\AliyunOssDrivers;
 
 class UploadController extends Controller
 {
-    public $file = '';
     /**
      * @var DdvFile
      */
