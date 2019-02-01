@@ -108,7 +108,7 @@ Route::group([
                 //节点详情
                 Route::get('/{nodeId}', 'NodeController@show');
                 // 删除节点
-                Route::delete('/', 'NodeController@destroy');
+                Route::delete('/{nodeId}', 'NodeController@destroy');
             });
             Route::group([
                 // path地址前缀
@@ -123,7 +123,7 @@ Route::group([
                 // 角色编辑
                 Route::put('/{roleId}', 'RoleController@update');
                 // 角色删除
-                Route::delete('/', 'RoleController@destroy');
+                Route::delete('/{roleId}', 'RoleController@destroy');
             });
             Route::group([
                 // path地址前缀
@@ -138,7 +138,7 @@ Route::group([
                 // 编辑管理员
                 Route::put('/{manageId}', 'ManageController@update');
                 // 删除管理员
-                Route::delete('/', 'ManageController@destroy');
+                Route::delete('/{manageId}', 'ManageController@destroy');
             });
             Route::group([
                 // path地址前缀

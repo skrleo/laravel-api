@@ -59,20 +59,20 @@ class NodeController extends Controller
      * 节点编辑
      * @param $nodeId
      * @return array
-     * @throws \App\Logic\Exception
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
     public function update($nodeId){
         $this->validate(['nodeId' => $nodeId], [
             'nodeId' => 'required|integer',
-            'label' => 'string',
+            'label' => 'required|string',
             'icon' => 'string',
             'sort' => 'integer',
             'state' => 'integer',
             'path' => 'string',
             'parentId' => 'integer',
-            'description' => 'string',
+            'description' => 'required|string',
         ]);
         $nodeLogic = new NodeLogic();
         $nodeLogic->load($this->verifyData);
@@ -85,7 +85,7 @@ class NodeController extends Controller
      * 节点详情
      * @param $nodeId
      * @return array
-     * @throws \App\Logic\Exception
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
@@ -103,13 +103,13 @@ class NodeController extends Controller
     /**
      * 节点删除
      * @return array
-     * @throws \App\Logic\Exception
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
-    public function destroy(){
-        $this->validate(null, [
-            'nodeIds' => 'required|array'
+    public function destroy($nodeId){
+        $this->validate(['nodeId' => $nodeId], [
+            'nodeId' => 'required|integer'
         ]);
         $nodeLogic = new NodeLogic();
         $nodeLogic->load($this->verifyData);

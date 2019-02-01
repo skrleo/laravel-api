@@ -11,6 +11,7 @@ namespace App\Logic\V1\Admin\Rbac;
 
 use App\Logic\LoadDataLogic;
 use App\Model\Exception;
+use App\Model\V1\Rbac\Purview\RoleToNodeModel;
 use App\Model\V1\Rbac\Role\RoleModel;
 
 class RoleLogic extends LoadDataLogic
@@ -81,6 +82,7 @@ class RoleLogic extends LoadDataLogic
     }
 
     /**
+     * 删除角色
      * @return bool
      * @throws Exception
      */
@@ -89,6 +91,10 @@ class RoleLogic extends LoadDataLogic
         if (empty($roleModel)){
             throw new Exception('角色不存在','NOT_FIND_ROLE');
         }
+        (new RoleToNodeModel())->where('role_id',$this->roleId)
+            ->get()->each(function (RoleToNodeModel $item){
+                $item->delete();
+            });
         if (!$roleModel->delete()){
             throw new Exception('删除角色','ROLE_DELETE_FAIL');
         }

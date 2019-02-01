@@ -43,7 +43,7 @@ class PurviewLogic extends LoadDataLogic
 
     /**
      * 添加用户角色关系
-     * @return array
+     * @return bool
      * @throws Exception
      */
     public function userToRole(){
@@ -65,12 +65,12 @@ class PurviewLogic extends LoadDataLogic
         if (!$manageModel->save()){
             throw new Exception('添加管理员失败','MANAGE_HAVE_EXISTED');
         }
-        return [];
+        return true;
     }
 
     /**
      * 添加角色节点关系
-     * @return array
+     * @return bool
      * @throws Exception
      */
     public function roleToNode(){
@@ -89,6 +89,6 @@ class PurviewLogic extends LoadDataLogic
                 'node_id' => $nodeId
             ]);
         }
-        return [];
+        return true;
     }
 }

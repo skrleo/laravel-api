@@ -8,9 +8,8 @@
 
 namespace App\Logic\V1\Admin\Rbac;
 
-
-use App\Logic\Exception;
 use App\Logic\LoadDataLogic;
+use App\Model\Exception;
 use App\Model\V1\Rbac\Node\NodeModel;
 use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
 
@@ -77,7 +76,7 @@ class NodeLogic extends LoadDataLogic
         if (!$nodeModel->save()){
             throw new Exception('添加节点失败','ERROR_STORE_FAIL');
         }
-        return [];
+        return true;
     }
 
     /**
@@ -118,9 +117,12 @@ class NodeLogic extends LoadDataLogic
      * @throws Exception
      */
     public function destroy(){
-        $nodeModel = (new NodeModel())->whereIn('node_id',$this->nodeIds)->delete();
+        $nodeModel = (new NodeModel())->where('node_id',$this->nodeId)->first();
         if (!$nodeModel){
-            throw new Exception('删除节点信息失败','DESTROY_NODE_FAIL');
+            throw new Exception('节点不存在','NODE_NOT_FIND');
+        }
+        if (!$nodeModel->delete()){
+            throw new Exception('删除节点失败','DELETE_NODE_FAIL');
         }
         return true;
     }

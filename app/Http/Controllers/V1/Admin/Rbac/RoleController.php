@@ -93,8 +93,8 @@ class RoleController extends Controller
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
-    public function destroy(){
-        $this->validate(null, [
+    public function destroy($roleId){
+        $this->validate(['roleId' => $roleId], [
             'roleId' => 'required|integer'
         ]);
         $roleLogic = new RoleLogic();

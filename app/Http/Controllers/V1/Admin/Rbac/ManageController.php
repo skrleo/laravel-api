@@ -56,6 +56,7 @@ class ManageController extends Controller
      */
     public function show($manageId){
         $this->validate([ 'manageId' => $manageId], [
+            'manageId' => 'required|integer',
             'uid' => 'required|integer',
             'type' => 'integer',
             'remark' => 'string'
@@ -74,6 +75,7 @@ class ManageController extends Controller
      */
     public function update($manageId){
         $this->validate([ 'manageId' => $manageId], [
+            'manageId' => 'required|integer',
             'uid' => 'required|integer',
             'type' => 'integer',
             'remark' => 'string'
@@ -85,7 +87,21 @@ class ManageController extends Controller
         }
     }
 
-    public function destroy(){
-
+    /**
+     * 删除管理员
+     * @param $manageId
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function destroy($manageId){
+        $this->validate([ 'manageId' => $manageId], [
+            'manageId' => 'required|integer'
+        ]);
+        $manageLogic = new ManageLogic();
+        $manageLogic->load($this->verifyData);
+        if ($manageLogic->destroy()){
+            return [];
+        }
     }
 }
