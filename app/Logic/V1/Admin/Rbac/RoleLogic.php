@@ -13,6 +13,7 @@ use App\Logic\LoadDataLogic;
 use App\Model\Exception;
 use App\Model\V1\Rbac\Purview\RoleToNodeModel;
 use App\Model\V1\Rbac\Role\RoleModel;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
 class RoleLogic extends LoadDataLogic
 {
@@ -56,9 +57,24 @@ class RoleLogic extends LoadDataLogic
      * @throws Exception
      */
     public function show(){
-        $roleModel = (new RoleModel())->where('role_id',$this->roleId)->first();
+        $roleModel = (new RoleModel())
+            ->where('role_id',$this->roleId)
+            ->with([
+                'hasManyRoleToNodeModel' => function(HasOneOrMany $query){
+                    $query->with([
+                        'hasOneNodeModel' => function(HasOneOrMany $query){
+                            $query->select('label','node_id');
+                        }
+                    ]);
+                }
+            ])
+            ->first();
         if (empty($roleModel)){
             throw new Exception('角色不存在','NOT_FIND_ROLE');
+        }
+        foreach ($roleModel->hasManyRoleToNodeModel as $item){
+            $item->setDataByModel($item->hasOneNodeModel);
+            $item->removeAttribute('hasOneNodeModel');
         }
         return $roleModel->toHump();
     }
