@@ -73,9 +73,11 @@ class RoleLogic extends LoadDataLogic
             throw new Exception('角色不存在','NOT_FIND_ROLE');
         }
         foreach ($roleModel->hasManyRoleToNodeModel as $item){
+            $nodeIds[] = $item->hasOneNodeModel->node_id;
             $item->setDataByModel($item->hasOneNodeModel);
             $item->removeAttribute('hasOneNodeModel');
         }
+        $roleModel->nodeIds = $nodeIds;
         return $roleModel->toHump();
     }
 
