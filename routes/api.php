@@ -64,7 +64,7 @@ Route::group([
             // path地址前缀
             'prefix'=>'user',
             // 命名空间前缀
-            'namespace'=>'user'
+            'namespace'=>'User'
         ],function(){
             // 用户列表
             Route::get('/lists', 'UserController@index');
