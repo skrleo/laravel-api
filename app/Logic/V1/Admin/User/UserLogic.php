@@ -71,7 +71,7 @@ class UserLogic extends LoadDataLogic
     }
 
     /**
-     * @return array
+     * @return bool
      * @throws Exception
      * @throws \ReflectionException
      */
@@ -84,9 +84,9 @@ class UserLogic extends LoadDataLogic
         $userBaseModel->password = md5($this->password);
         $userBaseModel->setDataByHumpArray($userData);
         if (!$userBaseModel->save()){
-            throw new Exception('添加节点失败','ERROR_STORE_FAIL');
+            throw new Exception('修改用户失败','UPDATE_USER_FAIL');
         }
-        return [];
+        return true;
     }
 
     /**
