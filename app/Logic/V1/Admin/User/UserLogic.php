@@ -99,10 +99,10 @@ class UserLogic extends LoadDataLogic
         if (empty($userBaseModel)){
             throw new Exception('用户不存在','USER_NOT_FIND');
         }
-        $userAccountModel = (new UserAccountModel())->where('uid',$this->uid)->get();
-        $userAccountModel->each(function (UserAccountModel $item){
-            $item->delete();
-        });
+        (new UserAccountModel())->where('uid',$userBaseModel->uid)
+            ->get()->each(function (UserAccountModel $item){
+                $item->delete();
+            });
         if (!$userBaseModel->delete()){
             throw new Exception('删除用户失败','DELETE_USER_FAIL');
         }
