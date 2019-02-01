@@ -42,12 +42,15 @@ class RoleController extends Controller
         ]);
         $roleLogic = new RoleLogic();
         $roleLogic->load($this->verifyData);
-        return $roleLogic->store();
+        if ($roleLogic->store()){
+            return [];
+        }
     }
 
     /**
+     * 角色详情
      * @param $roleId
-     * @return \App\Model\V1\Rbac\Role\RoleModel|\Illuminate\Database\Eloquent\Model|null|object
+     * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
@@ -58,12 +61,14 @@ class RoleController extends Controller
         ]);
         $roleLogic = new RoleLogic();
         $roleLogic->load($this->verifyData);
-        return $roleLogic->show();
+        return [
+            'data' => $roleLogic->show()
+        ];
     }
 
     /**
      * @param $roleId
-     * @return bool
+     * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
@@ -77,10 +82,13 @@ class RoleController extends Controller
         ]);
         $roleLogic = new RoleLogic();
         $roleLogic->load($this->verifyData);
-        return $roleLogic->update();
+        if ($roleLogic->update()){
+            return [];
+        }
     }
 
     /**
+     * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
@@ -91,6 +99,8 @@ class RoleController extends Controller
         ]);
         $roleLogic = new RoleLogic();
         $roleLogic->load($this->verifyData);
-        return $roleLogic->destroy();
+        if ($roleLogic->destroy()){
+            return [];
+        }
     }
 }
