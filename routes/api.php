@@ -75,7 +75,7 @@ Route::group([
             //用户编辑
             Route::put('/{uid}', 'UserController@update');
             // 删除用户
-            Route::delete('/', 'UserController@destroy');
+            Route::delete('/{uid}', 'UserController@destroy');
         });
 
         Route::group([

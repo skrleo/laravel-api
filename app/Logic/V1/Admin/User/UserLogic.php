@@ -11,6 +11,7 @@ namespace App\Logic\V1\Admin\User;
 
 use App\Logic\LoadDataLogic;
 use App\Model\Exception;
+use App\Model\V1\User\UserAccountModel;
 use App\Model\V1\User\UserBaseModel;
 
 class UserLogic extends LoadDataLogic
@@ -89,10 +90,23 @@ class UserLogic extends LoadDataLogic
     }
 
     /**
-     *
+     * 删除用户
+     * @return bool
+     * @throws Exception
      */
     public function destroy(){
-
+        $userBaseModel = (new UserBaseModel())->where('uid',$this->uid)->first();
+        if (empty($userBaseModel)){
+            throw new Exception('用户不存在','USER_NOT_FIND');
+        }
+        $userAccountModel = (new UserAccountModel())->where('uid',$this->uid)->get();
+        $userAccountModel->each(function (UserAccountModel $item){
+            $item->delete();
+        });
+        if (!$userBaseModel->delete()){
+            throw new Exception('删除用户失败','DELETE_USER_FAIL');
+        }
+        return true;
     }
 
 }

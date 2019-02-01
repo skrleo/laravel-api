@@ -93,16 +93,19 @@ class UserController extends  Controller
     }
 
     /**
-     * @return mixed
+     * @return array
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
     public function destroy(){
         $this->validate(null, [
-            'uids' => 'required|array',
+            'uid' => 'required|integer',
         ]);
         $userLogic = new UserLogic();
         $userLogic->load($this->verifyData);
-        return $userLogic->destroy();
+        if ($userLogic->destroy()){
+            return [];
+        }
     }
 }
