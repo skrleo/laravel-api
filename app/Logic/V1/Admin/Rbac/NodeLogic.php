@@ -117,9 +117,13 @@ class NodeLogic extends LoadDataLogic
      * @throws Exception
      */
     public function destroy(){
-        $nodeModel = (new NodeModel())->where('node_id',$this->nodeId)->first();
-        if (!$nodeModel){
+        $nodeModel = (new NodeModel())->where('node_id',$this->nodeId)->firstHump();
+        if (empty($nodeModel)){
             throw new Exception('节点不存在','NODE_NOT_FIND');
+        }
+        $parentNodeModel = (new NodeModel())->where('parent_id',$nodeModel->nodeId)->first();
+        if (!empty($parentNodeModel)){
+            throw new Exception('该节点有下级','NODE_HAVE_UNDER');
         }
         if (!$nodeModel->delete()){
             throw new Exception('删除节点失败','DELETE_NODE_FAIL');
