@@ -29,25 +29,6 @@ class ManageController extends Controller
     }
 
     /**
-     * @return array
-     * @throws \App\Model\Exception
-     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
-     * @throws \ReflectionException
-     */
-    public function store(){
-        $this->validate(null, [
-            'uid' => 'required|integer',
-            'type' => 'integer',
-            'remark' => 'string'
-        ]);
-        $manageLogic = new ManageLogic();
-        $manageLogic->load($this->verifyData);
-        if ($manageLogic->store()){
-            return [];
-        }
-    }
-
-    /**
      * @param $manageId
      * @return array
      * @throws \App\Model\Exception
@@ -76,8 +57,8 @@ class ManageController extends Controller
         $this->validate([ 'manageId' => $manageId], [
             'manageId' => 'required|integer',
             'uid' => 'required|integer',
-            'type' => 'integer',
-            'remark' => 'string'
+            'roleIds' => 'required|array',
+            'description' => 'string'
         ]);
         $manageLogic = new ManageLogic();
         $manageLogic->load($this->verifyData);

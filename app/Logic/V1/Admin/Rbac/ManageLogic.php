@@ -21,9 +21,13 @@ class ManageLogic extends LoadDataLogic
 
     protected $uid = 0;
 
-    protected $type = '';
+    protected $type = 0;
 
     protected $remark = '';
+
+    protected $state = 0;
+
+    protected $roleIds = [];
 
     /**
      * 管理员列表
@@ -50,22 +54,6 @@ class ManageLogic extends LoadDataLogic
     }
 
     /**
-     * 添加管理员
-     * @return bool
-     * @throws Exception
-     */
-    public function store(){
-        $manageModel = new ManageModel();
-        $manageModel->uid = $this->uid;
-        $manageModel->type = $this->type;
-        $manageModel->remark = $this->remark;
-        if (!$manageModel->save()){
-            throw new Exception('添加管理员','STORE_MANAGE_FAIL');
-        }
-        return true;
-    }
-
-    /**
      * 管理员详情
      * @return \DdvPhp\DdvUtil\Laravel\Model
      * @throws Exception
@@ -82,6 +70,10 @@ class ManageLogic extends LoadDataLogic
         if (empty($manageModel)){
             throw new Exception('管理员不存在','NOT_FIND_MANAGE');
         }
+        foreach ($manageModel->hasManyUserToRoleModel as $item){
+            $roleIds[] = $item->role_id;
+        }
+        $manageModel->roleIds = array_unique($roleIds) ?? [];
         return $manageModel->toHump();
     }
 
@@ -92,8 +84,24 @@ class ManageLogic extends LoadDataLogic
     public function update(){
         $manageModel = (new ManageModel())->where('manage_id',$this->manageId)->first();
         if (empty($manageModel)){
-            throw new Exception('管理员不存在','NOT_FIND_MANAGE');
+            throw new Exception('该管理员不存在','MANAGE_NOT_FIND');
         }
+        // 删除用户角色关系
+        (new UserToRoleModel)->where('uid',$this->uid)->delete();
+        //添加用户角色关系
+        foreach ($this->roleIds as $roleId){
+            (new UserToRoleModel)->firstOrCreate([
+                'uid' => $this->uid,
+                'role_id' => $roleId
+            ]);
+        }
+        $manageModel->state = $this->state;
+        $manageModel->type = $this->type;
+        $manageModel->description = $this->description ?? '';
+        if (!$manageModel->save()){
+            throw new Exception('添加管理员失败','MANAGE_HAVE_EXISTED');
+        }
+        return true;
     }
 
     /**
