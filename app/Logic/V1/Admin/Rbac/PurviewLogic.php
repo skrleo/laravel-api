@@ -74,18 +74,13 @@ class PurviewLogic extends LoadDataLogic
      * @throws Exception
      */
     public function roleToNode(){
-        $roleModel = (new RoleModel())->where('name',$this->name)->first();
-        if (!empty($roleModel)){
-            throw new Exception('角色已存在','ROLE_HAVE_EXISTED');
+        $roleModel = (new RoleModel())->where('role_id',$this->roleId)->firstHump();
+        if (empty($roleModel)){
+            throw new Exception('角色不存在','ROLE_NOT_FIND');
         }
-        $roleModel->name = $this->name;
-        if (!$roleModel->save()){
-            throw new Exception('创建角色失败','STORE_ROLE_FAIL');
-        }
-        $roleId = $roleModel->getQueueableId();
         foreach ($this->nodeIds as $nodeId){
             (new RoleToNodeModel())->firstOrCreate([
-                'role_id' => $roleId,
+                'role_id' => $roleModel->roleId,
                 'node_id' => $nodeId
             ]);
         }

@@ -77,7 +77,7 @@ class RoleLogic extends LoadDataLogic
             $item->setDataByModel($item->hasOneNodeModel);
             $item->removeAttribute('hasOneNodeModel');
         }
-        $roleModel->nodeIds = $nodeIds;
+        $roleModel->nodeIds = $nodeIds ?? [];
         return $roleModel->toHump();
     }
 

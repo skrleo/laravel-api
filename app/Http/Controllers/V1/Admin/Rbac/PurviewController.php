@@ -59,7 +59,7 @@ class PurviewController extends Controller
     public function roleToNode(){
         $this->validate(null, [
             'roleId' => 'required|integer',
-            'NodeIds' => 'required|array'
+            'nodeIds' => 'required|array'
         ]);
         $purviewLogic = new PurviewLogic();
         $purviewLogic->load($this->verifyData);
