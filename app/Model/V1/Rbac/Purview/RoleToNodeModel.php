@@ -18,9 +18,11 @@ class RoleToNodeModel extends Model
 
     protected $primaryKey = 'role_id';
 
-    protected $fillable = ['role_id','node_id'];
+    protected $fillable = ['role_id','node_id','is_checked'];
 
     public $timestamps = false;
+
+    const IS_CHECKED_TRUE = 1;
 
     public function hasOneNodeModel(){
         return $this->hasOne(NodeModel::class,'node_id','node_id');

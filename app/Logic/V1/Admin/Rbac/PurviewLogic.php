@@ -52,6 +52,9 @@ class PurviewLogic extends LoadDataLogic
         if (!empty($manageModel)){
             throw new Exception('管理员已存在','HAVE_FIND_USER');
         }
+        // 删除用户角色关系
+        (new UserToRoleModel)->where('uid',$this->uid)->delete();
+        //添加用户角色关系
         foreach ($this->roleIds as $roleId){
             (new UserToRoleModel)->firstOrCreate([
                 'uid' => $this->uid,
@@ -79,13 +82,17 @@ class PurviewLogic extends LoadDataLogic
         if (empty($roleModel)){
             throw new Exception('角色不存在','ROLE_NOT_FIND');
         }
+        // 删除角色节点关系
+        (new RoleToNodeModel())->where('role_id',$this->roleId)->delete();
+        // 添加角色节点关系
         foreach ($this->nodeIds as $nodeId){
             $nodeModel = (new NodeModel())->where('node_id',$nodeId)->firstHump();
             if(!empty($nodeModel->parentId)){
                 //添加父节点
                 (new RoleToNodeModel())->firstOrCreate([
                     'role_id' => $roleModel->roleId,
-                    'node_id' => $nodeModel->parentId
+                    'node_id' => $nodeModel->parentId,
+                    'is_checked' => RoleToNodeModel::IS_CHECKED_TRUE
                 ]);
             }
             //更新子节点

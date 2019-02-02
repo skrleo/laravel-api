@@ -34,7 +34,7 @@ class NodeController extends Controller
     /**
      * 添加节点
      * @return array
-     * @throws \App\Logic\Exception
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
