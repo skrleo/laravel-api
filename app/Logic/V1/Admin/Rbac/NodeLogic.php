@@ -36,10 +36,11 @@ class NodeLogic extends LoadDataLogic
     protected $isPage = 0;
 
     /**
-     * @return mixed
+     * @return array
      */
     public function index(){
-        $nodes = (new NodeModel())->orderBy('sort', 'DESC')->get()->toHump();
+        $nodes = (new NodeModel())
+            ->orderBy('sort', 'DESC')->getHump();
         if (!empty($nodes)) {
             $nodes = $this->_getNodeTree($nodes, 0);
         }

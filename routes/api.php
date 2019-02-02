@@ -61,6 +61,13 @@ Route::group([
         'namespace'=>'Admin'
     ],function(){
         Route::group([
+            'prefix'=>'base',
+            'namespace'=>'Base'
+        ],function(){
+            //权限节点列表
+            Route::get('/lists', 'BaseController@index');
+        });
+        Route::group([
             // path地址前缀
             'prefix'=>'user',
             // 命名空间前缀

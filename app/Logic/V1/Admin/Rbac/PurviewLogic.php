@@ -10,6 +10,7 @@ namespace App\Logic\V1\Admin\Rbac;
 
 use App\Logic\LoadDataLogic;
 use App\Model\Exception;
+use App\Model\V1\Rbac\Node\NodeModel;
 use App\Model\V1\Rbac\Purview\ManageModel;
 use App\Model\V1\Rbac\Purview\RoleToNodeModel;
 use App\Model\V1\Rbac\Purview\UserToRoleModel;
@@ -79,6 +80,15 @@ class PurviewLogic extends LoadDataLogic
             throw new Exception('角色不存在','ROLE_NOT_FIND');
         }
         foreach ($this->nodeIds as $nodeId){
+            $nodeModel = (new NodeModel())->where('node_id',$nodeId)->firstHump();
+            if(!empty($nodeModel->parentId)){
+                //添加父节点
+                (new RoleToNodeModel())->firstOrCreate([
+                    'role_id' => $roleModel->roleId,
+                    'node_id' => $nodeModel->parentId
+                ]);
+            }
+            //更新子节点
             (new RoleToNodeModel())->firstOrCreate([
                 'role_id' => $roleModel->roleId,
                 'node_id' => $nodeId
