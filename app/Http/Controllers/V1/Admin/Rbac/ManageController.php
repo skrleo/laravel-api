@@ -49,21 +49,20 @@ class ManageController extends Controller
 
     /**
      * @param $manageId
-     * @return \DdvPhp\DdvUtil\Laravel\Model
+     * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
     public function show($manageId){
         $this->validate([ 'manageId' => $manageId], [
-            'manageId' => 'required|integer',
-            'uid' => 'required|integer',
-            'type' => 'integer',
-            'remark' => 'string'
+            'manageId' => 'required|integer'
         ]);
         $manageLogic = new ManageLogic();
         $manageLogic->load($this->verifyData);
-        return $manageLogic->show();
+        return [
+          'data' => $manageLogic->show()
+        ];
     }
 
     /**

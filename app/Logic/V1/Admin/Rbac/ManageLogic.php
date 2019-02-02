@@ -71,7 +71,14 @@ class ManageLogic extends LoadDataLogic
      * @throws Exception
      */
     public function show(){
-        $manageModel = (new ManageModel())->where('manage_id',$this->manageId)->first();
+        $manageModel = (new ManageModel())
+            ->with([
+                'hasOneUserBaseModel' => function(HasOneOrMany $query){
+                    $query->select('uid','name');
+                },
+                'hasManyUserToRoleModel'
+            ])
+            ->where('manage_id',$this->manageId)->first();
         if (empty($manageModel)){
             throw new Exception('管理员不存在','NOT_FIND_MANAGE');
         }
