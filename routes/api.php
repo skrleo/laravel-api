@@ -90,7 +90,7 @@ Route::group([
                 // path地址前缀
                 'prefix'=>'site',
                 // 命名空间前缀
-                'namespace'=>'site'
+                'namespace'=>'Site'
             ],function(){
                 // 站点详情
                 Route::get('/{siteId}', 'SiteController@show');
