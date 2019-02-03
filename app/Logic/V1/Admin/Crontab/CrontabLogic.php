@@ -9,11 +9,11 @@
 namespace App\Logic\V1\Admin\Crontab;
 
 
-use App\Http\Controllers\V1\Admin\Base\BaseController;
+use App\Logic\LoadDataLogic;
 use App\Model\Exception;
 use App\Model\V1\Crontab\CrontabModel;
 
-class CrontabLogic extends BaseController
+class CrontabLogic extends LoadDataLogic
 {
     protected $name = '';
 

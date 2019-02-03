@@ -31,9 +31,7 @@ class CrontabController extends BaseController
         ]);
         $crontabLogic = new CrontabLogic();
         $crontabLogic->load($this->verifyData);
-        return [
-            'lists' => $crontabLogic->index()
-        ];
+        return $crontabLogic->index();
     }
 
     /**
@@ -41,12 +39,13 @@ class CrontabController extends BaseController
      * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
      */
     public function store(){
         $this->validate(null, [
             'name' => 'required|string',
-            'beginTime' => 'required|integer',
-            'endTime' => 'required|integer',
+            'beginTime' => 'required|string',
+            'endTime' => 'required|string',
             'interval' => 'required|integer',
             'type' => 'required|integer',
             'action' => 'required|string',
@@ -64,6 +63,7 @@ class CrontabController extends BaseController
      * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
      */
     public function show($crontabId){
         $this->validate(['crontabId' => $crontabId], [
@@ -82,13 +82,14 @@ class CrontabController extends BaseController
      * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
      */
     public function update($crontabId){
         $this->validate(['crontabId' => $crontabId], [
             'crontabId' => 'required|integer',
             'name' => 'required|string',
-            'beginTime' => 'required|integer',
-            'endTime' => 'required|integer',
+            'beginTime' => 'required|string',
+            'endTime' => 'required|string',
             'interval' => 'required|integer',
             'type' => 'required|integer',
             'action' => 'required|string',
@@ -106,6 +107,7 @@ class CrontabController extends BaseController
      * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
      */
     public function destroy($crontabId){
         $this->validate(['crontabId' => $crontabId], [

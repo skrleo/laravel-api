@@ -61,6 +61,7 @@ Route::group([
             // 命名空间前缀
             'namespace'=>'Admin',
         ],function(){
+
             Route::group([
                 'prefix'=>'base',
                 'namespace'=>'Base'
@@ -68,6 +69,23 @@ Route::group([
                 //权限节点列表
                 Route::get('/lists', 'BaseController@index');
             });
+
+            Route::group([
+                'prefix'=>'task',
+                'namespace'=>'Crontab'
+            ],function(){
+                //定时任务列表
+                Route::get('/lists', 'CrontabController@index');
+                //添加定时任务
+                Route::post('/', 'CrontabController@store');
+                //定时任务详情
+                Route::get('/{crontabId}', 'CrontabController@show');
+                //编辑定时任务
+                Route::get('/{crontabId}', 'CrontabController@update');
+                //删除定时任务
+                Route::delete('/{crontabId}', 'CrontabController@destroy');
+            });
+
             Route::group([
                 // path地址前缀
                 'prefix'=>'user',
