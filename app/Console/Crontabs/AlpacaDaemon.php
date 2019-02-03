@@ -8,14 +8,13 @@
 
 namespace App\Console\Crontabs;
 
-use Illuminate\Console\Command;
 
 /**
  * 守护进程
  * Class AlpacaDaemon
  * @package App\Console\Crontabs
  */
-class AlpacaDaemon extends Command
+class AlpacaDaemon
 {
     private $daemon_json = __DIR__ . '/deamon.json';
 
@@ -58,6 +57,10 @@ class AlpacaDaemon extends Command
         return $data;
     }
 
+    /**
+     * code是1001,表示后台进程已经启动
+     * @return mixed
+     */
     public function stop()
     {
         $data =new \stdClass();
@@ -70,6 +73,9 @@ class AlpacaDaemon extends Command
         return $result;
     }
 
+    /**
+     * code是1000时候，表示后台进程未启动
+     */
     public function start()
     {
         $data = json_decode(file_get_contents($this->daemon_json) , true);

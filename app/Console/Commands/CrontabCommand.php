@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Crontabs\AlpacaDaemon;
 use Illuminate\Console\Command;
 
 class CrontabCommand extends Command
@@ -18,7 +19,7 @@ class CrontabCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'crontab is a efficient timing tasks';
 
     /**
      * Create a new command instance.
@@ -37,7 +38,6 @@ class CrontabCommand extends Command
      */
     public function handle()
     {
-        //
-        $this->error('Error Arguments');
+        (new AlpacaDaemon)->stop();
     }
 }
