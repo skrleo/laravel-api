@@ -93,6 +93,7 @@ class WorkermanCommand extends Command
 
     /**
      * 当客户端发来消息时触发
+     * https://www.jianshu.com/p/d808dfa8b2d7
      * @param int   $client_id 连接id
      * @param mixed $message 具体消息
      */
