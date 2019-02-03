@@ -12,7 +12,7 @@ class CrontabCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'crontab';
+    protected $signature = 'crontab {action}';
 
     /**
      * The console command description.
@@ -38,6 +38,34 @@ class CrontabCommand extends Command
      */
     public function handle()
     {
-        (new AlpacaDaemon)->stop();
+        // 启动状态验证
+        $action = $this->argument('action');
+        if (!in_array($action, ['start', 'stop', 'status'])) {
+            $this->error('Error Arguments');
+            exit;
+        }
+        /**
+         * 定时任务启动
+         */
+        if ($action == 'start'){
+            (new AlpacaDaemon())->start();
+            exit;
+        }
+
+        /**
+         * 定时任务停止
+         */
+        if ($action == 'stop'){
+            (new AlpacaDaemon())->stop();
+            exit;
+        }
+
+        /**
+         * 查看定时任务
+         */
+        if ($action == 'status'){
+            (new AlpacaDaemon())->status();
+            exit;
+        }
     }
 }
