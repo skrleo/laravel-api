@@ -9,6 +9,8 @@
 namespace App\Console\Crontabs;
 
 
+use App\Model\V1\Crontab\CrontabModel;
+
 /**
  * 守护进程
  * Class AlpacaDaemon

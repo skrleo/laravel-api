@@ -27,6 +27,8 @@ class CrontabLogic extends BaseController
 
     protected $action = '';
 
+    protected $crontabId = 0;
+
     /**
      * 定时任务列表
      * @return array|\DdvPhp\DdvPage
@@ -45,8 +47,8 @@ class CrontabLogic extends BaseController
      */
     public function store(){
         $crontabModel = (new CrontabModel());
-        $nodeData = $this->getAttributes(['name', 'beginTime', 'endTime', 'interval', 'type', 'action'], ['', null]);
-        $crontabModel->setDataByHumpArray($nodeData);
+        $crontabData = $this->getAttributes(['name', 'beginTime', 'endTime', 'interval', 'type', 'action'], ['', null]);
+        $crontabModel->setDataByHumpArray($crontabData);
         if (!$crontabModel->save()){
             throw new Exception('添加定时任务失败','CRONTAB_STORE_FAIL');
         }
@@ -54,9 +56,49 @@ class CrontabLogic extends BaseController
     }
 
     /**
-     *
+     * 定时任务详情
+     * @return \DdvPhp\DdvUtil\Laravel\Model
+     * @throws Exception
      */
     public function show(){
+        $crontabModel = (new CrontabModel())->where('crontab_id',$this->crontabId)->first();
+        if (empty($crontabModel)){
+            throw new Exception('任务不存在','NOT_FIND_CRONTTAB');
+        }
+        return $crontabModel->toHump();
+    }
 
+    /**
+     * 编辑定时任务
+     * @return bool
+     * @throws Exception
+     */
+    public function update(){
+        $crontabModel = (new CrontabModel())->where('crontab_id',$this->crontabId)->first();
+        if (empty($crontabModel)){
+            throw new Exception('任务不存在','NOT_FIND_CRONTTAB');
+        }
+        $crontabData = $this->getAttributes(['name', 'beginTime', 'endTime', 'interval', 'type', 'action'], ['', null]);
+        $crontabModel->setDataByHumpArray($crontabData);
+        if (!$crontabModel->save()){
+            throw new Exception('编辑定时任务失败','CRONTAB_UPDATE_FAIL');
+        }
+        return true;
+    }
+
+    /**
+     * 删除定时任务
+     * @return bool
+     * @throws Exception
+     */
+    public function destroy(){
+        $crontabModel = (new CrontabModel())->where('crontab_id',$this->crontabId)->first();
+        if (empty($crontabModel)){
+            throw new Exception('任务不存在','NOT_FIND_CRONTTAB');
+        }
+        if (!$crontabModel->delete()){
+            throw new Exception('删除定时任务失败','DELETE_CRONTAB_FAIL');
+        }
+        return true;
     }
 }

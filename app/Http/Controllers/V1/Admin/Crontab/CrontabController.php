@@ -20,6 +20,7 @@ use App\Logic\V1\Admin\Crontab\CrontabLogic;
 class CrontabController extends BaseController
 {
     /**
+     * 定时任务列表
      * @return array
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
@@ -58,7 +59,10 @@ class CrontabController extends BaseController
     }
 
     /**
+     * 定时任务详情
+     * @param $crontabId
      * @return array
+     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      */
     public function show($crontabId){
@@ -70,5 +74,47 @@ class CrontabController extends BaseController
         return [
             'data' => $crontabLogic->show()
         ];
+    }
+
+    /**
+     * 编辑定时任务
+     * @param $crontabId
+     * @return array
+     * @throws \App\Model\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     */
+    public function update($crontabId){
+        $this->validate(['crontabId' => $crontabId], [
+            'crontabId' => 'required|integer',
+            'name' => 'required|string',
+            'beginTime' => 'required|integer',
+            'endTime' => 'required|integer',
+            'interval' => 'required|integer',
+            'type' => 'required|integer',
+            'action' => 'required|string',
+        ]);
+        $crontabLogic = new CrontabLogic();
+        $crontabLogic->load($this->verifyData);
+        if ($crontabLogic->update()){
+            return [];
+        }
+    }
+
+    /**
+     * 删除定时任务
+     * @param $crontabId
+     * @return array
+     * @throws \App\Model\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     */
+    public function destroy($crontabId){
+        $this->validate(['crontabId' => $crontabId], [
+            'crontabId' => 'required|integer'
+        ]);
+        $crontabLogic = new CrontabLogic();
+        $crontabLogic->load($this->verifyData);
+        if ($crontabLogic->destroy()){
+            return [];
+        }
     }
 }
