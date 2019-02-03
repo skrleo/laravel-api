@@ -81,7 +81,7 @@ Route::group([
                 //定时任务详情
                 Route::get('/{crontabId}', 'CrontabController@show');
                 //编辑定时任务
-                Route::get('/{crontabId}', 'CrontabController@update');
+                Route::put('/{crontabId}', 'CrontabController@update');
                 //删除定时任务
                 Route::delete('/{crontabId}', 'CrontabController@destroy');
             });

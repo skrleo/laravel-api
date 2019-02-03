@@ -61,11 +61,12 @@ class CrontabLogic extends LoadDataLogic
      * @throws Exception
      */
     public function show(){
-        $crontabModel = (new CrontabModel())->where('crontab_id',$this->crontabId)->first();
+        $crontabModel = (new CrontabModel())->where('crontab_id',$this->crontabId)->firstHump();
         if (empty($crontabModel)){
             throw new Exception('任务不存在','NOT_FIND_CRONTTAB');
         }
-        return $crontabModel->toHump();
+        $crontabModel->beginTime = array($crontabModel->beginTime,$crontabModel->endTime);
+        return $crontabModel;
     }
 
     /**
