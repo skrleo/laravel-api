@@ -39,10 +39,8 @@ class AlpacaCrontab
 
     /**
      * 配置
-     * @author Chengcheng
-     * @param array $crontab
-     * @date 2016-10-23 20:34:00
-     * @return array
+     * @param $crontab
+     * @return $this
      */
     public function setConfig($crontab)
     {
@@ -52,9 +50,7 @@ class AlpacaCrontab
 
     /**
      * 查看定时任务
-     * @author Chengcheng
-     * @date 2016-10-23 20:34:00
-     * @return array
+     * @return mixed
      */
     public function listTask()
     {
@@ -70,9 +66,8 @@ class AlpacaCrontab
 
     /**
      * 添加定时任务
-     * @author Chengcheng
-     * @date 2016-10-23 20:34:00
-     * @return array
+     * @param $task
+     * @return mixed
      */
     public function addTask($task)
     {
@@ -86,11 +81,9 @@ class AlpacaCrontab
 
     /**
      * 编辑定时任务
-     * @author Chengcheng
-     * @param string $index
-     * @param string $task
-     * @date 2016-10-23 20:34:00
-     * @return array
+     * @param $index
+     * @param $task
+     * @return mixed
      */
     public function editTask($index,$task)
     {
@@ -104,11 +97,9 @@ class AlpacaCrontab
 
     /**
      * 编辑定时任务状态
-     * @author Chengcheng
-     * @param string $index
-     * @param string $status
-     * @date 2016-10-23 20:34:00
-     * @return array
+     * @param $index
+     * @param $status
+     * @return mixed
      */
     public function editTaskStatus($index,$status)
     {
@@ -122,10 +113,8 @@ class AlpacaCrontab
 
     /**
      * 获取定时任务
-     * @author Chengcheng
-     * @param string $index
-     * @date 2016-10-23 20:34:00
-     * @return array
+     * @param $index
+     * @return mixed
      */
     public function getIndexTask($index)
     {
@@ -138,10 +127,8 @@ class AlpacaCrontab
 
     /**
      * 删除定时任务
-     * @author Chengcheng
-     * @param string $index
-     * @date 2016-10-23 20:34:00
-     * @return array
+     * @param $index
+     * @return mixed
      */
     public function removeTask($index)
     {
@@ -155,9 +142,7 @@ class AlpacaCrontab
 
     /**
      * 执行定时任务
-     * @author Chengcheng
-     * @date 2016-10-23 20:34:00
-     * @return array
+     * @return mixed|void
      */
     public function doTask()
     {
@@ -226,10 +211,8 @@ class AlpacaCrontab
 
     /**
      * 格式化时间
-     * @author Chengcheng
-     * @param string $interval
-     * @date 2016-10-23 20:34:00
-     * @return array
+     * @param $interval
+     * @return string
      */
     private function timeToStr($interval)
     {

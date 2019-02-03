@@ -48,6 +48,9 @@ class AlpacaDaemon
         return $this;
     }
 
+    /**
+     * @return array|mixed
+     */
     public function status()
     {
         $data = json_decode(file_get_contents($this->daemon_json),true);
