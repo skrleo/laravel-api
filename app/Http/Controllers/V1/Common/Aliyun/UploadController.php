@@ -9,6 +9,9 @@
 namespace App\Http\Controllers\V1\Common\Aliyun;
 
 use App\Http\Controllers\Exception;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 use OSS\OssClient;
 use OSS\Core\OssException;
 use App\Http\Controllers\Controller;
@@ -129,28 +132,33 @@ class UploadController extends Controller
      * @throws Exception
      */
     public function uploadImg(Request $request){
-        $imgBase64 = $request->input('file');
-        if (preg_match('/^(data:\s*image\/(\w+);base64,)/',$imgBase64,$res)) {
-            //图片保存路径
-            if (!file_exists(storage_path('images/'))) {
-                mkdir(storage_path('images/'),0755,true);
-            }
-            //图片名字 + 获取图片类型
-            $fileName = date("YmdHis").rand(100, 999) . '.' . $res[2];
-            $filePath =  storage_path('images/') . $fileName;
-            if (!file_put_contents($filePath,base64_decode(str_replace($res[1],'', $imgBase64)))) {
-               throw new Exception('图片保存失败','UPLOAD_IMAGE_FAIL');
-            }
-            // 上传到阿里云 OSS存储
-            try{
-                $ossClient = new OssClient(config('aliyun.oss.accessKeyId'), config('aliyun.oss.accessKeySecret'), config('aliyun.oss.endpoint'));
-                $ossClient->uploadFile(config('aliyun.oss.bucket'), $fileName, $filePath);
-            } catch(OssException $e) {
-                throw new Exception('文件上传失败','FILE_UPLOAD_FAIL');
+        if ($request->isMethod('post')) {
+            $file = $request->file('file');
+            // 文件是否上传成功
+            if ($file->isValid()) {
+                // 获取文件相关信息
+                $extension = $file->getClientOriginalExtension();
+                // 上传文件
+                $fileName = date('YmdHis') . uniqid() . '.' . $extension;
+                //图片保存路径
+                if (!file_exists(storage_path('upload/images/'))) {
+                    mkdir(storage_path('upload/images/'),0755,true);
+                }
+                $file->move(storage_path('upload/images/'), $fileName);
+                $filePath = storage_path('upload/images/') . $fileName;
+                // 上传到阿里云 OSS存储
+                try{
+                    $ossClient = new OssClient(config('aliyun.oss.accessKeyId'), config('aliyun.oss.accessKeySecret'), config('aliyun.oss.endpoint'));
+                    $ossClient->uploadFile(config('aliyun.oss.bucket'), $fileName, $filePath);
+                } catch(OssException $e) {
+                    throw new Exception('文件上传失败','FILE_UPLOAD_FAIL');
+                }
+                unlink($filePath);
             }
         }
         return [
             'data' => [
+                //https://img.17wangku.com/201902030238145c565416c7fac.png
                 'filePath' =>  config('aliyun.oss.urlRoot'). $fileName
             ]
         ];
