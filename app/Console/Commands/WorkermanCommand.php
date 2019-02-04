@@ -135,6 +135,6 @@ class WorkermanCommand extends Command
      */
     public function startRegister(){
         // register 必须是text协议
-        new Register('text://0.0.0.0:1238');
+        $register = new Register('text://0.0.0.0:1238');
     }
 }
