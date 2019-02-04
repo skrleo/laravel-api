@@ -68,17 +68,40 @@ class WorkermanCommand extends Command
         $argv[1] = $action;
         $argv[2] = $this->option('d') ? '-d' : '';
 
-        // BusinessWorker -- 必须是text协议
+        switch ($argv[1]) {
+            case 'start':
+                $this->start();
+                break;
+            case 'stop':
+                break;
+            case 'restart':
+                break;
+            case 'reload':
+                break;
+            case 'status':
+                break;
+            case 'connections':
+                break;
+        }
+
+    }
+
+    /**
+     * 启动workerman 连接
+     */
+    public function start(){
+
+        // 启动BusinessWorker服务 -- 必须是text协议
         new Register('text://0.0.0.0:' . config('gateway.register.port'));
 
-        // BusinessWorker
+        // 启动BusinessWorker服务
         $worker                  = new BusinessWorker();
         $worker->name            = config('gateway.worker.name');
         $worker->count           = config('gateway.worker.count');
         $worker->registerAddress = config('gateway.register.host') . ':' . config('gateway.register.port');
         $worker->eventHandler    = 'Console\Commands\WorkermanCommand';
 
-        // Gateway
+        // 启动Gateway服务
         $gateway                  = new Gateway("websocket://0.0.0.0:" . config('gateway.port'));
         $gateway->name            = config('gateway.gateway.name');
         $gateway->count           = config('gateway.gateway.count');
@@ -88,47 +111,25 @@ class WorkermanCommand extends Command
         $gateway->pingInterval    = 10;
         $gateway->pingData        = '{"action":"sys/ping","data":"0"}';
 
+        /*
+        // 当客户端连接上来时，设置连接的onWebSocketConnect，即在websocket握手时的回调
+        $gateway->onConnect = function($connection)
+        {
+            $connection->onWebSocketConnect = function($connection , $http_header)
+            {
+                // 可以在这里判断连接来源是否合法，不合法就关掉连接
+                // $_SERVER['HTTP_ORIGIN']标识来自哪个站点的页面发起的websocket链接
+                if($_SERVER['HTTP_ORIGIN'] != 'http://kedou.workerman.net')
+                {
+                    $connection->close();
+                }
+                // onWebSocketConnect 里面$_GET $_SERVER是可用的
+                // var_dump($_GET, $_SERVER);
+            };
+        };
+        */
+
+        // 运行所有服务
         Worker::runAll();
-    }
-
-    /**
-     * 当客户端发来消息时触发
-     * https://www.jianshu.com/p/d808dfa8b2d7
-     * @param int   $client_id 连接id
-     * @param mixed $message 具体消息
-     */
-    public static function onMessage($client_id, $message)
-    {
-        // 向客户端发送hello $data
-        $client_id->send('Hello, your send message is: ' . $message);
-    }
-
-    /**
-     * 当客户端连接时触发
-     * 如果业务不需此回调可以删除onConnect
-     */
-    public static function onConnect()
-    {
-        $result           = [];
-        $result['action'] = "sys/connect";
-        $result['msg']    = '连接成功！';
-        $result['code']   = 9900;
-        WsSender::sendToCurrentClient(json_encode($result, JSON_UNESCAPED_UNICODE));
-    }
-
-    /**
-     * 进程启动后初始化数据库连接
-     */
-    public static function onWorkerStart()
-    {
-
-    }
-
-    /**
-     * 当用户断开连接时触发
-     * @param int $client_id 连接id
-     */
-    public static function onClose($client_id)
-    {
     }
 }
