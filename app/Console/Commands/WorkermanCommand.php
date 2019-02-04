@@ -85,7 +85,7 @@ class WorkermanCommand extends Command
         }
 
     }
-    
+
     /**
      * 启动workerman 连接
      */
@@ -107,8 +107,8 @@ class WorkermanCommand extends Command
         $gateway->lanIp           = config('gateway.gateway.lan_ip');
         $gateway->startPort       = config('gateway.gateway.startPort');
         $gateway->registerAddress = config('gateway.register.host') . ':' . config('gateway.register.port');
-        $gateway->pingInterval    = 10;
-        $gateway->pingData        = '{"action":"sys/ping","data":"0"}';
+//        $gateway->pingInterval    = 10;
+//        $gateway->pingData        = '{"action":"sys/ping","data":"0"}';
 
         /*
         // 当客户端连接上来时，设置连接的onWebSocketConnect，即在websocket握手时的回调
