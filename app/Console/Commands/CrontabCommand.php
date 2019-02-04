@@ -48,7 +48,7 @@ class CrontabCommand extends Command
          * 定时任务启动
          */
         if ($action == 'start'){
-            (new AlpacaDaemon())->start();
+            $this->error('start');
             exit;
         }
 
@@ -56,7 +56,7 @@ class CrontabCommand extends Command
          * 定时任务停止
          */
         if ($action == 'stop'){
-            (new AlpacaDaemon())->stop();
+            $this->error('stop');
             exit;
         }
 
@@ -64,7 +64,7 @@ class CrontabCommand extends Command
          * 查看定时任务
          */
         if ($action == 'status'){
-            (new AlpacaDaemon())->status();
+            $this->error('status');
             exit;
         }
     }

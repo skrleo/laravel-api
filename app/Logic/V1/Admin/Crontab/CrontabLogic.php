@@ -66,6 +66,7 @@ class CrontabLogic extends LoadDataLogic
             throw new Exception('任务不存在','NOT_FIND_CRONTTAB');
         }
         $crontabModel->beginTime = array($crontabModel->beginTime,$crontabModel->endTime);
+        unset($crontabModel->endTime);
         return $crontabModel;
     }
 

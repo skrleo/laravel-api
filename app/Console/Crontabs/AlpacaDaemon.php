@@ -68,7 +68,7 @@ class AlpacaDaemon
      */
     public function stop()
     {
-        $data =new \stdClass();
+        $data = new \stdClass();
         $data->code="1001";
         $data->message="Stop at:".date("Y-m-d H:i:s" ,time());
         file_put_contents($this->daemon_json,json_encode($data),LOCK_EX);
@@ -116,6 +116,7 @@ class AlpacaDaemon
             $data['message'] = date("Y-m-d H:i:s" ,time())." : Working ...";
             file_put_contents($this->daemon_json, json_encode($data), LOCK_EX);
             sleep(1);
+
         }
         $this->stop();
     }

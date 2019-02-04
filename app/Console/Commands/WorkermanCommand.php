@@ -99,7 +99,8 @@ class WorkermanCommand extends Command
      */
     public static function onMessage($client_id, $message)
     {
-
+        // 向客户端发送hello $data
+        $client_id->send('Hello, your send message is: ' . $message);
     }
 
     /**

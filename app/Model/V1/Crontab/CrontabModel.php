@@ -17,4 +17,9 @@ class CrontabModel extends Model
 
     protected $primaryKey = 'crontab_id';
 
+    // 任务暂停状态
+    const TASK_QUEUE_STOP = 0;
+    // 任务运行状态
+    const TASK_QUEUE_START = 1;
+
 }
