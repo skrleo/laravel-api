@@ -85,23 +85,22 @@ class WorkermanCommand extends Command
         }
 
     }
-
+    
     /**
      * 启动workerman 连接
      */
     public function start(){
+        $this->startGateWay();
+        $this->startBusinessWorker();
+        $this->startRegister();
+        // 运行所有服务
+        Worker::runAll();
+    }
 
-        // 启动BusinessWorker服务 -- 必须是text协议
-        new Register('text://0.0.0.0:' . config('gateway.register.port'));
-
-        // 启动BusinessWorker服务
-        $worker                  = new BusinessWorker();
-        $worker->name            = config('gateway.worker.name');
-        $worker->count           = config('gateway.worker.count');
-        $worker->registerAddress = config('gateway.register.host') . ':' . config('gateway.register.port');
-        $worker->eventHandler    = 'Console\Commands\WorkermanCommand';
-
-        // 启动Gateway服务
+    /**
+     * 启动Gateway服务
+     */
+    public function startGateWay(){
         $gateway                  = new Gateway("websocket://0.0.0.0:" . config('gateway.port'));
         $gateway->name            = config('gateway.gateway.name');
         $gateway->count           = config('gateway.gateway.count');
@@ -128,8 +127,24 @@ class WorkermanCommand extends Command
             };
         };
         */
+    }
 
-        // 运行所有服务
-        Worker::runAll();
+    /**
+     * 启动BusinessWorker服务
+     */
+    public function startBusinessWorker(){
+        $worker                  = new BusinessWorker();
+        $worker->name            = config('gateway.worker.name');
+        $worker->count           = config('gateway.worker.count');
+        $worker->registerAddress = config('gateway.register.host') . ':' . config('gateway.register.port');
+        $worker->eventHandler    = 'Console\Commands\WorkermanCommand';
+    }
+
+    /**
+     * 启动Register服务
+     */
+    public function startRegister(){
+        // 启动Register服务 -- 必须是text协议
+        new Register('text://0.0.0.0:' . config('gateway.register.port'));
     }
 }
