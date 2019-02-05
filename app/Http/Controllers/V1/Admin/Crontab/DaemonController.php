@@ -20,6 +20,7 @@ use App\Logic\V1\Admin\Crontab\DaemonLogic;
 class DaemonController extends BaseController
 {
     /**
+     * 开始定时任务的守护进程
      * @return array
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
@@ -30,11 +31,43 @@ class DaemonController extends BaseController
         ]);
         $daemonLogic = new DaemonLogic();
         $daemonLogic->load($this->verifyData);
-        if ($daemonLogic->start()){
-            return [];
-        }
+        return [
+            'data' => $daemonLogic->start()
+        ];
     }
 
+    /**
+     * 停止定时任务的守护进程
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function stop(){
+        $this->validate(null, [
+            'status' => 'integer'
+        ]);
+        $daemonLogic = new DaemonLogic();
+        $daemonLogic->load($this->verifyData);
+        return [
+            'data' => $daemonLogic->stop()
+        ];
+    }
 
+    /**
+     * 执行定时任务
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function task(){
+        $this->validate(null, [
+            'status' => 'integer'
+        ]);
+        $daemonLogic = new DaemonLogic();
+        $daemonLogic->load($this->verifyData);
+        return [
+            'data' => $daemonLogic->task()
+        ];
+    }
 
 }

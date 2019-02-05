@@ -9,6 +9,8 @@
 namespace App\Logic\V1\Admin\Crontab;
 
 
+use App\Console\Crontabs\AlpacaDaemon;
+use App\Console\Crontabs\AlpacaWorker;
 use App\Logic\LoadDataLogic;
 
 class DaemonLogic extends LoadDataLogic
@@ -16,41 +18,34 @@ class DaemonLogic extends LoadDataLogic
     protected $daemonJson = __DIR__ .'/deamon.json';
 
     /**
-     * 启动守护进程
+     * 开始守护进程
      */
     public function start(){
-        $data = json_decode(file_get_contents($this->daemonJson,true));
-        if(empty($data)){
-            $data['code'] = '1001';
-        }
-        if($data['code'] == "1000" ){
-            //die("Error - exit,   Already running !");
-            return;
-        }
+        //在守护进程中注入定时任务
+        $events = ['0'=>function(){
+            AlpacaWorker::worker()->action(['REQUEST_URI'=>"/crontab/index/task"]);
+        }];
+        AlpacaDaemon::daemon()->setEvents($events);
+        AlpacaDaemon::daemon()->start();
+        return [];
+    }
 
-        $data['code']="1000";
-        $data['message']="Start";
-        file_put_contents($this->daemonJson,json_encode($data,true),LOCK_EX);
+    /**
+     * 停止定时任务的守护进程
+     * @return mixed
+     */
+    public function stop(){
+        $result['data'] = AlpacaDaemon::daemon()->stop();
+        return $result;
+    }
 
-        ignore_user_abort(true);     // 忽略客户端断开
-        set_time_limit(0);           // 设置执行不超时
-
-        while(true){
-            $data = json_decode(file_get_contents($this->daemon_json) , true);
-            if(empty($data) || empty($data['code']) || $data['code'] == "1001" ){
-                break;
-            }
-
-            if(!empty($this->events)){
-                foreach ($this->events as $e){
-                    $e();
-                }
-            }
-
-            $data['message'] = date("Y-m-d H:i:s" ,time())." : Working ...";
-            file_put_contents($this->daemon_json, json_encode($data), LOCK_EX);
-            sleep(1);
-        }
-        $this->stop();
+    /**
+     * 执行定时任务
+     * @return mixed
+     */
+    public function task(){
+        //执行定时任务
+        $result['data'] = AlpacaCrontab::crontab()->doTask();
+        return $result;
     }
 }

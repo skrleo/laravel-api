@@ -74,6 +74,12 @@ Route::group([
                 'prefix'=>'task',
                 'namespace'=>'Crontab'
             ],function(){
+                // 启动守护进程
+                Route::get('/daemon/start', 'DaemonController@start');
+                // 停止守护进程
+                Route::get('/daemon/stop', 'DaemonController@stop');
+                //执行守护进程
+                Route::get('/daemon/task', 'DaemonController@task');
                 //定时任务列表
                 Route::get('/lists', 'CrontabController@index');
                 //添加定时任务

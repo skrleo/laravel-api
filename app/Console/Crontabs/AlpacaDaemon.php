@@ -33,7 +33,7 @@ class AlpacaDaemon
     {
         if(!self::$instance){
             self::$instance = new self();
-            self::$instance->daemon_json = base_path('storage') . '/crontab/deamon.json';
+            self::$instance->daemon_json = __DIR__ . '/deamon.json';
         }
         return self::$instance;
     }
