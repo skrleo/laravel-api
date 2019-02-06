@@ -92,36 +92,28 @@ class WorkermanCommand extends Command
     }
 
     /**
+     * 当客户端连接时触发
+     * 如果业务不需此回调可以删除onConnect
+     *
+     * @param int $client_id 连接id
+     */
+    public static function onConnect($client_id)
+    {
+        // 向当前client_id发送数据
+        WsSender::sendToClient($client_id, "Hello $client_id\r\n");
+        // 向所有人发送
+        WsSender::sendToAll("$client_id login\r\n");
+    }
+
+    /**
      * 当客户端发来消息时触发
-     * https://www.jianshu.com/p/d808dfa8b2d7
-     * @param int   $client_id 连接id
+     * @param int $client_id 连接id
      * @param mixed $message 具体消息
      */
     public static function onMessage($client_id, $message)
     {
-        // 向客户端发送hello $data
-        $client_id->send('Hello, your send message is: ' . $message);
-    }
-
-    /**
-     * 当客户端连接时触发
-     * 如果业务不需此回调可以删除onConnect
-     */
-    public static function onConnect()
-    {
-        $result           = [];
-        $result['action'] = "sys/connect";
-        $result['msg']    = '连接成功！';
-        $result['code']   = 9900;
-        WsSender::sendToCurrentClient(json_encode($result, JSON_UNESCAPED_UNICODE));
-    }
-
-    /**
-     * 进程启动后初始化数据库连接
-     */
-    public static function onWorkerStart()
-    {
-
+        // 向所有人发送
+        WsSender::sendToAll("$client_id said $message\r\n");
     }
 
     /**
@@ -130,5 +122,7 @@ class WorkermanCommand extends Command
      */
     public static function onClose($client_id)
     {
+        // 向所有人发送
+        WsSender::sendToAll("$client_id logout\r\n");
     }
 }
