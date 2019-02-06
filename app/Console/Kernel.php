@@ -14,8 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\WsServer::class,
-        Commands\CrontabCommand::class,
-        Commands\WorkermanCommand::class
+        Commands\CrontabCommand::class
     ];
 
     /**
