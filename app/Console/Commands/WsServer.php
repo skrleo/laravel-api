@@ -99,7 +99,10 @@ class WsServer extends Command
      */
     public static function onMessage($client_id, $message)
     {
-
+        $result         = [];
+        $result['code'] = '2019';
+        $result['msg']  = 'success';
+        return $result;
     }
 
     /**
