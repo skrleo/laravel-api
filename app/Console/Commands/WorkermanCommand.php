@@ -57,72 +57,20 @@ class WorkermanCommand extends Command
             exit;
         }
 
-        //因为workerman需要带参数 所以得强制修改
-        global $argv;
-        $action = $this->argument('action');
-        if (!in_array($action, ['start', 'stop', 'status'])) {
-            $this->error('Error Arguments');
-            exit;
+
+        // 标记是全局启动
+        define('GLOBAL_START', 1);
+
+        require_once __DIR__ . '../../../vendor/autoload.php';
+
+        // 加载所有Applications/*/start.php，以便启动所有服务
+        foreach(glob(__DIR__.'../GatewayWorker/start*.php') as $start_file)
+        {
+            require_once $start_file;
         }
-        $argv[0] = 'ws';
-        $argv[1] = $action;
-        $argv[2] = $this->option('d') ? '-d' : '';
-
-        // BusinessWorker -- 必须是text协议
-        new Register('text://0.0.0.0:' . config('gateway.register.port'));
-
-        // BusinessWorker
-        $worker                  = new BusinessWorker();
-        $worker->name            = config('gateway.worker.name');
-        $worker->count           = config('gateway.worker.count');
-        $worker->registerAddress = config('gateway.register.host') . ':' . config('gateway.register.port');
-        $worker->eventHandler    = 'Console\Commands\WorkermanCommand';
-
-        // Gateway
-        $gateway                  = new Gateway("websocket://0.0.0.0:" . config('gateway.port'));
-        $gateway->name            = config('gateway.gateway.name');
-        $gateway->count           = config('gateway.gateway.count');
-        $gateway->lanIp           = config('gateway.gateway.lan_ip');
-        $gateway->startPort       = config('gateway.gateway.startPort');
-        $gateway->registerAddress = config('gateway.register.host') . ':' . config('gateway.register.port');
-        $gateway->pingInterval    = 10;
-        $gateway->pingData        = '{"action":"sys/ping","data":"0"}';
-
+        // 运行所有服务
         Worker::runAll();
+
     }
 
-    /**
-     * 当客户端连接时触发
-     * 如果业务不需此回调可以删除onConnect
-     *
-     * @param int $client_id 连接id
-     */
-    public static function onConnect($client_id)
-    {
-        // 向当前client_id发送数据
-        WsSender::sendToClient($client_id, "Hello $client_id\r\n");
-        // 向所有人发送
-        WsSender::sendToAll("$client_id login\r\n");
-    }
-
-    /**
-     * 当客户端发来消息时触发
-     * @param int $client_id 连接id
-     * @param mixed $message 具体消息
-     */
-    public static function onMessage($client_id, $message)
-    {
-        // 向所有人发送
-        WsSender::sendToAll("$client_id said $message\r\n");
-    }
-
-    /**
-     * 当用户断开连接时触发
-     * @param int $client_id 连接id
-     */
-    public static function onClose($client_id)
-    {
-        // 向所有人发送
-        WsSender::sendToAll("$client_id logout\r\n");
-    }
 }
