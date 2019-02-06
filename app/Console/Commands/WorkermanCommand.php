@@ -57,6 +57,16 @@ class WorkermanCommand extends Command
             exit;
         }
 
+        //因为workerman需要带参数 所以得强制修改
+        global $argv;
+        $action = $this->argument('action');
+        if (!in_array($action, ['start', 'stop', 'status'])) {
+            $this->error('Error Arguments');
+            exit;
+        }
+        $argv[0] = 'ws';
+        $argv[1] = $action;
+        $argv[2] = $this->option('d') ? '-d' : '';
 
         // 标记是全局启动
         define('GLOBAL_START', 1);
