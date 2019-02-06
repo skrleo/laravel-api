@@ -6,7 +6,6 @@
  * Time: 0:44
  */
 return [
-
     /*服务端口，对外开放*/
     'port'     => env('WS_SERVER_PORT', '8082'),                   //客户端连接这个端口
 

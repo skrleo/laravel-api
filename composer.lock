@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2ab54160af4204f5689fdb6c872839f",
+    "content-hash": "809397acd90f16159baa7ea00421eef5",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -4198,17 +4198,44 @@
             "time": "2018-08-21T06:17:30+00:00"
         },
         {
-            "name": "workerman/workerman",
-            "version": "v3.5.16",
+            "name": "workerman/gatewayclient",
+            "version": "v3.0.13",
             "source": {
                 "type": "git",
-                "url": "https://github.com/walkor/Workerman.git",
-                "reference": "b374bb86f9dae74bf373e924173a891eb6435c7a"
+                "url": "https://github.com/walkor/GatewayClient.git",
+                "reference": "6f4e76f38947be5cabca2c6fee367151f248d949"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/walkor/Workerman/zipball/b374bb86f9dae74bf373e924173a891eb6435c7a",
-                "reference": "b374bb86f9dae74bf373e924173a891eb6435c7a",
+                "url": "https://api.github.com/repos/walkor/GatewayClient/zipball/6f4e76f38947be5cabca2c6fee367151f248d949",
+                "reference": "6f4e76f38947be5cabca2c6fee367151f248d949",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GatewayClient\\": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "homepage": "http://www.workerman.net",
+            "time": "2018-09-15T03:03:50+00:00"
+        },
+        {
+            "name": "workerman/workerman",
+            "version": "v3.5.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/walkor/Workerman.git",
+                "reference": "f615edc0a550645778c6f8911830e4e12b0c5d45"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/walkor/Workerman/zipball/f615edc0a550645778c6f8911830e4e12b0c5d45",
+                "reference": "f615edc0a550645778c6f8911830e4e12b0c5d45",
                 "shasum": ""
             },
             "require": {
@@ -4241,7 +4268,7 @@
                 "asynchronous",
                 "event-loop"
             ],
-            "time": "2018-11-18T06:16:58+00:00"
+            "time": "2019-01-19T02:36:12+00:00"
         }
     ],
     "packages-dev": [
