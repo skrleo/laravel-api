@@ -99,10 +99,11 @@ class WsServer extends Command
      */
     public static function onMessage($client_id, $message)
     {
-        $result         = [];
-        $result['code'] = '2019';
-        $result['msg']  = 'success';
-        return $result;
+        $result           = [];
+        $result['action'] = "sys/connect";
+        $result['msg']    = '连接成功！';
+        $result['code']   = 9900;
+        WsSender::sendToCurrentClient(json_encode($result, JSON_UNESCAPED_UNICODE));
     }
 
     /**
