@@ -17,16 +17,6 @@ Route::group([
         // 命名空间前缀
         'namespace'=>'Common\Aliyun'
     ],function(){
-        // 获取分块大小 接口
-        Route::get('filePartSize','UploadController@filePartSize');
-        // 获取文件id 接口
-        Route::get('fileId','UploadController@fileId');
-        // 获取成功上传的信息
-        Route::get('filePartInfo','UploadController@filePartInfo');
-        // 获取分块签名
-        Route::get('filePartMd5','UploadController@filePartMd5');
-        // 合并上传文件
-        Route::post('complete','UploadController@complete');
         // 图片上传
         Route::post('img','UploadController@uploadImg');
     });
