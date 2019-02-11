@@ -27,12 +27,22 @@ class AccountController extends Controller
             'account' => 'required|string',
             'password' => 'required|string',
         ]);
-        $articleLogic = new AccountLogic();
-        $articleLogic->load($this->verifyData);
+        $accountLogic = new AccountLogic();
+        $accountLogic->load($this->verifyData);
         return [
-            'data'=> $articleLogic->login()
+            'data' => $accountLogic->login()
         ];
     }
+
+    /*
+     * 退出登录
+     */
+    public function logout()
+    {
+        AccountLogic::logout();
+        return ['data' => []];
+    }
+
 
 
 }

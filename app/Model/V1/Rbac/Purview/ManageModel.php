@@ -19,6 +19,8 @@ class ManageModel extends Model
     protected $primaryKey = 'manage_id';
 
     protected $fillable = ['uid'];
+    // 用户状态启用
+    const MANAGE_STATE_START = 1;
 
     public function hasManyUserToRoleModel(){
         return $this->hasMany(UserToRoleModel::class,'uid','uid');

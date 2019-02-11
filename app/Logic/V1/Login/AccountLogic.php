@@ -9,6 +9,7 @@
 namespace App\Logic\V1\Login;
 
 
+use App\Http\Middleware\ClientIp;
 use App\Logic\Exception;
 use App\Logic\LoadDataLogic;
 use App\Model\V1\User\UserAccountModel;
@@ -37,6 +38,34 @@ class AccountLogic extends LoadDataLogic
         if (md5($this->password)!== $userBaseModel->password){
             throw new Exception('密码错误,请重试！', 'USER_PASSWORD_ERROR');
         }
+        //更新登录信息
+        $userBaseModel->setDataByHumpArray([
+            'loginNum' => intval($userBaseModel->loginNum) + 1,
+            'loginTime' => time(),
+            'lastLoginTime' => $userBaseModel->loginTime,
+            'loginIp' => ClientIp::getClientIp(),
+            'lastLoginIp' => $userBaseModel->loginIp
+        ]);
+        $userBaseModel->save();
+        //把uid存到session中
+        \Session::put('uid', $userBaseModel->uid);
         return $userBaseModel->toHump();
+    }
+
+    /**
+     * 退出登录
+     * @return bool
+     */
+    public static function logout(){
+        \Session::remove('uid');
+        return true;
+    }
+
+    /**
+     * 判断用户是否登录
+     * @return bool
+     */
+    public static function isLogin(){
+        return session('uid', null);
     }
 }
