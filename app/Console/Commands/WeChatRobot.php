@@ -3,7 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\V1\Admin\Wechat\Vbot\VbotController;
+use Hanson\Vbot\Foundation\Vbot;
+use Hanson\Vbot\Message\Text;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 
 class WeChatRobot extends Command
 {
@@ -32,12 +35,18 @@ class WeChatRobot extends Command
     }
 
     /**
+     * 启动微信机器人
      * Execute the console command.
      *
      * @return mixed
+     * @throws \Hanson\Vbot\Exceptions\ArgumentException
      */
     public function handle()
     {
-        (new VbotController())->config();
+        $vbot = new Vbot(config('vbot'));
+        $vbot->messageHandler->setHandler(function(Collection $message){
+            Text::send($message['from']['UserName'], 'hi,I am WeChat Robot!');
+        });
+        $vbot->server->serve();
     }
 }
