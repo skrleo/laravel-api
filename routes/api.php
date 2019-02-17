@@ -59,6 +59,15 @@ Route::group([
                 //权限节点列表
                 Route::get('/lists', 'BaseController@index');
             });
+            /**
+             * vbot 微信机器人
+             */
+            Route::group([
+                'prefix'=>'wechat',
+                'namespace'=>'Wechat'
+            ],function(){
+                Route::get('/', 'Vbot\VbotController@config');
+            });
 
             Route::group([
                 'prefix'=>'task',
