@@ -21,9 +21,13 @@ class VbotController extends Controller
      */
     public function config(){
         $vbot = new Vbot(config('vbot'));
-        $vbot->messageHandler->setHandler(function(Collection $message){
-            Text::send($message['from']['UserName'], 'hi');
+        // 获取监听器实例
+        $observer = $vbot->observer;
+        $observer->setQrCodeObserver(function($qrCodeUrl){
+            $link    = str_replace('/l/', '/qrcode/', $qrCodeUrl);
+            $imgData = curl($link);
+            //随便弄……
+            return ['data' => $imgData];
         });
-        $vbot->server->serve();
     }
 }

@@ -12,7 +12,7 @@ return [
      * swoole 配置项（执行主动发消息命令必须要开启，且必须安装 swoole 插件）
      */
     'swoole'  => [
-        'status' => false,
+        'status' => true,
         'ip'     => '127.0.0.1',
         'port'   => '8866',
     ],
