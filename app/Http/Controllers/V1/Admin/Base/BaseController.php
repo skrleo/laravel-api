@@ -10,6 +10,8 @@ namespace App\Http\Controllers\V1\Admin\Base;
 
 
 use App\Http\Controllers\Controller;
+use App\Jobs\BaseJob;
+use App\Jobs\SendReminderEmail;
 use App\Logic\V1\Admin\Base\BaseLogic;
 use Faker\Provider\Base;
 
@@ -19,6 +21,7 @@ class BaseController extends Controller
      * 获取用户权限节点
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
+     * @throws \DdvPhp\DdvUtil\Exception
      */
     public function index(){
         $this->validate(null, [
@@ -29,5 +32,12 @@ class BaseController extends Controller
         return [
             'lists' => $baseLogic->nodeLists()
         ];
+    }
+
+    /**
+     *
+     */
+    public function test(){
+        BaseJob::dispatch()->delay(10);
     }
 }

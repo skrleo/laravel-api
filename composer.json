@@ -19,6 +19,7 @@
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "overtrue/laravel-wechat": "~4.0",
+        "predis/predis": "^1.1",
         "workerman/gateway-worker": "^3.0",
         "workerman/gatewayclient": "^3.0",
         "workerman/workerman": "^3.5"

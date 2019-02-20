@@ -58,6 +58,8 @@ Route::group([
             ],function(){
                 //权限节点列表
                 Route::get('/lists', 'BaseController@index');
+                // 测试
+                Route::get('/test', 'BaseController@test');
             });
             /**
              * vbot 微信机器人
