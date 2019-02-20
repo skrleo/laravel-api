@@ -30,7 +30,7 @@ class BaseJob implements ShouldQueue
     public function handle()
     {
         //
-        file_put_contents('wzb.txt','测试');
-        echo '恭喜你执行成功';
+        $message = "Start at:".date("Y-m-d H:i:s" ,time());
+        file_put_contents('wzb.txt',$message);
     }
 }
