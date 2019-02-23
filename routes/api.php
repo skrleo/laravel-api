@@ -61,6 +61,7 @@ Route::group([
                 // 测试
                 Route::get('/test', 'BaseController@test');
             });
+
             /**
              * vbot 微信机器人
              */
@@ -91,6 +92,8 @@ Route::group([
                 Route::put('/{crontabId}', 'CrontabController@update');
                 //删除定时任务
                 Route::delete('/{crontabId}', 'CrontabController@destroy');
+                // 队列任务
+                Route::get('/queue/lists', 'QueueController@index');
             });
 
             Route::group([

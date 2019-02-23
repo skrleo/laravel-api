@@ -31,6 +31,7 @@ class BaseJob implements ShouldQueue
     {
         //
         $message = "Start at:".date("Y-m-d H:i:s" ,time());
+        echo $message;
         file_put_contents('wzb.txt',$message);
     }
 }

@@ -38,7 +38,6 @@ class BaseController extends Controller
      *
      */
     public function test(){
-        dispatch(new BaseJob())->onQueue('testQueue');
         BaseJob::dispatch()->delay(10);
     }
 }

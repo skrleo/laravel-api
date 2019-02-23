@@ -9,6 +9,7 @@
 namespace App\Logic\V1\Admin\Crontab;
 
 
+use App\Jobs\BaseJob;
 use App\Logic\LoadDataLogic;
 use App\Model\Exception;
 use App\Model\V1\Crontab\CrontabModel;
@@ -49,6 +50,12 @@ class CrontabLogic extends LoadDataLogic
         $crontabModel = (new CrontabModel());
         $crontabData = $this->getAttributes(['name', 'beginTime', 'endTime', 'interval', 'type', 'action'], ['', null]);
         $crontabModel->setDataByHumpArray($crontabData);
+        /**
+         * 添加队列任务
+         */
+        BaseJob::dispatch(['name' => 'Max Sky', 'gender' => 1])
+            ->onQueue('MyQueue');
+
         if (!$crontabModel->save()){
             throw new Exception('添加定时任务失败','CRONTAB_STORE_FAIL');
         }
