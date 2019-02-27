@@ -1,0 +1,59 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: chen
+ * Date: 2019/2/27
+ * Time: 22:13
+ */
+
+namespace App\Logic\V1\Admin\Base;
+
+
+use App\Logic\LoadDataLogic;
+use App\Model\Exception;
+use App\Model\V1\Base\ShortcutModel;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+
+class ShortcutLogic extends LoadDataLogic
+{
+    protected $uid = 0;
+
+    protected $shortcutId = 0;
+
+    /**
+     * 快捷方式列表
+     * @return \DdvPhp\DdvPage
+     */
+    public function lists(){
+        $res = (new ShortcutModel())
+            ->where('uid',$this->uid)
+            ->with([
+                'hasOneNodeModel' => function(HasOneOrMany $query){
+                    $query->select('node_id','label','icon','path');
+                }
+            ])
+            ->getDdvPage()
+        ->mapLists(function (ShortcutModel $model){
+            $model->setDataByModel($model->hasOneNodeModel, [
+                'node_id' => 0,
+                'label' => '',
+                'icon' => '',
+                'path' => ''
+            ]);
+            $model->removeAttribute('hasOneNodeModel');
+        });
+        return $res->toHump();
+    }
+
+    /**
+     * @return \DdvPhp\DdvUtil\Laravel\Model
+     * @throws Exception
+     */
+    public function destroy(){
+        $wayOfShortcutModel = (new ShortcutModel())->where('shortcut_id',$this->shortcutId)->first();
+        if (empty($wayOfShortcutModel)){
+            throw new Exception('快捷方式不存在','SHORTCUT_NOT_FIND');
+        }
+        return $wayOfShortcutModel->toHump();
+    }
+}

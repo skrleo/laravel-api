@@ -60,6 +60,10 @@ Route::group([
                 Route::get('/lists', 'BaseController@index');
                 // 测试
                 Route::get('/test', 'BaseController@test');
+                // 快捷方式列表
+                Route::get('/shortcut/lists', 'ShortcutController@index');
+                // 删除快捷方式
+                Route::delete('/shortcut/{shortcutId}', 'ShortcutController@index');
             });
 
             /**
