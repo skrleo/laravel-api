@@ -81,7 +81,6 @@ class BaseLogic extends LoadDataLogic
             'ip' => (new Sysinfo)->ip(),
             'cpu' => (new Sysinfo)->cpu(),
             'laraver' => (new Sysinfo)->laraver(),
-            'mysql' => (new Sysinfo)->mysql(),
             'php' => (new Sysinfo)->php(),
             'safeMode' => (new Sysinfo)->safeMode(),
             'server' => (new Sysinfo)->server(),
