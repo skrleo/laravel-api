@@ -14,6 +14,7 @@ use App\Model\V1\Rbac\Node\NodeModel;
 use App\Model\V1\Rbac\Purview\RoleToNodeModel;
 use App\Model\V1\Rbac\Purview\UserToRoleModel;
 use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
+use LaraMall\Admin\Sysinfo\Sysinfo;
 
 class BaseLogic extends LoadDataLogic
 {
@@ -71,4 +72,22 @@ class BaseLogic extends LoadDataLogic
         return array_unique($nodeIds);
     }
 
+    /**
+     * 获取网站信息(服务器配置以及网站状态)
+     * @return array
+     */
+    public function getConfig(){
+        return [
+            'ip' => (new Sysinfo)->ip(),
+            'cpu' => (new Sysinfo)->cpu(),
+            'laraver' => (new Sysinfo)->laraver(),
+            'mysql' => (new Sysinfo)->mysql(),
+            'php' => (new Sysinfo)->php(),
+            'safeMode' => (new Sysinfo)->safeMode(),
+            'server' => (new Sysinfo)->server(),
+            'timezone' => (new Sysinfo)->timezone(),
+            'uploadMaxFilesize' => (new Sysinfo)->upload_max_filesize(),
+            'webserver' => (new Sysinfo)->webserver(),
+        ];
+    }
 }

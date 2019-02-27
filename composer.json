@@ -16,6 +16,7 @@
         "fideloper/proxy": "~3.3",
         "hanson/vbot": "^2.0",
         "jacobcyl/ali-oss-storage": "^2.1",
+        "laramall/laravel-system-info": "^1.0",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "overtrue/laravel-wechat": "~4.0",

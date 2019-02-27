@@ -58,8 +58,8 @@ Route::group([
             ],function(){
                 //权限节点列表
                 Route::get('/lists', 'BaseController@index');
-                // 测试
-                Route::get('/test', 'BaseController@test');
+                // 获取网站信息(服务器配置以及网站状态)
+                Route::get('/config', 'BaseController@getConfig');
                 // 快捷方式列表
                 Route::get('/shortcut/lists', 'ShortcutController@index');
                 // 删除快捷方式

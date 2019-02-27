@@ -35,6 +35,20 @@ class BaseController extends Controller
     }
 
     /**
+     * 获取网站信息(服务器配置以及网站状态)
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \DdvPhp\DdvUtil\Exception
+     * @throws \ReflectionException
+     */
+    public function getConfig(){
+        $baseLogic = new BaseLogic();
+        return [
+            'data' => $baseLogic->getConfig()
+        ];
+    }
+
+    /**
      *
      */
     public function test(){
