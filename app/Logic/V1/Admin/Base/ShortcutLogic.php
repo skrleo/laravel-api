@@ -43,6 +43,7 @@ class ShortcutLogic extends LoadDataLogic
                 'icon' => '',
                 'path' => ''
             ]);
+            $model->path = substr($model->path,1);
             $model->removeAttribute('hasOneNodeModel');
         });
         return $res->toHump();
