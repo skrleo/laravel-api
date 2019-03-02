@@ -63,14 +63,17 @@ class ShortcutLogic extends LoadDataLogic
 
     /**
      * 删除快捷方式
-     * @return \DdvPhp\DdvUtil\Laravel\Model
+     * @return bool
      * @throws Exception
      */
     public function destroy(){
-        $wayOfShortcutModel = (new ShortcutModel())->where('shortcut_id',$this->shortcutId)->first();
-        if (empty($wayOfShortcutModel)){
+        $shortcutModel = (new ShortcutModel())->where('shortcut_id',$this->shortcutId)->first();
+        if (empty($shortcutModel)){
             throw new Exception('快捷方式不存在','SHORTCUT_NOT_FIND');
         }
-        return $wayOfShortcutModel->toHump();
+        if (!$shortcutModel->delete()){
+            throw new Exception('删除快捷方式失败','DELETE_SHORTCUT_FAIL');
+        }
+        return true;
     }
 }

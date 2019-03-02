@@ -65,7 +65,7 @@ Route::group([
                 // 添加快捷方式
                 Route::post('/shortcut', 'ShortcutController@store');
                 // 删除快捷方式
-                Route::delete('/shortcut/{shortcutId}', 'ShortcutController@index');
+                Route::delete('/shortcut/{shortcutId}', 'ShortcutController@destroy');
             });
 
             /**
