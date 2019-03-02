@@ -34,6 +34,7 @@ class ShortcutLogic extends LoadDataLogic
                     $query->select('node_id','label','icon','path');
                 }
             ])
+            ->orderByDesc('number')
             ->getDdvPage()
         ->mapLists(function (ShortcutModel $model){
             $model->setDataByModel($model->hasOneNodeModel, [
