@@ -20,6 +20,8 @@ class ShortcutLogic extends LoadDataLogic
 
     protected $shortcutId = 0;
 
+    protected $nodeId = 0;
+
     /**
      * 快捷方式列表
      * @return \DdvPhp\DdvPage
@@ -46,6 +48,20 @@ class ShortcutLogic extends LoadDataLogic
     }
 
     /**
+     * 添加快捷方式
+     * @return bool
+     */
+    public function store(){
+        $shortcutModel = (new ShortcutModel())->firstOrCreate([
+                'node_id' => $this->nodeId,
+                'uid' => $this->uid
+            ]);
+        $shortcutModel->increment('number');
+        return true;
+    }
+
+    /**
+     * 删除快捷方式
      * @return \DdvPhp\DdvUtil\Laravel\Model
      * @throws Exception
      */

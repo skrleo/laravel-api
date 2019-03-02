@@ -62,6 +62,8 @@ Route::group([
                 Route::get('/config', 'BaseController@getConfig');
                 // 快捷方式列表
                 Route::get('/shortcut/lists', 'ShortcutController@index');
+                // 添加快捷方式
+                Route::post('/shortcut', 'ShortcutController@store');
                 // 删除快捷方式
                 Route::delete('/shortcut/{shortcutId}', 'ShortcutController@index');
             });

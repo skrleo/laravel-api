@@ -29,6 +29,26 @@ class ShortcutController extends Controller
     }
 
     /**
+     * 添加快捷方式
+     * @param $shortcutId
+     * @return array
+     * @throws \App\Model\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function store(){
+        $this->validate([], [
+            'nodeId' => 'required|integer',
+            'uid' => 'required|integer'
+        ]);
+        $shortcutLogic = new ShortcutLogic();
+        $shortcutLogic->load($this->verifyData);
+        if ($shortcutLogic->store()){
+            return [];
+        }
+    }
+
+    /**
      * 删除快捷方式
      * @param $shortcutId
      * @return array

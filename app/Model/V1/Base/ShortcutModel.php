@@ -18,6 +18,8 @@ class ShortcutModel extends Model
 
     protected $primaryKey = 'shortcut_id';
 
+    protected $fillable = ['uid','node_id'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
