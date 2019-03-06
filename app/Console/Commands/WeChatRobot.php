@@ -47,7 +47,7 @@ class WeChatRobot extends Command
         // 获取监听器实例
         $observer = $vbot->observer;
         $observer->setQrCodeObserver(function($qrCodeUrl){
-            echo $qrCodeUrl;
+            var_dump($qrCodeUrl);
         });
     }
 }
