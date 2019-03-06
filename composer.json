@@ -7,6 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "aliyuncs/oss-sdk-php": "^2.3",
+        "apetab/vbot-server": "v1.0.0-beta",
         "barryvdh/laravel-cors": "^0.11.2",
         "barryvdh/laravel-ide-helper": "^2.5",
         "ddvphp/ddv-file": "0.0.*",

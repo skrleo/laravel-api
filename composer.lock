@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b29db281596825f0ef6971fbed8a8f9",
+    "content-hash": "8b40e1492f005db2467a152e4ef8196e",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -91,6 +91,41 @@
             "description": "Aliyun OSS SDK for PHP",
             "homepage": "http://www.aliyun.com/product/oss/",
             "time": "2018-01-08T06:59:35+00:00"
+        },
+        {
+            "name": "apetab/vbot-server",
+            "version": "v1.0.0-beta",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/apetab/vbot-server.git",
+                "reference": "5bbbc51ab92b86f0be5528db81af1204c5bc2904"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/apetab/vbot-server/zipball/5bbbc51ab92b86f0be5528db81af1204c5bc2904",
+                "reference": "5bbbc51ab92b86f0be5528db81af1204c5bc2904",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "hanson/vbot": "^2.0",
+                "walkor/workerman": "^3.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Vbot\\WebServer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "zhangsir",
+                    "email": "fei@zhangsir.me"
+                }
+            ],
+            "description": "vbot web服务, 支持windows/linux环境，可异步推送消息，网页二维码登陆",
+            "time": "2018-09-13T16:44:27+00:00"
         },
         {
             "name": "asm89/stack-cors",
@@ -5076,6 +5111,53 @@
             "time": "2019-01-29T11:11:52+00:00"
         },
         {
+            "name": "walkor/workerman",
+            "version": "v3.5.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/walkor/Workerman.git",
+                "reference": "f615edc0a550645778c6f8911830e4e12b0c5d45"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/walkor/Workerman/zipball/f615edc0a550645778c6f8911830e4e12b0c5d45",
+                "reference": "f615edc0a550645778c6f8911830e4e12b0c5d45",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "suggest": {
+                "ext-event": "For better performance. "
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Workerman\\": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "walkor",
+                    "email": "walkor@workerman.net",
+                    "homepage": "http://www.workerman.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "An asynchronous event driven PHP framework for easily building fast, scalable network applications.",
+            "homepage": "http://www.workerman.net",
+            "keywords": [
+                "asynchronous",
+                "event-loop"
+            ],
+            "abandoned": "workerman/workerman",
+            "time": "2019-01-19T02:36:12+00:00"
+        },
+        {
             "name": "workerman/gateway-worker",
             "version": "v3.0.12",
             "source": {
@@ -6980,7 +7062,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "apetab/vbot-server": 10
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
