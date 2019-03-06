@@ -46,7 +46,8 @@ class WeChatRobot extends Command
         $vbot = new Vbot(config('vbot'));
         // 获取监听器实例
         $observer = $vbot->observer;
-        $observer->setQrCodeObserver(function($qrCodeUrl){
+        $observer->setQrCodeObserver(function($qrCodeUrl)use ($vbot){
+            $vbot->console->log('please scan the qrCode with wechat.');
             var_dump($qrCodeUrl);
         });
     }
