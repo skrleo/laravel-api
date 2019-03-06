@@ -44,9 +44,10 @@ class WeChatRobot extends Command
     public function handle()
     {
         $vbot = new Vbot(config('vbot'));
-        $vbot->messageHandler->setHandler(function(Collection $message){
-            Text::send($message['from']['UserName'], 'hi,I am WeChat Robot!');
+        // 获取监听器实例
+        $observer = $vbot->observer;
+        $observer->setQrCodeObserver(function($qrCodeUrl){
+            echo $qrCodeUrl;
         });
-        $vbot->server->serve();
     }
 }

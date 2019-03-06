@@ -24,8 +24,7 @@ class VbotController extends Controller
         // 获取监听器实例
         $observer = $vbot->observer;
         $observer->setQrCodeObserver(function($qrCodeUrl){
-            $link    = str_replace('/l/', '/qrcode/', $qrCodeUrl);
-            return ['data' => $link];
+            return $qrCodeUrl;
         });
     }
 }
