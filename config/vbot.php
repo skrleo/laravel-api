@@ -9,12 +9,12 @@ $path = __DIR__.'/./../public/vbot';
 return [
     'path'     => $path,
     /*
-     * swoole 配置项（执行主动发消息命令必须要开启，且必须安装 swoole 插件）
+     * workerman 配置项（主动发消息）
      */
-    'swoole'  => [
-        'status' => true,
-        'ip'     => '127.0.0.1',
-        'port'   => '8866',
+    'workerman' => [
+        'mode' => 'web', // 可选配置 web/console
+        'ip' => '0.0.0.0',
+        'port' => 8866
     ],
     /*
      * 下载配置项
@@ -65,11 +65,10 @@ return [
      * 如果加载拓展则必须加载此配置项
      */
     'extension' => [
-        // 管理员配置（必选），优先加载 remark(备注名)
+        // 管理员配置（必选），优先加载 remark_name
         'admin' => [
             'remark'   => '',
             'nickname' => '',
         ],
-        // 'other extension' => [ ... ],
     ],
 ];
