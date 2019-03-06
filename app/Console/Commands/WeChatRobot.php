@@ -7,6 +7,7 @@ use Hanson\Vbot\Foundation\Vbot;
 use Hanson\Vbot\Message\Text;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Vbot\WebServer\WebServer;
 
 class WeChatRobot extends Command
 {
@@ -44,11 +45,12 @@ class WeChatRobot extends Command
     public function handle()
     {
         $vbot = new Vbot(config('vbot'));
-        // 获取监听器实例
-        $observer = $vbot->observer;
-        $observer->setQrCodeObserver(function($qrCodeUrl)use ($vbot){
-            $vbot->console->log('please scan the qrCode with wechat.');
-            var_dump($qrCodeUrl);
+        WebServer::register();
+
+        $vbot->messageHandler->setHandler(function ($message) {
+            Text::send($message['from']['UserName'], 'Hi, I\'m Vbot!');
         });
+
+        $vbot->server->serve();
     }
 }
