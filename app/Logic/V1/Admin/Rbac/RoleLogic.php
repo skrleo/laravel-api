@@ -74,9 +74,11 @@ class RoleLogic extends LoadDataLogic
         }
         foreach ($roleModel->hasManyRoleToNodeModel as $item){
             if (empty($item->is_checked)){
-                $nodeIds[] = $item->hasOneNodeModel->node_id;
+                if (!empty($item->hasOneNodeModel)){
+                    $nodeIds[] = $item->hasOneNodeModel->node_id;
+                    $item->setDataByModel($item->hasOneNodeModel);
+                }
             }
-            $item->setDataByModel($item->hasOneNodeModel);
             $item->removeAttribute('hasOneNodeModel');
         }
         $roleModel->nodeIds = $nodeIds ?? [];
