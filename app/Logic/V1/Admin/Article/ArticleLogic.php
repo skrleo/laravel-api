@@ -12,6 +12,7 @@ use App\Logic\Exception;
 use App\Logic\LoadDataLogic;
 use App\Model\V1\Article\ArticleModel;
 use App\Model\V1\Article\ArticleToTagModel;
+use App\Model\V1\Article\TagModel;
 use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\QueryException;
@@ -32,6 +33,8 @@ class ArticleLogic extends LoadDataLogic
 
     protected $tagIds = [];
 
+    protected $description = '';
+
     /**
      * @return string
      */
@@ -39,7 +42,18 @@ class ArticleLogic extends LoadDataLogic
     {
         $res = (new ArticleModel())
         ->latest()
-        ->getDdvPage();
+        ->getDdvPage()
+        ->mapLists(function ($model){
+            $articleToTagModel = (new ArticleToTagModel())->where('article_id',$this->articleId)
+                ->get();
+            foreach ($articleToTagModel as $item){
+                $tagModel = (new TagModel())->where('tag_id',$item->tag_id)->first();
+                if (!empty($tagModel)){
+                    $tagName[] = $tagModel->name;
+                }
+            }
+            $model->tagName = $tagName ?? [];
+        });
         return $res->toHump();
     }
 
@@ -50,7 +64,7 @@ class ArticleLogic extends LoadDataLogic
      */
     public function store(){
         $articleModel = new ArticleModel();
-        $articleData = $this->getAttributes(['uid', 'title', 'related', 'recommend','categoryId'], ['', null]);
+        $articleData = $this->getAttributes(['uid', 'title', 'related', 'recommend','categoryId','description'], ['', null]);
         $articleModel->setDataByHumpArray($articleData);
         if (!$articleModel->save()){
             throw new Exception('添加文章失败','ERROR_STORE_FAIL');
@@ -74,7 +88,7 @@ class ArticleLogic extends LoadDataLogic
         if (empty($articleModel)){
             throw new Exception('文章不存在','ARTICLE_NOT_FIND');
         }
-        $articleData = $this->getAttributes(['uid', 'title', 'related', 'recommend','categoryId'], ['', null]);
+        $articleData = $this->getAttributes(['uid', 'title', 'related', 'recommend','categoryId','description'], ['', null]);
         $articleModel->setDataByHumpArray($articleData);
         if (!$articleModel->save()){
             throw new Exception('修改文章失败','UPDATE_ARTICLE_ERROR');
@@ -91,6 +105,15 @@ class ArticleLogic extends LoadDataLogic
         if (empty($articleModel)){
             throw new Exception('文章不存在','ARTICLE_NOT_FIND');
         }
+        $articleToTagModel = (new ArticleToTagModel())->where('article_id',$this->articleId)
+            ->get();
+        foreach ($articleToTagModel as $item){
+            $tagModel = (new TagModel())->where('tag_id',$item->tag_id)->first();
+            if (!empty($tagModel)){
+                $tagName[] = $tagModel->name;
+            }
+        }
+        $articleModel->tagName = $tagName ?? [];
         return $articleModel->toHump();
     }
 
