@@ -16,4 +16,6 @@ class ArticleToTagModel extends Model
     protected $table = 'article_to_tag';
 
     protected $primaryKey = 'id';
+
+    protected $fillable = ['tag_id','article_id'];
 }

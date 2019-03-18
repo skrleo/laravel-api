@@ -11,6 +11,7 @@ namespace App\Logic\V1\Admin\Article;
 use App\Logic\Exception;
 use App\Logic\LoadDataLogic;
 use App\Model\V1\Article\ArticleModel;
+use App\Model\V1\Article\ArticleToTagModel;
 use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\QueryException;
@@ -28,6 +29,8 @@ class ArticleLogic extends LoadDataLogic
     protected $articleId = 0;
 
     protected $categoryId = 0;
+
+    protected $tagIds = [];
 
     /**
      * @return string
@@ -51,6 +54,12 @@ class ArticleLogic extends LoadDataLogic
         $articleModel->setDataByHumpArray($articleData);
         if (!$articleModel->save()){
             throw new Exception('添加文章失败','ERROR_STORE_FAIL');
+        }
+        foreach ($this->tagIds as $tagId){
+            (new ArticleToTagModel())->firstOrCreate([
+                'tag_id' => $tagId['tagId'],
+                'article_id' => $articleModel->getQueueableId()
+            ]);
         }
         return true;
     }

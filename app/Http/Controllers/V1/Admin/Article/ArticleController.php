@@ -37,6 +37,7 @@ class ArticleController extends Controller
         $this->validate(null, [
             'uid' => 'required|integer',
             'title' => 'required|string',
+            'tagIds' => 'required|array',
             'related' => 'required|string',
             'recommend' => 'required|string'
         ]);
