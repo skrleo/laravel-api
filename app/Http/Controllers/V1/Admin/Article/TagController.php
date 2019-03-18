@@ -37,14 +37,14 @@ class TagController extends Controller
     public function store(){
         $this->validate(null, [
             'name' => 'required|string',
-            'status' => 'required|integer',
-            'description' => 'required|string',
+            'status' => 'integer',
+            'description' => 'string',
         ]);
         $tagLogic = new TagLogic();
         $tagLogic->load($this->verifyData);
-        if ($tagLogic->store()){
-            return [];
-        }
+        return [
+            'data' => $tagLogic->store()
+        ];
     }
 
     /**

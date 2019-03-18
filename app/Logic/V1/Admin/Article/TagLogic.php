@@ -34,18 +34,19 @@ class TagLogic extends LoadDataLogic
     }
 
     /**
-     * @return bool
+     * @return array
      * @throws Exception
      */
     public function store(){
-        $tagModel = new TagModel();
-        $tagModel->name = $this->name;
-        $tagModel->status = $this->status;
-        $tagModel->description = $this->description;
+        $tagModel = (new TagModel())->firstOrNew(['name' => $this->name]);
+        $tagModel->status = $this->status ?? 0;
+        $tagModel->description = $this->description ?? '';
         if (!$tagModel->save()){
             throw new Exception('添加标签失败','STORE_TAG_FAIL');
         }
-        return true;
+        return [
+            'tagId' => $tagModel->getQueueableId()
+        ];
     }
 
     /**
