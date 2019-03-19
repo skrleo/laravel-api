@@ -13,7 +13,11 @@ use App\Model\Model;
 
 class UserAccountModel extends Model
 {
+    protected $table = 'user_account';
 
+    protected $primaryKey = 'uaid';
+
+    public $timestamps = false;
     /**
      * 手机号
      */
@@ -23,7 +27,4 @@ class UserAccountModel extends Model
      */
     const ACCOUNT_TYPE_EMAIL = 3;
 
-    protected $table = 'user_account';
-
-    protected $primaryKey = 'uaid';
 }

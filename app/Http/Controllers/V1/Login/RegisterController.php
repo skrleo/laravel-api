@@ -8,16 +8,25 @@
 
 namespace App\Http\Controllers\V1\Login;
 use App\Http\Controllers\Controller;
-use App\Logic\V1\Common\RegisterLogic;
-use App\Model\V1\User\UserAccountModel;
-use Illuminate\Contracts\Session\Session;
+use App\Logic\V1\Login\RegisterLogic;
 
 class RegisterController extends Controller
 {
     /**
-     * @return int
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
      */
     public function register(){
-        return 1111;
+        $this->validate(null, [
+            'account' => 'required|string',
+            'password' => 'required|string',
+            'headimg' => 'string',
+        ]);
+        $registerLogic = new RegisterLogic();
+        $registerLogic->load($this->verifyData);
+        if ($registerLogic->register()){
+            return [];
+        };
     }
 }

@@ -17,7 +17,6 @@ class UserBaseModel extends Model
 
     protected $primaryKey = 'uid';
 
-
     /**
      * 账号启用
      */
