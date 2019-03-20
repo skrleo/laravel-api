@@ -14,6 +14,7 @@ use App\Model\Exception;
 use App\Model\V1\Article\ArticleModel;
 use App\Model\V1\Article\ArticleToTagModel;
 use App\Model\V1\Article\TagModel;
+use App\Model\V1\User\UserBaseModel;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
 class ArticleLogic extends LoadDataLogic
@@ -50,6 +51,8 @@ class ArticleLogic extends LoadDataLogic
         if (empty($articleModel)){
             throw new Exception('文章不存在','ARTICLE_NOT_FIND');
         }
+        $userBaseModel = (new UserBaseModel())->where('uid',$articleModel->uid)->firstHump();
+        $articleModel->name = $userBaseModel->name ?? '';
         $articleToTagModel = (new ArticleToTagModel())->where('article_id',$this->articleId)
             ->get();
         foreach ($articleToTagModel as $item){
