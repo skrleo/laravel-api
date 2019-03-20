@@ -30,6 +30,24 @@ class ArticleController extends Controller
     }
 
     /**
+     * @param $articleId
+     * @return array
+     * @throws \App\Model\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function show($articleId){
+        $this->validate(['articleId' => $articleId], [
+            'articleId' => 'required|integer'
+        ]);
+        $articleLogic = new ArticleLogic();
+        $articleLogic->load($this->verifyData);
+        return  [
+            'data' => $articleLogic->show()
+        ];
+    }
+
+    /**
      * @return array
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException

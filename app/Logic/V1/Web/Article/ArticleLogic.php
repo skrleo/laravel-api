@@ -12,6 +12,8 @@ namespace App\Logic\V1\Web\Article;
 use App\Logic\LoadDataLogic;
 use App\Model\Exception;
 use App\Model\V1\Article\ArticleModel;
+use App\Model\V1\Article\ArticleToTagModel;
+use App\Model\V1\Article\TagModel;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
 class ArticleLogic extends LoadDataLogic
@@ -48,6 +50,15 @@ class ArticleLogic extends LoadDataLogic
         if (empty($articleModel)){
             throw new Exception('文章不存在','ARTICLE_NOT_FIND');
         }
+        $articleToTagModel = (new ArticleToTagModel())->where('article_id',$this->articleId)
+            ->get();
+        foreach ($articleToTagModel as $item){
+            $tagModel = (new TagModel())->where('tag_id',$item->tag_id)->firstHump(['tag_id','name']);
+            if (!empty($tagModel)){
+                $tag[] = $tagModel;
+            }
+        }
+        $articleModel->tags = $tag ?? [];
         return $articleModel->toHump();
     }
 }
