@@ -11,6 +11,7 @@ namespace App\Http\Controllers\V1\Web\Article;
 
 use App\Http\Controllers\Controller;
 use App\Logic\V1\Web\Article\ArticleLogic;
+use App\Logic\V1\Web\Article\SpiderLogic;
 
 class ArticleController extends Controller
 {
@@ -26,5 +27,21 @@ class ArticleController extends Controller
         $articleLogic = new ArticleLogic();
         $articleLogic->load($this->verifyData);
         return  $articleLogic->lists();
+    }
+
+    /**
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function spider(){
+        $this->validate(null, [
+            'uid' => 'integer'
+        ]);
+        $articleLogic = new SpiderLogic();
+        $articleLogic->load($this->verifyData);
+        return[
+            'data' => $articleLogic->getNewsInfo()
+        ];
     }
 }

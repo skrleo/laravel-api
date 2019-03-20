@@ -56,6 +56,8 @@ Route::group([
                  * 添加文章
                  */
                 Route::post('/', 'ArticleController@store');
+
+                Route::get('/spider', 'ArticleController@spider');
                 /**
                  * 编辑文章
                  */
