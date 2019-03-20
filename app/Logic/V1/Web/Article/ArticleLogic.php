@@ -10,7 +10,9 @@ namespace App\Logic\V1\Web\Article;
 
 
 use App\Logic\LoadDataLogic;
+use App\Model\Exception;
 use App\Model\V1\Article\ArticleModel;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
 class ArticleLogic extends LoadDataLogic
 {
@@ -19,13 +21,27 @@ class ArticleLogic extends LoadDataLogic
 
     public function lists(){
         $res = (new ArticleModel())
+            ->with([
+                'hasOneUserBaseModel' => function(HasOneOrMany $query){
+                    $query->select('uid','name','phone');
+                }
+            ])
             ->latest()
-            ->getDdvPage();
+            ->getDdvPage()
+            ->mapLists(function (ArticleModel $model){
+                $model->setDataByModel($model->hasOneUserBaseModel, [
+                    'uid' => 0,
+                    'name' => '',
+                    'phone' => ''
+                ]);
+                $model->removeAttribute($model->hasOneUserBaseModel);
+            });
         return $res->toHump();
     }
 
     /**
      * @return \DdvPhp\DdvUtil\Laravel\Model
+     * @throws Exception
      */
     public function show(){
         $articleModel = (new ArticleModel())->where('article_id',$this->articleId)->first();

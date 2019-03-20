@@ -11,9 +11,7 @@ namespace App\Http\Controllers\V1\Admin\Base;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\BaseJob;
-use App\Jobs\SendReminderEmail;
 use App\Logic\V1\Admin\Base\BaseLogic;
-use Faker\Provider\Base;
 
 class BaseController extends Controller
 {
