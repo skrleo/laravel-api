@@ -13,6 +13,7 @@ use App\Logic\LoadDataLogic;
 use App\Model\Exception;
 use App\Model\V1\Rbac\Purview\RoleToNodeModel;
 use App\Model\V1\Rbac\Role\RoleModel;
+use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
 class RoleLogic extends LoadDataLogic
@@ -30,7 +31,7 @@ class RoleLogic extends LoadDataLogic
      */
     public function index(){
         $res = (new RoleModel())
-            ->when(!empty($this->name),function ($query){
+            ->when(!empty($this->name),function (EloquentBuilder $query){
                 $query->where('name','like','%' .$this->name . '%');
             })
             ->getDdvPage()->toHump();

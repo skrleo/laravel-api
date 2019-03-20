@@ -39,6 +39,7 @@ class ArticleController extends Controller
             'title' => 'required|string',
             'tagIds' => 'required|array',
             'related' => 'required|string',
+            'description' => 'required|string',
             'recommend' => 'required|string'
         ]);
         $articleLogic = new ArticleLogic();

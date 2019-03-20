@@ -13,6 +13,7 @@ use App\Logic\LoadDataLogic;
 use App\Model\Exception;
 use App\Model\V1\User\UserAccountModel;
 use App\Model\V1\User\UserBaseModel;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
 class UserLogic extends LoadDataLogic
 {
@@ -38,7 +39,13 @@ class UserLogic extends LoadDataLogic
      * @return \DdvPhp\DdvPage
      */
     public function index(){
-        $res = (new UserBaseModel())->getDdvPage();
+        $res = (new UserBaseModel())
+            ->with([
+                'hasManyUserAccountModel' => function (HasOneOrMany $query) {
+                    $query->select('uid','account','type');
+                }
+            ])
+            ->getDdvPage();
         return $res->toHump();
     }
 

@@ -21,4 +21,8 @@ class UserBaseModel extends Model
      * 账号启用
      */
     const ACCOUNT_START_ENABLE = 0;
+
+    public function hasManyUserAccountModel(){
+        return $this->hasMany(UserAccountModel::class,'uid','uid');
+    }
 }
