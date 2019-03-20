@@ -29,6 +29,8 @@ class ArticleLogic extends LoadDataLogic
 
     protected $articleId = 0;
 
+    protected $status = 0;
+
     protected $categoryId = 0;
 
     protected $tagIds = [];
@@ -64,7 +66,7 @@ class ArticleLogic extends LoadDataLogic
      */
     public function store(){
         $articleModel = new ArticleModel();
-        $articleData = $this->getAttributes(['uid', 'title', 'related', 'recommend','categoryId','description'], ['', null]);
+        $articleData = $this->getAttributes(['uid', 'title', 'related', 'status','recommend','categoryId','description'], ['', null]);
         $articleModel->setDataByHumpArray($articleData);
         if (!$articleModel->save()){
             throw new Exception('添加文章失败','ERROR_STORE_FAIL');
@@ -88,7 +90,7 @@ class ArticleLogic extends LoadDataLogic
         if (empty($articleModel)){
             throw new Exception('文章不存在','ARTICLE_NOT_FIND');
         }
-        $articleData = $this->getAttributes(['uid', 'title', 'related', 'recommend','categoryId','description'], ['', null]);
+        $articleData = $this->getAttributes(['uid', 'title', 'related', 'status','recommend','categoryId','description'], ['', null]);
         $articleModel->setDataByHumpArray($articleData);
         if (!$articleModel->save()){
             throw new Exception('修改文章失败','UPDATE_ARTICLE_ERROR');
@@ -108,12 +110,12 @@ class ArticleLogic extends LoadDataLogic
         $articleToTagModel = (new ArticleToTagModel())->where('article_id',$this->articleId)
             ->get();
         foreach ($articleToTagModel as $item){
-            $tagModel = (new TagModel())->where('tag_id',$item->tag_id)->first();
+            $tagModel = (new TagModel())->where('tag_id',$item->tag_id)->firstHump(['tag_id','name']);
             if (!empty($tagModel)){
-                $tagName[] = $tagModel->name;
+                $tag[] = $tagModel;
             }
         }
-        $articleModel->tagName = $tagName ?? [];
+        $articleModel->tags = $tag ?? [];
         return $articleModel->toHump();
     }
 
