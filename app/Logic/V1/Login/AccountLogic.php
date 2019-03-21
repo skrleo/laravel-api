@@ -70,7 +70,7 @@ class AccountLogic extends LoadDataLogic
         /**
          * 判断是前台和后台登录
          */
-        if (!$this->type){
+        if ($this->type <> 0 ){
             $manageModel = (new ManageModel())->where('uid',$userBaseModel->uid)->first();
             if (empty($manageModel)){
                 throw new Exception('该用户并非管理员，禁止登录！', 'USER_NOT_MANAGE');
