@@ -83,7 +83,7 @@ class AccountLogic extends LoadDataLogic
      * 退出登录
      * @return bool
      */
-    public static function logout(){
+    public static function loginOut(){
         \Session::remove('uid');
         return true;
     }

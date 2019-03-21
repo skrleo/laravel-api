@@ -35,6 +35,10 @@ Route::group([
              */
             Route::post('/login', 'AccountController@login');
             /**
+             * 退出登录
+             */
+            Route::delete('/login', 'AccountController@logOut');
+            /**
              * 用户注册
              */
             Route::post('/register', 'RegisterController@register');

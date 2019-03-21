@@ -38,9 +38,9 @@ class AccountController extends Controller
     /*
      * 退出登录
      */
-    public function logout()
+    public function logOut()
     {
-        AccountLogic::logout();
+        AccountLogic::loginOut();
         return ['data' => []];
     }
 
