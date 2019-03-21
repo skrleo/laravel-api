@@ -50,7 +50,7 @@ class UserLogic extends LoadDataLogic
     }
 
     /**
-     * @return array
+     * @return bool
      * @throws Exception
      * @throws \ReflectionException
      */
@@ -60,9 +60,16 @@ class UserLogic extends LoadDataLogic
         $userBaseModel->setDataByHumpArray($userData);
         $userBaseModel->password = md5($this->password);
         if (!$userBaseModel->save()){
-            throw new Exception('添加节点失败','ERROR_STORE_FAIL');
+            throw new Exception('添加用户失败','STORE_USER_FAIL');
         }
-        return [];
+        $accountModel = new UserAccountModel();
+        $accountModel->uid = $userBaseModel->getQueueableId();
+        $accountModel->account = $this->email;
+        $accountModel->type = UserAccountModel::ACCOUNT_TYPE_EMAIL;
+        if (!$accountModel->save()){
+            throw new Exception('添加用户失败','STORE_USER_FAIL');
+        }
+        return true;
     }
 
     /**
