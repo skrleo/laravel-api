@@ -24,6 +24,7 @@ class AccountController extends Controller
      */
     public function login(){
         $this->validate(null, [
+            'type' => 'required|integer',
             'account' => 'required|string',
             'password' => 'required|string',
         ]);

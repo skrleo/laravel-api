@@ -12,6 +12,7 @@ namespace App\Logic\V1\Login;
 use App\Http\Middleware\ClientIp;
 use App\Logic\Exception;
 use App\Logic\LoadDataLogic;
+use App\Model\V1\Rbac\Purview\ManageModel;
 use App\Model\V1\User\UserAccountModel;
 use App\Model\V1\User\UserBaseModel;
 
@@ -20,6 +21,8 @@ class AccountLogic extends LoadDataLogic
     protected $account = '';
 
     protected $password = '';
+
+    protected $type = 0;
 
     /**
      * uid不为空则是登录状态
@@ -64,6 +67,15 @@ class AccountLogic extends LoadDataLogic
         $userBaseModel->save();
         //把uid存到session中
         \Session::put('uid', $userBaseModel->uid);
+        /**
+         * 判断是前台和后台登录
+         */
+        if (!$this->type){
+            $manageModel = (new ManageModel())->where('uid',$userBaseModel->uid)->first();
+            if (empty($manageModel)){
+                throw new Exception('该用户并非管理员，禁止登录！', 'USER_NOT_MANAGE');
+            }
+        }
         return $userBaseModel->toHump();
     }
 
