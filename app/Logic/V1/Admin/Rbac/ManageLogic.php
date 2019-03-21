@@ -10,9 +10,11 @@ namespace App\Logic\V1\Admin\Rbac;
 
 
 use App\Logic\LoadDataLogic;
+use App\Logic\V1\Login\AccountLogic;
 use App\Model\Exception;
 use App\Model\V1\Rbac\Purview\ManageModel;
 use App\Model\V1\Rbac\Purview\UserToRoleModel;
+use App\Model\V1\User\UserBaseModel;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
 class ManageLogic extends LoadDataLogic
@@ -29,6 +31,58 @@ class ManageLogic extends LoadDataLogic
 
     protected $roleIds = [];
 
+    /**判断是否是管理员
+     * @return bool
+     */
+    public static function isLoginManage()
+    {
+        if (empty(self::getLoginManageId())) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 获取管理员状态
+     * @throws Exception
+     */
+    public static function getManageState($uid)
+    {
+        $userBaseModel = (new UserBaseModel())->where('uid', $uid)->first();
+        if (!$userBaseModel) {
+            throw new Exception("用户不存在");
+        }
+        if ($userBaseModel->state < 0) {
+            throw new Exception("账号被锁定");
+        }
+        return true;
+    }
+
+
+    /**获取管理员ID
+     * @return mixed|null
+     */
+    public static function getLoginManageId()
+    {
+        if (!AccountLogic::isLogin()) {
+            return null;
+        }
+        $manageId = session('manageId', null);
+        if (empty($manageId)) {
+
+            $manageModel = (new ManageModel())->where(['uid' => AccountLogic::getLoginUid()])->firstHump();
+
+            if (empty($manageModel)) {
+                return null;
+            }
+            if ($manageModel->state <= 0) {
+                return null;
+            }
+            $manageId = $manageModel->manageId;
+            \Session::put('manageId', $manageId);
+        }
+        return $manageId;
+    }
     /**
      * 管理员列表
      * @return \DdvPhp\DdvPage

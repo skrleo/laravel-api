@@ -22,6 +22,21 @@ class AccountLogic extends LoadDataLogic
     protected $password = '';
 
     /**
+     * uid不为空则是登录状态
+     * @return bool
+     */
+    public static function isLogin(){
+        return !empty(self::getLoginUid());
+    }
+
+    /**
+     * 获取用户的ID
+     * @return string|int
+     */
+    public static function getLoginUid(){
+        return session('uid', null);
+    }
+    /**
      * 登录
      * @throws Exception
      */
@@ -59,13 +74,5 @@ class AccountLogic extends LoadDataLogic
     public static function logout(){
         \Session::remove('uid');
         return true;
-    }
-
-    /**
-     * 判断用户是否登录
-     * @return bool
-     */
-    public static function isLogin(){
-        return session('uid', null);
     }
 }

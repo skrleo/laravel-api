@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AdminManage;
 use DdvPhp\DdvRestfulApi\Middleware\Laravel\RestfulApi;
 
 Route::group([
@@ -97,11 +98,14 @@ Route::group([
          * 后台接口
          */
         Route::group([
+            'middleware'=>[
+                // 判断用户是否有权限
+                AdminManage::class,
+            ],
             'prefix'=>'admin',
             // 命名空间前缀
             'namespace'=>'Admin',
         ],function(){
-
             Route::group([
                 'prefix'=>'base',
                 'namespace'=>'Base'
