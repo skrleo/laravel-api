@@ -38,8 +38,12 @@ class ArticleController extends Controller
             'uid' => 'required|integer',
             'title' => 'required|string',
             'price' => 'required|string',
+            'cover' => 'required|array',
+            'tagIds' => 'array',
             'address' => 'required|string',
             'openTime' => 'required|string',
+            'categoryId' => 'required|string',
+            'description' => 'required|string',
             'reason' => 'required|string',
         ]);
         $articleLogic = new ArticleLogic();
