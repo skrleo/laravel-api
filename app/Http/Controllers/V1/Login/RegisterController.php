@@ -22,6 +22,7 @@ class RegisterController extends Controller
             'account' => 'required|string',
             'password' => 'required|string',
             'headimg' => 'string',
+            'name' => 'string',
         ]);
         $registerLogic = new RegisterLogic();
         $registerLogic->load($this->verifyData);

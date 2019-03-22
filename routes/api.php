@@ -50,6 +50,14 @@ Route::group([
             'namespace'=>'Web',
         ],function(){
             Route::group([
+                'prefix'=>'user',
+                'namespace'=>'User'
+            ],function(){
+                //用户详情
+                Route::get('/{uid}', 'UserController@show');
+            });
+            
+            Route::group([
                 'prefix'=>'article',
                 'namespace'=>'Article'
             ],function(){

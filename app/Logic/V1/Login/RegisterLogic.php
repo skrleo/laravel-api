@@ -28,6 +28,8 @@ class RegisterLogic extends LoadDataLogic
 
     protected $headimg = '';
 
+    protected $name = '';
+
     /**
      * @return bool
      */
@@ -35,6 +37,7 @@ class RegisterLogic extends LoadDataLogic
         $userBaseModel = new UserBaseModel();
         $userBaseModel->register_ip = ClientIp::getClientIp();
         $userBaseModel->password = md5($this->password);
+        $userBaseModel->name = $this->name ?? '';
         $userBaseModel->headimg = $this->headimg ?? '';
         $userBaseModel->save();
         //  添加用户账号

@@ -37,6 +37,7 @@ class ArticleLogic extends LoadDataLogic
                     'name' => '',
                     'phone' => ''
                 ]);
+                $model->imageUrls = json_decode($model->cover,true);
                 $model->removeAttribute($model->hasOneUserBaseModel);
             });
         return $res->toHump();
@@ -61,6 +62,7 @@ class ArticleLogic extends LoadDataLogic
                 $tag[] = $tagModel;
             }
         }
+        $articleModel->imageUrls = json_decode($articleModel->cover,true);
         $articleModel->tags = $tag ?? [];
         return $articleModel->toHump();
     }
