@@ -37,10 +37,10 @@ class ArticleController extends Controller
         $this->validate(null, [
             'uid' => 'required|integer',
             'title' => 'required|string',
-            'tagIds' => 'required|array',
-            'related' => 'required|string',
-            'description' => 'required|string',
-            'recommend' => 'required|string'
+            'price' => 'required|string',
+            'address' => 'required|string',
+            'openTime' => 'required|string',
+            'reason' => 'required|string',
         ]);
         $articleLogic = new ArticleLogic();
         $articleLogic->load($this->verifyData);
@@ -60,8 +60,10 @@ class ArticleController extends Controller
             'articleId' => 'required|integer',
             'uid' => 'required|integer',
             'title' => 'required|string',
-            'related' => 'required|string',
-            'recommend' => 'required|string'
+            'price' => 'required|string',
+            'address' => 'required|string',
+            'openTime' => 'required|string',
+            'reason' => 'required|string',
         ]);
         $articleLogic = new ArticleLogic();
         $articleLogic->load($this->verifyData);

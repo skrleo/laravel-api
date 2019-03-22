@@ -37,6 +37,14 @@ class ArticleLogic extends LoadDataLogic
 
     protected $description = '';
 
+    protected $address = '';
+
+    protected $openTime = '';
+
+    protected $reason = '';
+
+    protected $price = '';
+
     /**
      * @return string
      */
@@ -66,7 +74,7 @@ class ArticleLogic extends LoadDataLogic
      */
     public function store(){
         $articleModel = new ArticleModel();
-        $articleData = $this->getAttributes(['uid', 'title', 'related', 'status','recommend','categoryId','description'], ['', null]);
+        $articleData = $this->getAttributes(['uid', 'title', 'price', 'status','address','openTime','description','reason'], ['', null]);
         $articleModel->setDataByHumpArray($articleData);
         if (!$articleModel->save()){
             throw new Exception('添加文章失败','ERROR_STORE_FAIL');
