@@ -38,7 +38,7 @@ class ArticleController extends Controller
             'uid' => 'required|integer',
             'title' => 'required|string',
             'price' => 'required|string',
-            'cover' => 'required|array',
+            'cover' => 'required|string',
             'tagIds' => 'array',
             'address' => 'required|string',
             'openTime' => 'required|string',

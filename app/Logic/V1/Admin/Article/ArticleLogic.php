@@ -45,7 +45,7 @@ class ArticleLogic extends LoadDataLogic
 
     protected $price = '';
 
-    protected $cover = [];
+    protected $cover = '';
 
     /**
      * @return string
@@ -76,7 +76,6 @@ class ArticleLogic extends LoadDataLogic
      */
     public function store(){
         $articleModel = new ArticleModel();
-        $this->cover = json_encode($this->cover,true);
         $articleData = $this->getAttributes(['uid', 'title', 'price', 'status','address','openTime','description','categoryId','reason','cover'], ['', null]);
         $articleModel->setDataByHumpArray($articleData);
         if (!$articleModel->save()){
