@@ -15,10 +15,12 @@ use App\Model\V1\Article\ArticleModel;
 use App\Model\V1\Article\ArticleToTagModel;
 use App\Model\V1\Article\TagModel;
 use App\Model\V1\User\UserBaseModel;
+use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
 class ArticleLogic extends LoadDataLogic
 {
+    protected $categoryId = 0;
 
     protected $articleId = 0;
 
@@ -29,6 +31,9 @@ class ArticleLogic extends LoadDataLogic
                     $query->select('uid','name','phone');
                 }
             ])
+            ->when(isset($this->categoryId),function (EloquentBuilder $query){
+                $query->where('category_id',$this->categoryId);
+            })
             ->latest()
             ->getDdvPage()
             ->mapLists(function (ArticleModel $model){

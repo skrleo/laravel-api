@@ -22,7 +22,7 @@ class ArticleController extends Controller
      */
     public function index(){
         $this->validate(null, [
-            'uid' => 'integer'
+            'categoryId' => 'integer'
         ]);
         $articleLogic = new ArticleLogic();
         $articleLogic->load($this->verifyData);
