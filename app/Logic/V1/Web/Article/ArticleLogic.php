@@ -24,6 +24,30 @@ class ArticleLogic extends LoadDataLogic
 
     protected $articleId = 0;
 
+    protected $title = '';
+
+    protected $uid = 0;
+
+    protected $related = '';
+
+    protected $recommend = '';
+
+    protected $status = 0;
+
+    protected $tagIds = [];
+
+    protected $description = '';
+
+    protected $address = '';
+
+    protected $openTime = '';
+
+    protected $reason = '';
+
+    protected $price = '';
+
+    protected $cover = '';
+
     public function lists(){
         $res = (new ArticleModel())
             ->with([
@@ -47,6 +71,26 @@ class ArticleLogic extends LoadDataLogic
         return $res->toHump();
     }
 
+    /**
+     * @return bool
+     * @throws Exception
+     * @throws \ReflectionException
+     */
+    public function store(){
+        $articleModel = new ArticleModel();
+        $articleData = $this->getAttributes(['uid', 'title', 'price', 'status','address','openTime','description','categoryId','reason','cover'], ['', null]);
+        $articleModel->setDataByHumpArray($articleData);
+        if (!$articleModel->save()){
+            throw new Exception('添加文章失败','ERROR_STORE_FAIL');
+        }
+        foreach ($this->tagIds as $tagId){
+            (new ArticleToTagModel())->firstOrCreate([
+                'tag_id' => $tagId['tagId'],
+                'article_id' => $articleModel->getQueueableId()
+            ]);
+        }
+        return true;
+    }
     /**
      * @return \DdvPhp\DdvUtil\Laravel\Model
      * @throws Exception

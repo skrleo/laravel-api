@@ -30,6 +30,31 @@ class ArticleController extends Controller
     }
 
     /**
+     * @return array
+     * @throws \App\Model\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function store(){
+        $this->validate(null, [
+            'uid' => 'required|integer',
+            'title' => 'required|string',
+            'price' => 'required|string',
+            'cover' => 'required|string',
+            'tagIds' => 'array',
+            'address' => 'required|string',
+            'openTime' => 'required|string',
+            'categoryId' => 'required|string',
+            'description' => 'required|string',
+            'reason' => 'required|string',
+        ]);
+        $articleLogic = new ArticleLogic();
+        $articleLogic->load($this->verifyData);
+        if ($articleLogic->store()){
+            return[];
+        }
+    }
+    /**
      * @param $articleId
      * @return array
      * @throws \App\Model\Exception
