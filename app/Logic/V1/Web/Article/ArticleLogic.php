@@ -10,6 +10,7 @@ namespace App\Logic\V1\Web\Article;
 
 
 use App\Logic\LoadDataLogic;
+use App\Logic\V1\Login\AccountLogic;
 use App\Model\Exception;
 use App\Model\V1\Article\ArticleModel;
 use App\Model\V1\Article\ArticleToTagModel;
@@ -77,6 +78,9 @@ class ArticleLogic extends LoadDataLogic
      * @throws \ReflectionException
      */
     public function store(){
+        if (AccountLogic::isLogin()){
+            throw new Exception('用户未登录','USER_NOT_LOGIN');
+        }
         $articleModel = new ArticleModel();
         $articleData = $this->getAttributes(['uid', 'title', 'price', 'status','address','openTime','description','categoryId','reason','cover'], ['', null]);
         $articleModel->setDataByHumpArray($articleData);

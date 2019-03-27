@@ -37,7 +37,7 @@ class ArticleController extends Controller
      */
     public function store(){
         $this->validate(null, [
-            'uid' => 'required|integer',
+            'uid' => 'integer',
             'title' => 'required|string',
             'price' => 'required|string',
             'cover' => 'required|string',
