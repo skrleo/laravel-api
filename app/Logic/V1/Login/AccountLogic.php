@@ -58,11 +58,11 @@ class AccountLogic extends LoadDataLogic
         }
         //更新登录信息
         $userBaseModel->setDataByHumpArray([
-            'loginNum' => intval($userBaseModel->loginNum) + 1,
+            'loginNum' => intval($userBaseModel->login_num) + 1,
             'loginTime' => time(),
-            'lastLoginTime' => $userBaseModel->loginTime,
+            'lastLoginTime' => $userBaseModel->login_time,
             'loginIp' => ClientIp::getClientIp(),
-            'lastLoginIp' => $userBaseModel->loginIp
+            'lastLoginIp' => $userBaseModel->login_ip
         ]);
         $userBaseModel->save();
         //把uid存到session中
