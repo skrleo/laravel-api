@@ -122,6 +122,15 @@ Route::group([
                 'prefix'=>'base',
                 'namespace'=>'Base'
             ],function(){
+                //操作历史列表
+                Route::get('operation/log/lists', 'OperationLogController@index');
+                //添加操作历史
+                Route::post('operation/log/lists', 'OperationLogController@store');
+                //操作历史详情
+                Route::get('operation/log/{operationLogId}', 'OperationLogController@show');
+                //删除操作历史
+                Route::delete('operation/log/{operationLogId}', 'OperationLogController@destroy');
+
                 //权限节点列表
                 Route::get('/lists', 'BaseController@index');
                 // 获取网站信息(服务器配置以及网站状态)

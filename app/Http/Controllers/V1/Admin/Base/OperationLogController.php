@@ -21,7 +21,7 @@ class OperationLogController extends Controller
      */
     public function index(){
         $this->validate(null, [
-            'uid' => 'required|integer'
+            'uid' => 'integer'
         ]);
         $baseLogic = new OperationLogLogic();
         $baseLogic->load($this->verifyData);
