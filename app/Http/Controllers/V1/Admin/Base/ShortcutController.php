@@ -15,17 +15,19 @@ use App\Logic\V1\Admin\Base\ShortcutLogic;
 class ShortcutController extends Controller
 {
     /**
-     * @return \DdvPhp\DdvPage
+     * @return array
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
     public function index(){
         $this->validate(null, [
-            'uid' => 'required|integer'
+            'uid' => 'integer'
         ]);
         $shortcutLogic = new ShortcutLogic();
         $shortcutLogic->load($this->verifyData);
-        return $shortcutLogic->lists();
+        return [
+            'lists' => $shortcutLogic->lists()
+        ];
     }
 
     /**
@@ -38,8 +40,7 @@ class ShortcutController extends Controller
      */
     public function store(){
         $this->validate([], [
-            'nodeId' => 'required|integer',
-            'uid' => 'required|integer'
+            'nodeId' => 'required|integer'
         ]);
         $shortcutLogic = new ShortcutLogic();
         $shortcutLogic->load($this->verifyData);

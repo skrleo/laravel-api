@@ -10,6 +10,7 @@ namespace App\Logic\V1\Admin\Base;
 
 
 use App\Logic\LoadDataLogic;
+use App\Logic\V1\Login\AccountLogic;
 use App\Model\Exception;
 use App\Model\V1\Base\ShortcutModel;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
@@ -28,24 +29,23 @@ class ShortcutLogic extends LoadDataLogic
      */
     public function lists(){
         $res = (new ShortcutModel())
-            ->where('uid',$this->uid)
+            ->where('uid',AccountLogic::getLoginUid())
             ->with([
                 'hasOneNodeModel' => function(HasOneOrMany $query){
                     $query->select('node_id','label','icon','path');
                 }
             ])
             ->orderByDesc('number')
-            ->getDdvPage()
-        ->mapLists(function (ShortcutModel $model){
-            $model->setDataByModel($model->hasOneNodeModel, [
-                'node_id' => 0,
-                'label' => '',
-                'icon' => '',
-                'path' => ''
-            ]);
-            $model->path = substr($model->path,1);
-            $model->removeAttribute('hasOneNodeModel');
-        });
+            ->get()->each(function (ShortcutModel $model){
+                $model->setDataByModel($model->hasOneNodeModel, [
+                    'node_id' => 0,
+                    'label' => '',
+                    'icon' => '',
+                    'path' => ''
+                ]);
+                $model->path = substr($model->path,1);
+                $model->removeAttribute('hasOneNodeModel');
+            });
         return $res->toHump();
     }
 
@@ -56,7 +56,7 @@ class ShortcutLogic extends LoadDataLogic
     public function store(){
         $shortcutModel = (new ShortcutModel())->firstOrCreate([
                 'node_id' => $this->nodeId,
-                'uid' => $this->uid
+                'uid' => AccountLogic::getLoginUid()
             ]);
         $shortcutModel->increment('number');
         return true;

@@ -131,4 +131,11 @@ class NodeLogic extends LoadDataLogic
         }
         return true;
     }
+
+    /**
+     *
+     */
+    public function dragNode(){
+
+    }
 }
