@@ -47,6 +47,7 @@ class CrontabController extends BaseController
             'beginTime' => 'required|string',
             'endTime' => 'required|string',
             'interval' => 'required|integer',
+            'intervalType' => 'required|integer',
             'type' => 'required|integer',
             'action' => 'required|string',
         ]);
@@ -91,6 +92,7 @@ class CrontabController extends BaseController
             'beginTime' => 'required|string',
             'endTime' => 'required|string',
             'interval' => 'required|integer',
+            'intervalType' => 'required|integer',
             'type' => 'required|integer',
             'action' => 'required|string',
         ]);

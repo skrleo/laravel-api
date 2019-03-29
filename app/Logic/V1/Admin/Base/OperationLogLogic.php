@@ -25,6 +25,7 @@ class OperationLogLogic extends LoadDataLogic
     protected $type = 0;
 
     protected $detail = '';
+
     /**
      * @return mixed
      */
@@ -34,6 +35,7 @@ class OperationLogLogic extends LoadDataLogic
         }
         $res = (new OperationLogModel())
             ->where('uid',$this->uid)
+            ->latest('created_at')
             ->get()->toHump();
         return $res;
     }

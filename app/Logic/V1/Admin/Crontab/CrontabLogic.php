@@ -24,6 +24,8 @@ class CrontabLogic extends LoadDataLogic
 
     protected $interval = 0;
 
+    protected $intervalType = 0;
+
     protected $type = 0;
 
     protected $action = '';
@@ -48,7 +50,7 @@ class CrontabLogic extends LoadDataLogic
      */
     public function store(){
         $crontabModel = (new CrontabModel());
-        $crontabData = $this->getAttributes(['name', 'beginTime', 'endTime', 'interval', 'type', 'action'], ['', null]);
+        $crontabData = $this->getAttributes(['name', 'beginTime', 'endTime', 'interval','intervalType', 'type', 'action'], ['', null]);
         $crontabModel->setDataByHumpArray($crontabData);
         /**
          * 添加队列任务
@@ -87,7 +89,7 @@ class CrontabLogic extends LoadDataLogic
         if (empty($crontabModel)){
             throw new Exception('任务不存在','NOT_FIND_CRONTTAB');
         }
-        $crontabData = $this->getAttributes(['name', 'beginTime', 'endTime', 'interval', 'type', 'action'], ['', null]);
+        $crontabData = $this->getAttributes(['name', 'beginTime', 'endTime', 'interval','intervalType', 'type', 'action'], ['', null]);
         $crontabModel->setDataByHumpArray($crontabData);
         if (!$crontabModel->save()){
             throw new Exception('编辑定时任务失败','CRONTAB_UPDATE_FAIL');
