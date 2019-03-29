@@ -34,10 +34,8 @@ class OperationLogLogic extends LoadDataLogic
         }
         $res = (new OperationLogModel())
             ->where('uid',$this->uid)
-            ->get()->each(function (OperationLogModel $model){
-
-            });
-        return $res->toHump();
+            ->get()->toHump();
+        return $res;
     }
 
     /**
