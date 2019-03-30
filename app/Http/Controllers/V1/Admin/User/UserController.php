@@ -34,6 +34,23 @@ class UserController extends  Controller
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
+    public function fixPw(){
+        $this->validate(null, [
+            'uid' => 'required|integer',
+            'password' => 'required|string'
+        ]);
+        $userLogic = new UserLogic();
+        $userLogic->load($this->verifyData);
+        if ($userLogic->fixPw()){
+            return [];
+        }
+    }
+    /**
+     * @return array
+     * @throws \App\Model\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
     public function store(){
         $this->validate(null, [
             'name' => 'required|string',

@@ -240,6 +240,8 @@ Route::group([
                 Route::get('/{uid}', 'UserController@show');
                 //用户编辑
                 Route::put('/{uid}', 'UserController@update');
+                // 修改用户密码
+                Route::put('/fix/pw', 'UserController@fixPw');
                 // 删除用户
                 Route::delete('/{uid}', 'UserController@destroy');
             });

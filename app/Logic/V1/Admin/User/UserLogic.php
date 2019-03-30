@@ -52,6 +52,21 @@ class UserLogic extends LoadDataLogic
     /**
      * @return bool
      * @throws Exception
+     */
+    public function fixPw(){
+        $userBaseModel = (new UserBaseModel())->where('uid',$this->uid)->first();
+        if (empty($userBaseModel)){
+            throw new Exception('用户不存在','USER_NOT_FIND');
+        }
+        $userBaseModel->password = md5($this->password);
+        if (!$userBaseModel->save()){
+            throw new Exception('修改用户密码失败','UPDATE_USER_PASSWORD_FAIL');
+        }
+        return true;
+    }
+    /**
+     * @return bool
+     * @throws Exception
      * @throws \ReflectionException
      */
     public function store(){
@@ -109,7 +124,7 @@ class UserLogic extends LoadDataLogic
      * @throws Exception
      */
     public function destroy(){
-        $userBaseModel = (new UserBaseModel())->where('uid',$this->uid)->first();
+        $userBaseModel = (new UserBaseModel())->where('uid',$this->uid)->firstHump();
         if (empty($userBaseModel)){
             throw new Exception('用户不存在','USER_NOT_FIND');
         }
