@@ -225,7 +225,21 @@ Route::group([
                 // 队列任务
                 Route::get('/queue/lists', 'QueueController@index');
             });
-
+            Route::group([
+                // path地址前缀
+                'prefix'=>'message',
+                // 命名空间前缀
+                'namespace'=>'Message'
+            ],function(){
+                //消息列表
+                Route::get('/lists', 'MessageController@lists');
+                //发布消息
+                Route::post('/', 'MessageController@store');
+                // 消息详情
+                Route::get('/{messageId}', 'MessageController@show');
+                // 删除消息
+                Route::delete('/{messageId}', 'MessageController@destroy');
+            });
             Route::group([
                 // path地址前缀
                 'prefix'=>'user',
