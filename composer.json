@@ -16,6 +16,7 @@
         "ddvphp/ddv-util": "0.0.*",
         "endroid/qrcode": "^3.5",
         "fideloper/proxy": "~4.0",
+        "gregwar/captcha": "^1.1",
         "hanson/vbot": "^2.0",
         "jacobcyl/ali-oss-storage": "^2.1",
         "laramall/laravel-system-info": "^1.0",
