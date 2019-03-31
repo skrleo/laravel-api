@@ -39,6 +39,14 @@ Route::group([
              */
             Route::delete('/login', 'AccountController@logOut');
             /**
+             * 获取图形验证码
+             */
+            Route::get('/verify/img', 'AccountController@getImgVerify');
+            /**
+             * 获取账号错误次数
+             */
+            Route::get('/code/count', 'AccountController@getCodeCount');
+            /**
              * 用户注册
              */
             Route::post('/register', 'RegisterController@register');

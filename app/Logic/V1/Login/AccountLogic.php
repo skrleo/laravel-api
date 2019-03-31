@@ -12,6 +12,7 @@ namespace App\Logic\V1\Login;
 use App\Http\Middleware\ClientIp;
 use App\Logic\Exception;
 use App\Logic\LoadDataLogic;
+use App\Logic\V1\Common\Util\VerifyCommonLogic;
 use App\Model\V1\Rbac\Purview\ManageModel;
 use App\Model\V1\User\UserAccountModel;
 use App\Model\V1\User\UserBaseModel;
@@ -54,6 +55,8 @@ class AccountLogic extends LoadDataLogic
         }
         // 判断传进来的密码跟基本信息表中的密码是否相等
         if (md5($this->password)!== $userBaseModel->password){
+            //记录输入错误的密码次数
+            VerifyCommonLogic::setCacheShowCode($this->account);
             throw new Exception('密码错误,请重试！', 'USER_PASSWORD_ERROR');
         }
         //更新登录信息
@@ -65,6 +68,8 @@ class AccountLogic extends LoadDataLogic
             'lastLoginIp' => $userBaseModel->login_ip
         ]);
         $userBaseModel->save();
+        // 清除错误信息
+        VerifyCommonLogic::clearCache($this->account);
         //把uid存到session中
         \Session::put('uid', $userBaseModel->uid);
         /**
