@@ -118,23 +118,4 @@ class NodeController extends Controller
         }
     }
 
-    /**
-     * @param $nodeId
-     * @return array
-     * @throws \App\Model\Exception
-     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
-     * @throws \ReflectionException
-     */
-    public function dragNode(){
-        $this->validate(null, [
-            'type' => 'required|integer',
-            'nodeId' => 'required|integer',
-            'nodeId' => 'required|integer'
-        ]);
-        $nodeLogic = new NodeLogic();
-        $nodeLogic->load($this->verifyData);
-        if ($nodeLogic->dragNode()){
-            return [];
-        }
-    }
 }

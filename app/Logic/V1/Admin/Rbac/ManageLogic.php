@@ -164,7 +164,7 @@ class ManageLogic extends LoadDataLogic
      * @throws Exception
      */
     public function destroy(){
-        $manageModel = (new ManageModel())->where('manage_id',$this->manageId)->first();
+        $manageModel = (new ManageModel())->where('manage_id',$this->manageId)->firstHump();
         if (empty($manageModel)){
             throw new Exception('管理员不存在','NOT_FIND_MANAGE');
         }
