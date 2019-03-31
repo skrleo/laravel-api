@@ -20,7 +20,8 @@ class MessageController extends Controller
      */
     public function lists(){
         $this->validate(null, [
-            'status' => 'integer'
+            'status' => 'integer',
+            'uid' => 'integer'
         ]);
         $mssageLogic = new MessageLogic();
         $mssageLogic->load($this->verifyData);
@@ -35,7 +36,7 @@ class MessageController extends Controller
      */
     public function store(){
         $this->validate(null, [
-            'uid' => 'required|integer',
+            'uids' => 'required|array',
             'type' => 'required|integer',
             'title' => 'required|string',
             'content' => 'required|string'
@@ -49,7 +50,7 @@ class MessageController extends Controller
 
     /**
      * @param $messageId
-     * @return \App\Model\V1\Message\MessageModel|\DdvPhp\DdvUtil\Laravel\Model|null|object
+     * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
@@ -60,7 +61,9 @@ class MessageController extends Controller
         ]);
         $mssageLogic = new MessageLogic();
         $mssageLogic->load($this->verifyData);
-        return $mssageLogic->show();
+        return [
+            'data'=> $mssageLogic->show()
+        ];
     }
 
     /**
