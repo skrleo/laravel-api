@@ -56,7 +56,7 @@ class ShortcutLogic extends LoadDataLogic
     public function store(){
         $shortcutModel = (new ShortcutModel())->firstOrCreate([
                 'node_id' => $this->nodeId,
-                'uid' => AccountLogic::getLoginUid()
+                'uid' => AccountLogic::getLoginUid() ?? 2
             ]);
         $shortcutModel->increment('number');
         return true;
