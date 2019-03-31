@@ -120,7 +120,7 @@ Route::group([
         Route::group([
             'middleware'=>[
                 // 判断用户是否有权限
-                AdminManage::class,
+//                AdminManage::class,
             ],
             'prefix'=>'admin',
             // 命名空间前缀
