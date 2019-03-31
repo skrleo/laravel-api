@@ -21,17 +21,17 @@ class AdminManage
      * @param Request $request
      * @param Closure $next
      * @param null $guard
+     * @return mixed
      * @throws Exception
-     * @throws RJsonError
      * @throws \App\Model\Exception
      */
     public function handle(Request $request, Closure $next, $guard = null)
     {
         if (!AccountLogic::isLogin()) {
-            throw new RJsonError(AccountLogic::isLogin(), 'NO_ACCOUNT_LOGIN');
+            throw new Exception(AccountLogic::isLogin(), 'NO_ACCOUNT_LOGIN');
         }
         if (!ManageLogic::isLoginManage()) {
-            throw new RJsonError('没有管理权限', 'NO_MANAGE');
+            throw new Exception('没有管理权限', 'NO_MANAGE');
         }
         if(!ManageLogic::getManageState(AccountLogic::getLoginUid())){
             throw new Exception('账号异常', 'ERROR_MANAGE_STATE');
