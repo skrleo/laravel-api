@@ -28,7 +28,7 @@ class AdminManage
     public function handle(Request $request, Closure $next, $guard = null)
     {
         if (!AccountLogic::isLogin()) {
-            throw new RJsonError(AccountLogic::isLogin(), 'NO_ACCOUNT_LOGIN');
+            throw new RJsonError('用户登录异常', 'NO_ACCOUNT_LOGIN');
         }
         if (!ManageLogic::isLoginManage()) {
             throw new RJsonError('没有管理权限', 'NO_MANAGE');
