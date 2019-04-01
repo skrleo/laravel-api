@@ -83,6 +83,7 @@ class ManageLogic extends LoadDataLogic
             $manageId = $manageModel->manageId;
             \Session::put('manageId', $manageId);
         }
+        var_dump($manageId);
         return $manageId;
     }
     /**
