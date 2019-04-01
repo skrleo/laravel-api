@@ -71,7 +71,7 @@ class ManageLogic extends LoadDataLogic
         $manageId = session('manageId', null);
         var_dump($manageId);
         if (empty($manageId)) {
-
+            var_dump(AccountLogic::getLoginUid());
             $manageModel = (new ManageModel())->where(['uid' => AccountLogic::getLoginUid()])->firstHump();
 
             if (empty($manageModel)) {
