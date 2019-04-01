@@ -67,11 +67,8 @@ class ManageLogic extends LoadDataLogic
         if (!AccountLogic::isLogin()) {
             return null;
         }
-        var_dump(AccountLogic::isLogin());
         $manageId = session('manageId', null);
-        var_dump($manageId);
         if (empty($manageId)) {
-            var_dump(AccountLogic::getLoginUid());
             $manageModel = (new ManageModel())->where(['uid' => AccountLogic::getLoginUid()])->firstHump();
 
             if (empty($manageModel)) {
@@ -83,7 +80,6 @@ class ManageLogic extends LoadDataLogic
             $manageId = $manageModel->manageId;
             \Session::put('manageId', $manageId);
         }
-        var_dump($manageId);
         return $manageId;
     }
     /**
