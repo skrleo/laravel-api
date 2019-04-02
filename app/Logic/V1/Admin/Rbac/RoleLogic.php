@@ -15,6 +15,7 @@ use App\Model\V1\Rbac\Purview\RoleToNodeModel;
 use App\Model\V1\Rbac\Role\RoleModel;
 use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\QueryException;
 
 class RoleLogic extends LoadDataLogic
 {
@@ -108,19 +109,26 @@ class RoleLogic extends LoadDataLogic
      * 删除角色
      * @return bool
      * @throws Exception
+     * @throws \Exception
      */
     public function destroy(){
-        $roleModel = (new RoleModel())->where('role_id',$this->roleId)->first();
+        $roleModel = (new RoleModel())->where('role_id',$this->roleId)->firstHump();
         if (empty($roleModel)){
             throw new Exception('角色不存在','NOT_FIND_ROLE');
         }
-        (new RoleToNodeModel())->where('role_id',$this->roleId)
-            ->get()->each(function (RoleToNodeModel $item){
-                $item->delete();
-            });
-        if (!$roleModel->delete()){
-            throw new Exception('删除角色','ROLE_DELETE_FAIL');
+        \DB::beginTransaction();
+        try {
+            (new RoleToNodeModel())->where('role_id',$this->roleId)
+                ->get()->each(function (RoleToNodeModel $item){
+                    $item->delete();
+                });
+            $roleModel->delete();
+            \DB::commit();
+        } catch (QueryException $exception) {
+            \DB::rollBack();
+            throw new Exception($exception->getMessage(), $exception->getCode());
         }
+
         return true;
     }
 }

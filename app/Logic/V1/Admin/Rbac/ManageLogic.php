@@ -16,6 +16,7 @@ use App\Model\V1\Rbac\Purview\ManageModel;
 use App\Model\V1\Rbac\Purview\UserToRoleModel;
 use App\Model\V1\User\UserBaseModel;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\QueryException;
 
 class ManageLogic extends LoadDataLogic
 {
@@ -139,21 +140,27 @@ class ManageLogic extends LoadDataLogic
         if (empty($manageModel)){
             throw new Exception('该管理员不存在','MANAGE_NOT_FIND');
         }
-        // 删除用户角色关系
-        (new UserToRoleModel)->where('uid',$this->uid)->delete();
-        //添加用户角色关系
-        foreach ($this->roleIds as $roleId){
-            (new UserToRoleModel)->firstOrCreate([
-                'uid' => $this->uid,
-                'role_id' => $roleId
-            ]);
+        \DB::beginTransaction();
+        try {
+            // 删除用户角色关系
+            (new UserToRoleModel)->where('uid',$this->uid)->delete();
+            //添加用户角色关系
+            foreach ($this->roleIds as $roleId){
+                (new UserToRoleModel)->firstOrCreate([
+                    'uid' => $this->uid,
+                    'role_id' => $roleId
+                ]);
+            }
+            $manageModel->state = $this->state;
+            $manageModel->type = $this->type;
+            $manageModel->description = $this->description ?? '';
+            $manageModel->save();
+            \DB::commit();
+        } catch (QueryException $exception) {
+            \DB::rollBack();
+            throw new Exception($exception->getMessage(), $exception->getCode());
         }
-        $manageModel->state = $this->state;
-        $manageModel->type = $this->type;
-        $manageModel->description = $this->description ?? '';
-        if (!$manageModel->save()){
-            throw new Exception('添加管理员失败','MANAGE_HAVE_EXISTED');
-        }
+
         return true;
     }
 
@@ -161,18 +168,24 @@ class ManageLogic extends LoadDataLogic
      * 删除管理员
      * @return bool
      * @throws Exception
+     * @throws \Exception
      */
     public function destroy(){
         $manageModel = (new ManageModel())->where('manage_id',$this->manageId)->firstHump();
         if (empty($manageModel)){
             throw new Exception('管理员不存在','NOT_FIND_MANAGE');
         }
-        (new UserToRoleModel())->where('uid',$manageModel->uid)
-            ->get()->each(function (UserToRoleModel $item){
-                $item->delete();
-            });
-        if (!$manageModel->delete()){
-            throw new Exception('删除管理员失败','DELETE_MANAGE_FAIL');
+        \DB::beginTransaction();
+        try {
+            (new UserToRoleModel())->where('uid',$manageModel->uid)
+                ->get()->each(function (UserToRoleModel $item){
+                    $item->delete();
+                });
+            $manageModel->delete();
+            \DB::commit();
+        } catch (QueryException $exception) {
+            \DB::rollBack();
+            throw new Exception($exception->getMessage(), $exception->getCode());
         }
         return true;
     }

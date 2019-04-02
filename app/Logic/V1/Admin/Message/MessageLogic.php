@@ -16,6 +16,7 @@ use App\Model\V1\Message\MessageModel;
 use App\Model\V1\Message\UserToMessageModel;
 use App\Model\V1\User\UserBaseModel;
 use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
+use Illuminate\Database\QueryException;
 
 class MessageLogic extends LoadDataLogic
 {
@@ -53,20 +54,28 @@ class MessageLogic extends LoadDataLogic
      * @return bool
      * @throws Exception
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function store(){
         $messageModel = new MessageModel();
         $this->uid = AccountLogic::getLoginUid();
         $messageData = $this->getAttributes(['title', 'uid','type', 'content'], ['', null]);
         $messageModel->setDataByHumpArray($messageData);
-        if (!$messageModel->save()){
-            throw new Exception('添加消息失败','MESSAGE_STORE_FAIL');
-        }
-        foreach ($this->uids as $uid){
-            (new UserToMessageModel())->firstOrCreate([
-               'uid' => $uid['uid'],
-               'message_id' => $messageModel->getQueueableId()
-            ]);
+        \DB::beginTransaction();
+        try {
+            if (!$messageModel->save()){
+                throw new Exception('添加消息失败','MESSAGE_STORE_FAIL');
+            }
+            foreach ($this->uids as $uid){
+                (new UserToMessageModel())->firstOrCreate([
+                   'uid' => $uid['uid'],
+                   'message_id' => $messageModel->getQueueableId()
+                ]);
+            }
+            \DB::commit();
+        } catch (QueryException $exception) {
+            \DB::rollBack();
+            throw new Exception($exception->getMessage(), $exception->getCode());
         }
         return true;
     }
@@ -92,14 +101,21 @@ class MessageLogic extends LoadDataLogic
     /**
      * @return bool
      * @throws Exception
+     * @throws \Exception
      */
     public function destroy(){
         $messageModel = (new MessageModel())->where('message_id',$this->messageId)->firstHump();
         if (empty($messageModel)){
             throw new Exception('该消息不存在','MESSAGE_NOT_FIND');
         }
-        if (!$messageModel->delete()){
-            throw new Exception('该消息删除失败','MESSAGE_DESTROY_FAIL');
+        \DB::beginTransaction();
+        try {
+            $messageModel->delete();
+            (new UserToMessageModel())->where('message_id',$this->messageId)->delete();
+            \DB::commit();
+        } catch (QueryException $exception) {
+            \DB::rollBack();
+            throw new Exception($exception->getMessage(), $exception->getCode());
         }
         return true;
     }
