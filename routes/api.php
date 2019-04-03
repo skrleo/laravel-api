@@ -188,6 +188,10 @@ Route::group([
                  */
                 Route::post('/', 'ArticleController@store');
                 /**
+                 * 修改文章审核状态
+                 */
+                Route::put('/review', 'ArticleController@review');
+                /**
                  * 编辑文章
                  */
                 Route::put('/{articleId}', 'ArticleController@update');

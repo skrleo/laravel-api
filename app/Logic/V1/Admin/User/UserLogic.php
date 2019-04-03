@@ -45,6 +45,7 @@ class UserLogic extends LoadDataLogic
                     $query->select('uid','account','type');
                 }
             ])
+            ->latest('created_at')
             ->getDdvPage();
         return $res->toHump();
     }

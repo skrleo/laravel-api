@@ -134,6 +134,7 @@ class ManageLogic extends LoadDataLogic
     /**
      * 编辑管理员
      * @throws Exception
+     * @throws \Exception
      */
     public function update(){
         $manageModel = (new ManageModel())->where('manage_id',$this->manageId)->first();

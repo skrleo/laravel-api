@@ -120,9 +120,9 @@ class ArticleLogic extends LoadDataLogic
             throw new Exception('文章不存在','ARTICLE_NOT_FIND');
         }
         $articleToTagModel = (new ArticleToTagModel())->where('article_id',$this->articleId)
-            ->get();
+            ->getHump();
         foreach ($articleToTagModel as $item){
-            $tagModel = (new TagModel())->where('tag_id',$item->tag_id)->firstHump(['tag_id','name']);
+            $tagModel = (new TagModel())->where('tag_id',$item->tagId)->firstHump(['tagId','name']);
             if (!empty($tagModel)){
                 $tag[] = $tagModel;
             }
@@ -134,14 +134,21 @@ class ArticleLogic extends LoadDataLogic
     /**
      * @return bool
      * @throws Exception
+     * @throws \Exception
      */
     public function destroy(){
-        $articleModel = (new ArticleModel())->where('article_id',$this->articleId)->first();
+        $articleModel = (new ArticleModel())->where('article_id',$this->articleId)->firstHump();
         if (empty($articleModel)){
             throw new Exception('文章不存在','ARTICLE_NOT_FIND');
         }
-        if (!$articleModel->delete()){
-            throw new Exception('删除文章失败','DESTROY_ARTICLE_FAIL');
+        \DB::beginTransaction();
+        try {
+            $articleModel->delete();
+            (new ArticleToTagModel())->whereIn('article_id',$this->articleId)->delete();
+            \DB::commit();
+        } catch (QueryException $exception) {
+            \DB::rollBack();
+            throw new Exception($exception->getMessage(), $exception->getCode());
         }
         return true;
     }
