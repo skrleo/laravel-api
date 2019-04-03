@@ -109,4 +109,21 @@ class ArticleController extends Controller
             return[];
         }
     }
+
+    /**
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function review(){
+        $this->validate(null, [
+            'articleIds' => 'required|array',
+            'status' => 'required|integer'
+        ]);
+        $articleLogic = new ArticleLogic();
+        $articleLogic->load($this->verifyData);
+        if ($articleLogic->review()){
+            return[];
+        }
+    }
 }

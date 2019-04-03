@@ -22,6 +22,9 @@ class ArticleController extends Controller
      */
     public function index(){
         $this->validate(null, [
+            'keyword' => 'string',
+            'check' => 'integer',
+            'uid' => 'integer',
             'categoryId' => 'integer'
         ]);
         $articleLogic = new ArticleLogic();

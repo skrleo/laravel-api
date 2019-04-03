@@ -49,6 +49,10 @@ class ArticleLogic extends LoadDataLogic
 
     protected $cover = '';
 
+    protected $keyword = '';
+
+    protected $check = '';
+
     public function lists(){
         $res = (new ArticleModel())
             ->with([
@@ -58,6 +62,15 @@ class ArticleLogic extends LoadDataLogic
             ])
             ->when(isset($this->categoryId),function (EloquentBuilder $query){
                 $query->where('category_id',$this->categoryId);
+            })
+            ->when(!empty($this->keyword),function (EloquentBuilder $query){
+                $query->where('title','%' . $this->keyword .'%');
+            })
+            ->when(!empty($this->uid),function (EloquentBuilder $query){
+                $query->where('uid',$this->uid);
+            })
+            ->when(!empty($this->check),function (EloquentBuilder $query){
+                $query->where('status',ArticleModel::STATUS_PASS);
             })
             ->latest()
             ->getDdvPage()
@@ -78,7 +91,7 @@ class ArticleLogic extends LoadDataLogic
      * @throws \ReflectionException
      */
     public function store(){
-        if (AccountLogic::isLogin()){
+        if (!AccountLogic::isLogin()){
             throw new Exception('用户未登录','USER_NOT_LOGIN');
         }
         $articleModel = new ArticleModel();

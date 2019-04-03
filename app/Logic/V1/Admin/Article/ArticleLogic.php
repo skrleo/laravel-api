@@ -47,6 +47,8 @@ class ArticleLogic extends LoadDataLogic
 
     protected $cover = '';
 
+    protected $articleIds = [];
+
     /**
      * @return string
      */
@@ -144,4 +146,16 @@ class ArticleLogic extends LoadDataLogic
         return true;
     }
 
+    /**
+     * @return bool
+     */
+    public function review(){
+        (new ArticleModel())
+            ->whereIn('article_id',$this->articleIds)
+            ->get()->each(function (ArticleModel $model){
+                $model->status = $this->status;
+                $model->save();
+            });
+        return true;
+    }
 }

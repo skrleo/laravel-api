@@ -17,6 +17,8 @@ class ArticleModel extends Model
 
     protected $primaryKey = 'article_id';
 
+    const STATUS_PASS = 1;
+
     public function hasOneUserBaseModel(){
         return $this->hasOne(UserBaseModel::class,'uid','uid');
     }

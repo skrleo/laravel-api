@@ -10,9 +10,39 @@ namespace App\Logic\V1\Web\Article;
 
 
 use App\Logic\LoadDataLogic;
+use App\Model\Exception;
+use App\Model\V1\Article\ArticleModel;
+use App\Model\V1\Article\ArticleToTagModel;
 
 class SpiderLogic extends LoadDataLogic
 {
+    protected $categoryId = 0;
+
+    protected $articleId = 0;
+
+    protected $title = '';
+
+    protected $uid = 0;
+
+    protected $related = '';
+
+    protected $recommend = '';
+
+    protected $status = 0;
+
+    protected $tagIds = [];
+
+    protected $description = '';
+
+    protected $address = '';
+
+    protected $openTime = '';
+
+    protected $reason = '';
+
+    protected $price = '';
+
+    protected $cover = '';
 
     /**
      * 爬取页面全部数据
@@ -33,7 +63,9 @@ class SpiderLogic extends LoadDataLogic
     }
 
     /**
-     * @return mixed|string
+     * @return bool
+     * @throws Exception
+     * @throws \ReflectionException
      */
     public function getNewsInfo(){
         $url = "https://mp.weixin.qq.com/s/gKD9Rkv8CWqU26MrlJKPEQ";
@@ -41,7 +73,14 @@ class SpiderLogic extends LoadDataLogic
         $pattern = '/<div id="img-content">[\s\S]*<ul id="js_hotspot_area" class="article_extend_area">/is';
         preg_match_all($pattern, $result, $result);
         $result = $result[0][0];
-        var_dump($result);
-        return $result;
+        $articleModel = new ArticleModel();
+        $this->reason = $result = $result[0][0];
+        $this->cover = $result = $result[0][0];
+        $articleData = $this->getAttributes(['uid', 'title', 'price', 'status','address','openTime','description','categoryId','reason','cover'], ['', null]);
+        $articleModel->setDataByHumpArray($articleData);
+        if (!$articleModel->save()){
+            throw new Exception('添加文章失败','ERROR_STORE_FAIL');
+        }
+        return true;
     }
 }
