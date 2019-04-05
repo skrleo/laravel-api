@@ -69,18 +69,34 @@ class SpiderLogic extends LoadDataLogic
      */
     public function getNewsInfo(){
         $url = "https://mp.weixin.qq.com/s/gKD9Rkv8CWqU26MrlJKPEQ";
-        $result = $this->curlGetData($url);
-        $pattern = '/<div id="img-content">[\s\S]*<ul id="js_hotspot_area" class="article_extend_area">/is';
-        preg_match_all($pattern, $result, $result);
-        $result = $result[0][0];
-        $articleModel = new ArticleModel();
-        $this->reason = $result = $result[0][0];
-        $this->cover = $result = $result[0][0];
-        $articleData = $this->getAttributes(['uid', 'title', 'price', 'status','address','openTime','description','categoryId','reason','cover'], ['', null]);
-        $articleModel->setDataByHumpArray($articleData);
-        if (!$articleModel->save()){
-            throw new Exception('添加文章失败','ERROR_STORE_FAIL');
+        preg_match_all('/(<span style="font-size: 15px;">)(.*?)((<\/span>))/', $this->curlGetData($url), $titles, PREG_SET_ORDER);
+        foreach ($titles as $val) {
+            $title[]['title'] = $val[2];
         }
+        preg_match_all('/(<p style="text-indent: 2em;"><span style="font-size: 14px;text-indent: 2em;">)(.*?)((<\/span><\/p>))/', $this->curlGetData($url), $contents, PREG_SET_ORDER);
+        foreach ($contents as $val) {
+            $title[]['content'] = $val[2];
+
+        foreach($title as $key=>$vo){
+            $list[] = array_merge($vo,$title[$key]);
+
+        }
+        var_dump($list);
+//        $pattern = '|[^<div id="js_article" class="rich_media"]+>(.*)</[^>]+>|U';
+//        preg_match_all($pattern, $result, $content);
+        // 标题
+//        $title = '/<section class="135brush" data-brushtype="text" style="margin-left: -12px;text-align: center;font-size: 18px;padding: 12px 5px;box-sizing: border-box;">[\s\S]*</section>/is';
+//        preg_match_all($title, $result, $result);
+//        $result = $result[0][0];
+//        var_dump($result);
+//        $articleModel = new ArticleModel();
+//        $this->reason = $result = $result[0][0];
+//        $this->cover = $result = $result[0][0];
+//        $articleData = $this->getAttributes(['uid', 'title', 'price', 'status','address','openTime','description','categoryId','reason','cover'], ['', null]);
+//        $articleModel->setDataByHumpArray($articleData);
+//        if (!$articleModel->save()){
+//            throw new Exception('添加文章失败','ERROR_STORE_FAIL');
+//        }
         return true;
     }
 }
