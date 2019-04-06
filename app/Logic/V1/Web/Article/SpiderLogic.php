@@ -71,17 +71,13 @@ class SpiderLogic extends LoadDataLogic
         $url = "https://mp.weixin.qq.com/s/gKD9Rkv8CWqU26MrlJKPEQ";
         preg_match_all('/(<span style="font-size: 15px;">)(.*?)((<\/span>))/', $this->curlGetData($url), $titles, PREG_SET_ORDER);
         foreach ($titles as $val) {
-            $title[]['title'] = $val[2];
+            $content[]['title'] = $val[2];
         }
         preg_match_all('/(<p style="text-indent: 2em;"><span style="font-size: 14px;text-indent: 2em;">)(.*?)((<\/span><\/p>))/', $this->curlGetData($url), $contents, PREG_SET_ORDER);
         foreach ($contents as $val) {
-            $title[]['content'] = $val[2];
-
-        foreach($title as $key=>$vo){
-            $list[] = array_merge($vo,$title[$key]);
-
+            $content[]['content'] = $val[2];
         }
-        var_dump($list);
+        var_dump($content);
 //        $pattern = '|[^<div id="js_article" class="rich_media"]+>(.*)</[^>]+>|U';
 //        preg_match_all($pattern, $result, $content);
         // 标题
@@ -98,5 +94,6 @@ class SpiderLogic extends LoadDataLogic
 //            throw new Exception('添加文章失败','ERROR_STORE_FAIL');
 //        }
         return true;
+
     }
 }
