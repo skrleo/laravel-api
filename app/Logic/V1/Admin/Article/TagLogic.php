@@ -11,6 +11,7 @@ namespace App\Logic\V1\Admin\Article;
 
 use App\Logic\LoadDataLogic;
 use App\Model\Exception;
+use App\Model\V1\Article\ArticleToTagModel;
 use App\Model\V1\Article\TagModel;
 
 class TagLogic extends LoadDataLogic
@@ -84,9 +85,13 @@ class TagLogic extends LoadDataLogic
      * @throws Exception
      */
     public function destroy(){
-        $tagModel = (new TagModel())->where('tag_id',$this->tagId)->first();
+        $tagModel = (new TagModel())->where('tag_id',$this->tagId)->firstHump();
         if (empty($tagModel)){
             throw new Exception('标签不存在','TAG_NOT_FIND');
+        }
+        $articleToTagModel = (new ArticleToTagModel())->where('tag_id',$this->tagId)->firstHump();
+        if (!empty($articleToTagModel)){
+            throw new Exception('该标签还有文章使用','TAG_HAVE_ARTICLE');
         }
         if (!$tagModel->delete()){
             throw new Exception('标签删除失败','TAG_DESTROY_FIND');
