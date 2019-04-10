@@ -15,7 +15,14 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-
+    /***
+     *  授权登录
+     * @param Request $request
+     * @return array
+     * @throws \App\Logic\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
     public function handleLogin(Request $request){
         $query = $request->input('query');
         try{
