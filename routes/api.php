@@ -270,6 +270,30 @@ Route::group([
                 // 命名空间前缀
                 'namespace'=>'User'
             ],function(){
+                Route::group([
+                    // path地址前缀
+                    'prefix'=>'group',
+                    // 命名空间前缀
+                    'namespace'=>'Group'
+                ],function(){
+                    //分组列表
+                    Route::get('/lists', 'UserGroupController@index');
+                    //添加分组
+                    Route::post('/store ','UserGroupController@store');
+                });
+
+                Route::group([
+                    // path地址前缀
+                    'prefix'=>'label',
+                    // 命名空间前缀
+                    'namespace'=>'Label'
+                ],function(){
+                    //标签列表
+                    Route::get('/lists', 'UserLabelController@index');
+                    //添加标签
+                    Route::post('/store ','UserLabelController@store');
+                });
+
                 // 用户列表
                 Route::get('/lists', 'UserController@index');
                 //添加用户

@@ -15,7 +15,7 @@ use App\Model\V1\Open\OpenAppWechatModel;
 
 class OpenAppWechatCommonLogic extends LoadDataLogic
 {
-// 应用唯一标识[微信公众号或者小程序或者app的]
+    // 应用唯一标识[微信公众号或者小程序或者app的]
     protected $wechatAppId = '';
     // 商户号
     protected $wechatMchId = '';
@@ -44,11 +44,11 @@ class OpenAppWechatCommonLogic extends LoadDataLogic
      */
     public function getOne(){
         $this->getAppId();
-        $model = (new OpenAppWechatModel())->where(['wechat_app_id' => $this->wechatAppId])->firstHump();
-        if(empty($model)){
+        $openAppWechatModel = (new OpenAppWechatModel())->where(['wechat_app_id' => $this->wechatAppId])->firstHump();
+        if(empty($openAppWechatModel)){
             throw new Exception('没有找到该公众号信息', 'APP_INFO_NOT_FIND');
         }
-        return $model;
+        return $openAppWechatModel;
     }
 
     /**
@@ -92,6 +92,7 @@ class OpenAppWechatCommonLogic extends LoadDataLogic
         return $this->wechatMchId;
     }
     /**
+     * 获取微信appId
      * @param null $wechatAppId
      * @return null|string
      * @throws Exception
@@ -106,6 +107,7 @@ class OpenAppWechatCommonLogic extends LoadDataLogic
     }
 
     /**
+     * 获取微信小程序配置
      * @return \EasyWeChat\OpenPlatform\Authorizer\MiniProgram\Application
      * @throws Exception
      * @throws \ReflectionException
@@ -116,6 +118,7 @@ class OpenAppWechatCommonLogic extends LoadDataLogic
     }
 
     /**
+     * 获取微信公众号配置
      * @return \EasyWeChat\OpenPlatform\Authorizer\OfficialAccount\Application
      * @throws Exception
      * @throws \ReflectionException

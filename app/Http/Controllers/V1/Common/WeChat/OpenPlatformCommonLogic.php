@@ -8,7 +8,6 @@
 
 namespace App\Http\Controllers\V1\Common\WeChat;
 
-
 use App\Logic\Exception;
 use App\Logic\LoadDataLogic;
 use EasyWeChat\Factory;
@@ -69,13 +68,6 @@ class OpenPlatformCommonLogic extends LoadDataLogic
             $this->openPlatform = Factory::openPlatform($this->config);
         }
         return $this->openPlatform;
-    }
-
-    /**
-     * @return mixed
-     */
-    public static function getOpenPlatform(){
-        return self::getOpenPlatformLogic()->openPlatform();
     }
 
 }
