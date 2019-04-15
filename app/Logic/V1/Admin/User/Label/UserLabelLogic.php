@@ -18,6 +18,8 @@ class UserLabelLogic extends LoadDataLogic
 
     private $labelId = 0;
 
+    private $name = '';
+
     /**
      * @return \DdvPhp\DdvPage
      */
@@ -32,8 +34,7 @@ class UserLabelLogic extends LoadDataLogic
      */
     public function store(){
         (new UserLabelModel())->firstOrCreate([
-            'uid' => $this->uid,
-            'label_id' => $this->labelId
+            'name' => $this->name
         ]);
         return [];
     }
