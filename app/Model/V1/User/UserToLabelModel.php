@@ -16,4 +16,6 @@ class UserToLabelModel extends Model
     protected $table = 'user_to_label';
 
     protected $primaryKey = 'id';
+
+    protected $fillable = ['uid','label_id'];
 }

@@ -13,7 +13,9 @@ use App\Logic\LoadDataLogic;
 use App\Model\Exception;
 use App\Model\V1\User\UserAccountModel;
 use App\Model\V1\User\UserBaseModel;
+use App\Model\V1\User\UserToLabelModel;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\QueryException;
 
 class UserLogic extends LoadDataLogic
 {
@@ -34,6 +36,8 @@ class UserLogic extends LoadDataLogic
     protected $password = '';
     
     protected $nickname = '';
+
+    protected $labels = [];
 
     /**
      * @return \DdvPhp\DdvPage
@@ -65,25 +69,37 @@ class UserLogic extends LoadDataLogic
         }
         return true;
     }
+
     /**
      * @return bool
      * @throws Exception
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function store(){
         $userBaseModel = new UserBaseModel();
         $userData = $this->getAttributes(['name', 'sex', 'status', 'email','headimg', 'phone', 'nickname'], ['', null]);
         $userBaseModel->setDataByHumpArray($userData);
         $userBaseModel->password = md5($this->password);
-        if (!$userBaseModel->save()){
-            throw new Exception('添加用户失败','STORE_USER_FAIL');
-        }
-        $accountModel = new UserAccountModel();
-        $accountModel->uid = $userBaseModel->getQueueableId();
-        $accountModel->account = $this->email;
-        $accountModel->type = UserAccountModel::ACCOUNT_TYPE_EMAIL;
-        if (!$accountModel->save()){
-            throw new Exception('添加用户失败','STORE_USER_FAIL');
+        \DB::beginTransaction();
+        try {
+            $userBaseModel->save();
+            // 待生成系统号 以及 邮箱 手机号 账号
+            $accountModel = new UserAccountModel();
+            $accountModel->uid = $userBaseModel->getQueueableId();
+            $accountModel->account = $this->email;
+            $accountModel->type = UserAccountModel::ACCOUNT_TYPE_EMAIL;
+            $accountModel->save();
+            foreach ($this->labels as $label){
+                (new UserToLabelModel())->firstOrCreate([
+                    'label_id' => $label['labelId'],
+                    'uid' => $userBaseModel->getQueueableId()
+                ]);
+            }
+            \DB::commit();
+        } catch (QueryException $exception) {
+            \DB::rollBack();
+            throw new Exception($exception->getMessage(), $exception->getCode());
         }
         return true;
     }
