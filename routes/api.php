@@ -293,7 +293,6 @@ Route::group([
                     //添加标签
                     Route::post('/store ','UserLabelController@store');
                 });
-
                 // 用户列表
                 Route::get('/lists', 'UserController@index');
                 //添加用户

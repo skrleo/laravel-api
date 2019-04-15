@@ -10,7 +10,9 @@ namespace App\Logic\V1\Admin\User\Group;
 
 
 use App\Logic\LoadDataLogic;
+use App\Model\V1\User\UserBaseModel;
 use App\Model\V1\User\UserGroupModel;
+use App\Model\V1\User\UserToGroupModel;
 
 class UserGroupLogic extends LoadDataLogic
 {
@@ -40,10 +42,11 @@ class UserGroupLogic extends LoadDataLogic
     public function _getGroupTree($groups,$groupId){
         $tree = [];
         foreach ($groups as $group) {
-            var_dump($group->parentId . '&&'. $groupId);
             if ($group->parentId == $groupId) {
-                var_dump('ner:' . $group->parentId . '&&'. $groupId);
-                $group->children = $this->_getGroupTree($groups, $group->groupId);
+                $children = $this->_getGroupTree($groups, $group->groupId);
+                if (!empty($children)){
+                    $group->children = $children;
+                }
                 $tree[] = $group;
             }
         }
