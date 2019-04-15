@@ -84,12 +84,23 @@ class UserLogic extends LoadDataLogic
         \DB::beginTransaction();
         try {
             $userBaseModel->save();
-            // 待生成系统号 以及 邮箱 手机号 账号
-            $accountModel = new UserAccountModel();
-            $accountModel->uid = $userBaseModel->getQueueableId();
-            $accountModel->account = $this->email;
-            $accountModel->type = UserAccountModel::ACCOUNT_TYPE_EMAIL;
-            $accountModel->save();
+            // 待生成系统号
+            if (!empty($this->phone)){
+                // 手机号 账号
+                $accountModel = new UserAccountModel();
+                $accountModel->uid = $userBaseModel->getQueueableId();
+                $accountModel->account = $this->phone;
+                $accountModel->type = UserAccountModel::ACCOUNT_TYPE_PHONE;
+                $accountModel->save();
+            }
+            if (!empty($this->email)){
+                // 邮箱  账号
+                $accountModel = new UserAccountModel();
+                $accountModel->uid = $userBaseModel->getQueueableId();
+                $accountModel->account = $this->email;
+                $accountModel->type = UserAccountModel::ACCOUNT_TYPE_EMAIL;
+                $accountModel->save();
+            }
             foreach ($this->labels as $label){
                 (new UserToLabelModel())->firstOrCreate([
                     'label_id' => $label['labelId'],

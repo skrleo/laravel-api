@@ -55,10 +55,10 @@ class UserController extends  Controller
         $this->validate(null, [
             'name' => 'required|string',
             'sex' => 'integer',
-            'status' => 'required|integer',
+            'status' => 'integer',
             'labels' => 'array',
             'email' => 'required|string',
-            'phone' => 'string',
+            'phone' => 'required|string',
             'password' => 'required|string',
             'nickname' => 'required|string',
             'headimg' => 'string'

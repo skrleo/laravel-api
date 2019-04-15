@@ -33,9 +33,11 @@ class UserLabelLogic extends LoadDataLogic
      * @return array
      */
     public function store(){
-        (new UserLabelModel())->firstOrCreate([
+        $userLabelModel = (new UserLabelModel())->firstOrCreate([
             'name' => $this->name
         ]);
-        return [];
+        return [
+            'labelId' => $userLabelModel->getQueueableId()
+        ];
     }
 }

@@ -17,5 +17,7 @@ class UserToLabelModel extends Model
 
     protected $primaryKey = 'id';
 
+    public $timestamps = false;
+    
     protected $fillable = ['uid','label_id'];
 }

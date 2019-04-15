@@ -38,8 +38,8 @@ class UserLabelController extends Controller
         ]);
         $userLabelLogic = new UserLabelLogic();
         $userLabelLogic->load($this->verifyData);
-        if ($userLabelLogic->store()){
-            return [];
-        }
+        return [
+            'data' => $userLabelLogic->store()
+        ];
     }
 }
