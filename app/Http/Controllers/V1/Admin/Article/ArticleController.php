@@ -8,11 +8,13 @@
 
 namespace App\Http\Controllers\V1\Admin\Article;
 
+use App\HelpTrait\BroadcastHttpPush;
 use App\Http\Controllers\Controller;
 use App\Logic\V1\Admin\Article\ArticleLogic;
 
 class ArticleController extends Controller
 {
+    use BroadcastHttpPush;
     /**
      * @return string
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
@@ -125,5 +127,17 @@ class ArticleController extends Controller
         if ($articleLogic->review()){
             return[];
         }
+    }
+
+    public function test(){
+        $broadcastChannel = array(
+            "channel" => "private-Message",   // 通道名，`private-`表示私有
+            "name" => "sayHello",    // 事件名
+            "data" => array(
+                "status" => 200,
+                "message" => "hello world!"
+            )
+        );
+        $this->push($broadcastChannel);
     }
 }

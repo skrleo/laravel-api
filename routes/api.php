@@ -199,6 +199,8 @@ Route::group([
                  * 添加文章
                  */
                 Route::post('/', 'ArticleController@store');
+
+                Route::get('/test', 'ArticleController@test');
                 /**
                  * 修改文章审核状态
                  */
