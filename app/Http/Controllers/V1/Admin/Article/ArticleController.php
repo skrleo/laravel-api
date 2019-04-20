@@ -8,9 +8,12 @@
 
 namespace App\Http\Controllers\V1\Admin\Article;
 
+use App\Exports\ArticleExport;
 use App\HelpTrait\BroadcastHttpPush;
 use App\Http\Controllers\Controller;
 use App\Logic\V1\Admin\Article\ArticleLogic;
+use App\Model\V1\Article\ArticleModel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class ArticleController extends Controller
 {
@@ -139,5 +142,25 @@ class ArticleController extends Controller
             )
         );
         $this->push($broadcastChannel);
+    }
+
+    /**
+     * 文件导出下载
+     */
+    public function export(){
+        // 生成临时存储位置
+        $tempFile = tempnam(sys_get_temp_dir(), 'excel');
+
+        var_dump(sys_get_temp_dir());
+
+        //弹出下载对话框
+        header('Content-Type: application/vnd.ms-excel');
+        // 指定保存的名字
+        header('Content-Disposition: attachment; filename=test.xls');
+
+        // 读取那个临时文件，并且输出浏览器
+        readfile($tempFile);
+        // 删除那个临时文件
+        unlink($tempFile);
     }
 }

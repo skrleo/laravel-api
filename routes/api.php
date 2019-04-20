@@ -199,8 +199,14 @@ Route::group([
                  * 添加文章
                  */
                 Route::post('/', 'ArticleController@store');
-
+                /**
+                 * 实时消息测试
+                 */
                 Route::get('/test', 'ArticleController@test');
+                /**
+                 * 文件导出测试
+                 */
+                Route::get('/excel', 'ArticleController@export');
                 /**
                  * 修改文章审核状态
                  */
