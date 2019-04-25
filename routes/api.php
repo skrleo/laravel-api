@@ -207,6 +207,8 @@ Route::group([
                  * 文件导出测试
                  */
                 Route::get('/excel', 'ArticleController@export');
+
+                Route::get('/qrcode', 'ArticleController@getQrCode');
                 /**
                  * 修改文章审核状态
                  */

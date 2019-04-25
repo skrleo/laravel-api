@@ -8,12 +8,10 @@
 
 namespace App\Http\Controllers\V1\Admin\Article;
 
-use App\Exports\ArticleExport;
 use App\HelpTrait\BroadcastHttpPush;
 use App\Http\Controllers\Controller;
 use App\Logic\V1\Admin\Article\ArticleLogic;
-use App\Model\V1\Article\ArticleModel;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Endroid\QrCode\QrCode;
 
 class ArticleController extends Controller
 {
@@ -162,5 +160,24 @@ class ArticleController extends Controller
         readfile($tempFile);
         // 删除那个临时文件
         unlink($tempFile);
+    }
+
+    /**
+     *
+     */
+    public function getQrCode(){
+        $qrCode = new QrCode();
+        $qrCode->setText('123');
+        $qrCode->setSize(300);
+        $qrCode->setWriterByName('png');
+        $qrCode->setMargin(2);
+        $qrCode->setEncoding('UTF-8');
+        $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
+        $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+        $qrCode->writeFile(public_path() . '/qrcode.png');
+
+        return [
+          'data' =>   public_path() . '/qrcode.png'
+        ];
     }
 }
