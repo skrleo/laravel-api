@@ -184,6 +184,7 @@ class ArticleController extends Controller
 
     /**
      * 封装 swool 妙计定时任务器
+     *  see https://blog.csdn.net/m0_37082962/article/details/85991115
      */
     public function ceshi(){
 //        dispatch(new BaseJob());
