@@ -10,6 +10,7 @@ namespace App\Http\Controllers\V1\Admin\Article;
 
 use App\HelpTrait\BroadcastHttpPush;
 use App\Http\Controllers\Controller;
+use App\Jobs\BaseJob;
 use App\Logic\V1\Admin\Article\ArticleLogic;
 use Endroid\QrCode\QrCode;
 
@@ -179,5 +180,24 @@ class ArticleController extends Controller
         return [
           'data' =>   public_path() . '/qrcode.png'
         ];
+    }
+
+    /**
+     * 封装 swool 妙计定时任务器
+     */
+    public function ceshi(){
+//        dispatch(new BaseJob());
+        $num = 0;
+        $microTimer = new Timer();
+        $microTimer->isMicro()->loop(function ()use ($microTimer){
+            global $num;
+            $num ++;
+            if ($microTimer->stop()){
+                $GLOBALS['num'] = 0;
+                print '执行成功';
+            }else{
+                print '执行失败';
+            }
+        },1);
     }
 }

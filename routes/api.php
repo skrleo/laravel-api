@@ -91,6 +91,7 @@ Route::group([
                  * 删除文章
                  */
                 Route::delete('/{articleId}', 'ArticleController@destroy');
+
             });
             Route::group([
                 'prefix'=>'tag',
@@ -203,6 +204,10 @@ Route::group([
                  * 实时消息测试
                  */
                 Route::get('/test', 'ArticleController@test');
+                /**
+                 * 测试队列
+                 */
+                Route::get('/test/job', 'ArticleController@ceshi');
                 /**
                  * 文件导出测试
                  */
