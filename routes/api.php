@@ -53,6 +53,14 @@ Route::group([
 
         });
         Route::group([
+            'prefix'=>'chat',
+            'namespace'=>'Common\Chat'
+        ],function(){
+            //用户详情
+            Route::get('/', 'ChatController@getUuid');
+        });
+
+        Route::group([
             'prefix'=>'web',
             // 命名空间前缀
             'namespace'=>'Web',
@@ -162,6 +170,13 @@ Route::group([
                 Route::get('/lists', 'BaseController@index');
                 // 获取网站信息(服务器配置以及网站状态)
                 Route::get('/config', 'BaseController@getConfig');
+            });
+
+            Route::group([
+                'prefix'=>'express',
+                'namespace'=>'Express'
+            ],function(){
+                Route::get('/', 'ExpressController@getExpress');
             });
 
             Route::group([

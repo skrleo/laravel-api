@@ -9,45 +9,45 @@
 namespace App\Http\Controllers\V1\Common\Chat;
 
 use App\Http\Controllers\Controller;
-use GatewayWorker\Lib\Gateway;
+use GuzzleHttp\Client;
 
 class ChatController extends Controller
 {
-    public function __construct()
-    {
-        Gateway::$registerAddress = '127.0.0.1:1236';
-    }
-    /**
-     *
-     */
-    public function bindUser(){
-        // 假设用户已经登录，用户uid和群组id在session中
-        $uid = request('uid');
-        $client_id = request('client_id');
 
-        $res = request()->all();
-        $res['type'] = 'bind';
-        $res['time'] = date('H:i:s');
-        // client_id与uid绑定
-        Gateway::bindUid($client_id, $uid);
-        Gateway::sendToUid($uid, json_encode($res));
-        return response()->json($res);
+    /**
+     * 用户登录 获取
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function init(){
+        $this->getUuid();
+        $this->showQrCode();
     }
 
     /**
-     * 发送消息
-     * @return mixed
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function sendMessage()
-    {
-        $uid = request('uid');
-        $to_uid = request('to_uid');
-        $res = request()->all();
-        $res['type'] = 'send';
-        $res['time'] = date('H:i:s');
-        // 向任意uid的网站页面发送数据
-        Gateway::sendToUid($uid, json_encode($res));
-        Gateway::sendToUid($to_uid, json_encode($res));
-        return response()->json($res);
+    public function getUuid(){
+        $client = new Client();
+        $res = $client->request('GET', 'https://login.weixin.qq.com/jslogin', [
+            'appid' => 'wx782c26e4c19acffb',
+            'fun'   => 'new',
+            'redirect_rui'   => 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage',
+            'lang'  => 'zh_CN',
+            '_'     => time(),
+        ]);
+        echo $res->getBody();
+        return [
+            'data' => $res->getBody(),
+        ];
+    }
+
+    private function getMillisecond() {
+        list($t1, $t2) = explode(' ', microtime());
+        return (float)sprintf('%.0f',(floatval($t1)+floatval($t2))*1000);
+    }
+
+    public function showQrCode(){
+
     }
 }

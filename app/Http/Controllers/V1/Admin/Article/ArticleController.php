@@ -186,19 +186,23 @@ class ArticleController extends Controller
      * 封装 swool 妙计定时任务器
      *  see https://blog.csdn.net/m0_37082962/article/details/85991115
      */
+//    public function ceshi(){
+////        dispatch(new BaseJob());
+//        $num = 0;
+//        $microTimer = new Timer();
+//        $microTimer->isMicro()->loop(function ()use ($microTimer){
+//            global $num;
+//            $num ++;
+//            if ($microTimer->stop()){
+//                $GLOBALS['num'] = 0;
+//                print '执行成功';
+//            }else{
+//                print '执行失败';
+//            }
+//        },1);
+//    }
+
     public function ceshi(){
-//        dispatch(new BaseJob());
-        $num = 0;
-        $microTimer = new Timer();
-        $microTimer->isMicro()->loop(function ()use ($microTimer){
-            global $num;
-            $num ++;
-            if ($microTimer->stop()){
-                $GLOBALS['num'] = 0;
-                print '执行成功';
-            }else{
-                print '执行失败';
-            }
-        },1);
+
     }
 }
