@@ -18,6 +18,7 @@
         "fideloper/proxy": "~4.0",
         "gregwar/captcha": "^1.1",
         "hanson/vbot": "^2.0",
+        "hhxsv5/laravel-s": "~3.5.0",
         "jacobcyl/ali-oss-storage": "^2.1",
         "laramall/laravel-system-info": "^1.0",
         "laravel/framework": "5.7.*",

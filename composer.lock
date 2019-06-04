@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa2e7430598cee3627f987f1d07efc81",
+    "content-hash": "d66eb36386ca73e450ab172a2ef95230",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -1888,6 +1888,49 @@
                 "机器人"
             ],
             "time": "2018-09-10T01:53:17+00:00"
+        },
+        {
+            "name": "hhxsv5/laravel-s",
+            "version": "v3.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hhxsv5/laravel-s.git",
+                "reference": "59ac3bd10371603bca6a9dc276582aa62076d397"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hhxsv5/laravel-s/zipball/59ac3bd10371603bca6a9dc276582aa62076d397",
+                "reference": "59ac3bd10371603bca6a9dc276582aa62076d397",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-pcntl": "*",
+                "php": ">=5.5.9",
+                "swoole/ide-helper": "@dev",
+                "symfony/console": ">=2.7.0"
+            },
+            "suggest": {
+                "ext-inotify": "Inotify, used to reload all worker processes when your code is modified.",
+                "ext-swoole": "Event-driven asynchronous & concurrent & coroutine networking engine with high performance for PHP, require >= 1.7.19."
+            },
+            "bin": [
+                "bin/fswatch"
+            ],
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Hhxsv5\\LaravelS\\Illuminate\\LaravelSServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hhxsv5\\LaravelS\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/"
         },
         {
             "name": "jacobcyl/ali-oss-storage",
@@ -4159,6 +4202,32 @@
                 "mailer"
             ],
             "time": "2018-09-11T07:12:52+00:00"
+        },
+        {
+            "name": "swoole/ide-helper",
+            "version": "4.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swoole/ide-helper.git",
+                "reference": "7035aeb5c6d42c22b44aef1304aac62d6733b5e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/7035aeb5c6d42c22b44aef1304aac62d6733b5e5",
+                "reference": "7035aeb5c6d42c22b44aef1304aac62d6733b5e5",
+                "shasum": ""
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "~3.4.0",
+                "zendframework/zend-code": "~3.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Swoole\\IDEHelper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/"
         },
         {
             "name": "symfony/cache",

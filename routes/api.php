@@ -135,6 +135,15 @@ Route::group([
             // 命名空间前缀
             'namespace'=>'Admin',
         ],function(){
+
+            Route::get('/task/test', function () {
+                var_dump('xxx');
+                $task = new \App\Jobs\TestTask('测试异步任务');
+                var_dump('111');
+                $success = \Hhxsv5\LaravelS\Swoole\Task\Task::deliver($task);  // 异步投递任务，触发调用任务类的 handle 方法
+                var_dump($success);
+            });
+
             Route::group([
                 'prefix'=>'base',
                 'namespace'=>'Base'
