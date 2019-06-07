@@ -32,13 +32,14 @@ return [
         //],
     ],
     'timer'                    => [
-        'enable'        => false,
+        'enable'        => true,
         'jobs'          => [
             // Enable LaravelScheduleJob to run `php artisan schedule:run` every 1 minute, replace Linux Crontab
             //\Hhxsv5\LaravelS\Illuminate\LaravelScheduleJob::class,
             // Two ways to configure parameters:
             // [\App\Jobs\XxxCronJob::class, [1000, true]], // Pass in parameters when registering
             // \App\Jobs\XxxCronJob::class, // Override the corresponding method to return the configuration
+            \App\Jobs\Timer\TestCronJob::class, // Override the corresponding method to return the configuration
         ],
         'max_wait_time' => 5,
     ],
@@ -56,7 +57,7 @@ return [
         'dispatch_mode'      => 2,
         'reactor_num'        => function_exists('swoole_cpu_num') ? swoole_cpu_num() * 2 : 4,
         'worker_num'         => function_exists('swoole_cpu_num') ? swoole_cpu_num() * 2 : 8,
-        //'task_worker_num'    => function_exists('swoole_cpu_num') ? swoole_cpu_num() * 2 : 8,
+        'task_worker_num'    => function_exists('swoole_cpu_num') ? swoole_cpu_num() * 2 : 8,
         'task_ipc_mode'      => 1,
         'task_max_request'   => 8000,
         'task_tmpdir'        => @is_writable('/dev/shm/') ? '/dev/shm' : '/tmp',

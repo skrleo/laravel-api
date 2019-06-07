@@ -1,4 +1,11 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: chen
+ * Date: 2019/6/7
+ * Time: 22:01
+ */
+
 namespace App\Jobs;
 
 use Hhxsv5\LaravelS\Swoole\Task\Task;
