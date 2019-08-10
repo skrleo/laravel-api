@@ -15,7 +15,7 @@ trait BroadcastHttpPush
 {
     public function push($data)
     {
-        $baseUrl = env('WEBSOCKET_BASEURL', 'http://api.example.com:6001/');
+        $baseUrl = env('WEBSOCKET_BASEURL', 'http://api.homestead.com:6001/');
         $appId = env('WEBSOCKET_APPID', '0688b5f012108662');
         $key = env('WEBSOCKET_KEY', 'b2444f629035135ff3cdd1d9a7422aa7');
         $httpUrl = $baseUrl . 'apps/' . $appId . '/events?auth_key=' . $key;
