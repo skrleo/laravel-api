@@ -1,5 +1,5 @@
 {
-	"authHost": "http://api.homestead.com",
+	"authHost": "http://api.example.com",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [
 		{

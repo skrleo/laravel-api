@@ -22,4 +22,10 @@ class CrontabModel extends Model
     // 任务运行状态
     const TASK_QUEUE_START = 1;
 
+    /**
+     * 运行定时任务队列
+     */
+    public function runCrontab(){
+        
+    }
 }
