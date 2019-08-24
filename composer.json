@@ -23,6 +23,7 @@
         "laramall/laravel-system-info": "^1.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "~1.0",
+        "orzcc/taobao-top-client": "^2.5",
         "overtrue/laravel-wechat": "~4.0",
         "predis/predis": "^1.1",
         "workerman/gateway-worker": "^3.0",

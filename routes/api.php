@@ -195,69 +195,39 @@ Route::group([
                 Route::group([
                     'prefix'=>'tag'
                 ],function(){
-                    /**
-                     *  标签列表
-                     */
+                    //标签列表
                     Route::get('/lists', 'TagController@index');
-                    /**
-                     * 添加标签
-                     */
+                    // 添加标签
                     Route::post('/', 'TagController@store');
-                    /**
-                     * 编辑标签
-                     */
+                    // 编辑标签
                     Route::put('/{tagId}', 'TagController@update');
-                    /**
-                     * 标签详情
-                     */
+                    // 标签详情
                     Route::get('/{tagId}', 'TagController@show');
-                    /**
-                     * 删除标签
-                     */
+                    // 删除标签
                     Route::delete('/{tagId}', 'TagController@destroy');
                 });
-                /**
-                 *  文章列表
-                 */
+                //文章列表
                 Route::get('/lists', 'ArticleController@index');
-                /**
-                 * 添加文章
-                 */
+                // 添加文章
                 Route::post('/', 'ArticleController@store');
-                /**
-                 * 实时消息测试
-                 */
-                Route::get('/test', 'ArticleController@test');
-                /**
-                 * 测试队列
-                 */
+                // 实时消息测试
+                Route::get('/ceshi', 'ArticleController@ceshi');
+                // 测试队列
                 Route::get('/test/job', 'ArticleController@ceshi');
-                /**
-                 * 文件导出测试
-                 */
+                // 文件导出测试
                 Route::get('/excel', 'ArticleController@export');
 
                 Route::get('/qrcode', 'ArticleController@getQrCode');
-                /**
-                 * 修改文章审核状态
-                 */
+                // 修改文章审核状态
                 Route::put('/review', 'ArticleController@review');
-                /**
-                 * 编辑文章
-                 */
+                // 编辑文章
                 Route::put('/{articleId}', 'ArticleController@update');
-                /**
-                 * 文章详情
-                 */
+                // 文章详情
                 Route::get('/{articleId}', 'ArticleController@show');
-                /**
-                 * 删除文章
-                 */
+                // 删除文章
                 Route::delete('/{articleId}', 'ArticleController@destroy');
             });
-            /**
-             * vbot 微信机器人
-             */
+            //vbot 微信机器人
             Route::group([
                 'prefix'=>'wechat',
                 'namespace'=>'Wechat'
