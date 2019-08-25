@@ -211,6 +211,22 @@ Route::group([
                 // 删除用户
                 Route::delete('/{uid}', 'UserController@destroy');
             });
+            // 轮播图
+            Route::group([
+                'prefix'=>'banner',
+                'namespace'=>'Banner'
+            ],function(){
+                // 轮播图列表
+                Route::get('/lists', 'BannerController@index');
+                // 添加轮播图
+                Route::post('/', 'BannerController@store');
+                // 轮播图详情
+                Route::get('/{id}', 'BannerController@show');
+                // 编辑轮播图
+                Route::put('/{id}', 'BannerController@update');
+                // 删除轮播图
+                Route::delete('/{id}', 'BannerController@destroy');
+            });
 
             Route::group([
                 // path地址前缀

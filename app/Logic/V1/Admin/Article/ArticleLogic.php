@@ -13,8 +13,6 @@ use App\Logic\LoadDataLogic;
 use App\Model\V1\Article\ArticleModel;
 use App\Model\V1\Article\ArticleToTagModel;
 use App\Model\V1\Article\TagModel;
-use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
-use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\QueryException;
 
 class ArticleLogic extends LoadDataLogic
