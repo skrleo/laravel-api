@@ -69,6 +69,8 @@ class RouteServiceProvider extends ServiceProvider
 //             ->middleware('api')
              ->namespace($this->namespace);
 
+        // 公共路由
+        $route->group(base_path('routes/api.php'));
         // 前台路由
         $route->group(base_path('routes/api.web.php'));
         // 后台路由

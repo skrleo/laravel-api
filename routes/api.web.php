@@ -1,6 +1,6 @@
 <?php
 /**
- * 前台页面
+ * 前台路由
  * User: ChenGuanghui
  * Date: 2019/8/24
  * Time: 23:00
