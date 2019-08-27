@@ -28,4 +28,19 @@ class HomeController extends Controller
         $homeLogic->load($this->verifyData);
         return  $homeLogic->lists();
     }
+
+    /**
+     * 商品列表
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function goodsLists(){
+        $this->validate(null, [
+            'categoryId' => 'integer'
+        ]);
+        $homeLogic = new HomeLogic();
+        $homeLogic->load($this->verifyData);
+        return  $homeLogic->goodsLists();
+    }
 }
