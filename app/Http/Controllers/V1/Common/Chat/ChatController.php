@@ -14,9 +14,10 @@ use GuzzleHttp\Client;
 class ChatController extends Controller
 {
 
+    private $Uuid = '';
+
     /**
      * 获取微信登录uuid
-     * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getUuid()
@@ -33,8 +34,7 @@ class ChatController extends Controller
         ]);
 
         preg_match('/window.QRLogin.code = (\d+); window.QRLogin.uuid = \"(\S+?)\"/', $res->getBody(), $matches);
-
-        return $matches[2];
+        $this->Uuid = $matches[2];
     }
 
     /**
@@ -44,7 +44,8 @@ class ChatController extends Controller
     public function getQrCode()
     {
         $client = new Client();
-        $res = $client->request('GET', 'https://login.weixin.qq.com/qrcode/' . $this->getUuid());
+        $this->getUuid();
+        $res = $client->request('GET', 'https://login.weixin.qq.com/qrcode/' . $this->Uuid);
         // 二维码格式转base64
         return [
             'data' => [
@@ -58,30 +59,60 @@ class ChatController extends Controller
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function waitLogin()
+    public function checkIsLogin()
     {
         $client = new Client();
         $res = $client->request('GET', 'https://login.wx.qq.com/cgi-bin/mmwebwx-bin/login', [
             'query' => [
                 'loginicon' => 'true',
-                'uuid' => $this->getUuid(),
+                'uuid' => $this->Uuid,
                 'tip' => 0,
                 'r' => '862560455',
                 '_' => time(),
             ]
         ]);
 
+        echo $res->getBody();
+        // 获取登录状态
+        preg_match('/window.code=(\d+)/', $res->getBody(), $matches);
+        preg_match('/window.code=201;window.userAvatar = \'(\S+?)\'/', $res->getBody(), $userAvatar);
+        preg_match('/window.redirect_uri=\"(\S+?)\"/', $res->getBody(), $redirect_uri);
+
         return [
-            'data' => $res->getBody()
+            'data' => [
+                'code' => $matches[1],
+                'userAvatar' => $userAvatar[1] ?? '',
+                'redirectUri' => $redirect_uri[1] ?? ''
+            ]
         ];
     }
 
     /**
      * 登录后获取cookie信息
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getUserCookie()
     {
-
+        $client = new Client();
+        $res = $client->request('GET', 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage', [
+            'query' => [
+                'ticket' => 'true',
+                'uuid' => 'YeGrrvqmHQ==',
+                'lang' => 'zh_CN ',
+                'scan' => '1476606728',
+                'fun' => 'new',
+                'version' => 'v2',
+                '_' => time(),
+            ]
+        ]);
+        echo $matches[0];
+        return [
+            'data' => [
+                'code' => $matches[1],
+                'redirect_uri' => ''
+            ]
+        ];
     }
 
     /*-----------------微信网页版协议分析（2）-获取信息----------------------*/

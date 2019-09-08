@@ -43,8 +43,10 @@ Route::group([
             'prefix'=>'chat',
             'namespace'=>'Common\Chat'
         ],function(){
-            //用户详情
-            Route::get('/', 'ChatController@getUuid');
+            //获取微信二维码
+            Route::get('/getQrCode', 'ChatController@getQrCode');
+            // 查询是否登录
+            Route::get('/checkIsLogin', 'ChatController@checkIsLogin');
         });
     });
 
