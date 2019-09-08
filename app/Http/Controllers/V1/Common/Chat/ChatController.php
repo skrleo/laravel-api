@@ -30,11 +30,13 @@ class ChatController extends Controller
     public function getUuid(){
         $client = new Client();
         $res = $client->request('GET', 'https://login.weixin.qq.com/jslogin', [
-            'appid' => 'wx782c26e4c19acffb',
-            'fun'   => 'new',
-            'redirect_rui'   => 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage',
-            'lang'  => 'zh_CN',
-            '_'     => time(),
+            'query' => [
+                'appid' => 'wx782c26e4c19acffb',
+                'fun'   => 'new',
+                'redirect_rui'   => 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage',
+                'lang'  => 'zh_CN',
+                '_'     => time(),
+            ]
         ]);
         echo $res->getBody();
         return [
