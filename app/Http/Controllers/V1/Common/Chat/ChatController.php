@@ -45,10 +45,11 @@ class ChatController extends Controller
     {
         $client = new Client();
         $res = $client->request('GET', 'https://login.weixin.qq.com/qrcode/' . $this->getUuid());
-
         // 二维码格式转base64
         return [
-            'data' => $res->getBody()
+            'data' => [
+                'qrCode' => 'data:png;base64,' . base64_encode($res->getBody())
+            ]
         ];
     }
 
