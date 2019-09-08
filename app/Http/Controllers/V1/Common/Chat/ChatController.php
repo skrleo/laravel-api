@@ -38,9 +38,13 @@ class ChatController extends Controller
                 '_'     => time(),
             ]
         ]);
-        echo $res->getBody();
+
+        preg_match('/window.QRLogin.code = (\d+); window.QRLogin.uuid = \"(\S+?)\"/', $res->getBody(), $matches);
+
         return [
-            'data' => $res->getBody(),
+            'data' => [
+                'uuid' => $matches[2]
+            ]
         ];
     }
 
