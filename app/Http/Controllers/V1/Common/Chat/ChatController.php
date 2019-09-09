@@ -191,7 +191,7 @@ class ChatController extends Controller
     public function getContactLists()
     {
         $client = new Client();
-        $res = $client->request('GET', 'https://login.wx.qq.com/cgi-bin/mmwebwx-bin/login', [
+        $res = $client->request('GET', 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact', [
             'query' => [
                 'pass_ticket' => 'ZDJfLCa0EAKrLn2CdD7MDl%252B54GwlW0IEiwYOsm6II%252F8W57y0pF1F8fqS%252B5z4INU5',
                 'seq' => 0,

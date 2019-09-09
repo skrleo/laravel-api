@@ -46,7 +46,7 @@ Route::group([
             //获取微信二维码
             Route::get('/getQrCode', 'ChatController@getQrCode');
             // 查询是否登录
-            Route::get('/checkIsLogin', 'ChatController@checkIsLogin');
+            Route::get('/waitForLogin', 'ChatController@waitForLogin');
         });
     });
 
