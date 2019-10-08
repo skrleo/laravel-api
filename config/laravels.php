@@ -20,8 +20,8 @@ return [
     ],
     'event_handlers'           => [],
     'websocket'                => [
-        'enable' => false,
-        //'handler' => XxxWebSocketHandler::class,
+        'enable' => true,
+        'handler' => \App\Services\WebSocketService::class,
     ],
     'sockets'                  => [],
     'processes'                => [
@@ -75,11 +75,5 @@ return [
         'enable_reuse_port'  => true,
         'enable_coroutine'   => false,
         'http_compression'   => false,
-
-        /**
-         * More settings of Swoole
-         * @see https://wiki.swoole.com/wiki/page/274.html  Chinese
-         * @see https://www.swoole.co.uk/docs/modules/swoole-server/configuration  English
-         */
     ],
 ];
