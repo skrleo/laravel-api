@@ -35,10 +35,6 @@ return [
         'enable'        => true,
         'jobs'          => [
             // Enable LaravelScheduleJob to run `php artisan schedule:run` every 1 minute, replace Linux Crontab
-            //\Hhxsv5\LaravelS\Illuminate\LaravelScheduleJob::class,
-            // Two ways to configure parameters:
-            // [\App\Jobs\XxxCronJob::class, [1000, true]], // Pass in parameters when registering
-            // \App\Jobs\XxxCronJob::class, // Override the corresponding method to return the configuration
             \App\Jobs\ServiceInit::class, // Override the corresponding method to return the configuration
         ],
         'max_wait_time' => 5,
@@ -72,6 +68,9 @@ return [
         'package_max_length' => 4 * 1024 * 1024,
         'reload_async'       => true,
         'max_wait_time'      => 60,
+        // 表示每60秒遍历一次，一个连接如果600秒内未向服务器发送任何数据，此连接将被强制关闭
+        'heartbeat_idle_time'      => 600,
+        'heartbeat_check_interval' => 60,
         'enable_reuse_port'  => true,
         'enable_coroutine'   => false,
         'http_compression'   => false,
