@@ -17,7 +17,6 @@
         "endroid/qrcode": "^3.5",
         "fideloper/proxy": "~4.0",
         "gregwar/captcha": "^1.1",
-        "hanson/vbot": "^2.0",
         "hhxsv5/laravel-s": "~3.5.0",
         "jacobcyl/ali-oss-storage": "^2.1",
         "laramall/laravel-system-info": "^1.0",
@@ -25,10 +24,7 @@
         "laravel/tinker": "~1.0",
         "orzcc/taobao-top-client": "^2.5",
         "overtrue/laravel-wechat": "~4.0",
-        "predis/predis": "^1.1",
-        "workerman/gateway-worker": "^3.0",
-        "workerman/gatewayclient": "^3.0",
-        "workerman/workerman": "^3.5"
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
