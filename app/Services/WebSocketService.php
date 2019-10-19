@@ -12,7 +12,6 @@ class WebSocketService implements WebSocketHandlerInterface
 {
     public function __construct()
     {
-        var_dump('WebSocket 已经启动');
     }
 
     // 连接建立时触发
@@ -20,8 +19,7 @@ class WebSocketService implements WebSocketHandlerInterface
     {
         // 在触发 WebSocket 连接建立事件之前，Laravel 应用初始化的生命周期已经结束，你可以在这里获取 Laravel 请求和会话数据
         // 调用 push 方法向客户端推送数据，fd 是客户端连接标识字段
-        Log::info('WebSocket 连接建立');
-        var_dump('WebSocket 连接建立');
+        Log::info('WebSocket open');
         $server->push($request->fd, 'Welcome to WebSocket Server built on LaravelS');
     }
 
@@ -35,6 +33,6 @@ class WebSocketService implements WebSocketHandlerInterface
     // 关闭连接时触发
     public function onClose(Server $server, $fd, $reactorId)
     {
-        Log::info('WebSocket 连接关闭');
+        Log::info('WebSocket close');
     }
 }

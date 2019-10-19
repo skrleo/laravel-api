@@ -29,12 +29,12 @@ class ServiceInit extends CronJob
     public function run()
     {
         // TODO: Implement run() method.
-        CrontabModel::getHump()->each(function ($model){
-            if ($model->status == 1){
-                $client = new Client();
-                $res = $client->request('GET', $model->action);
-                var_dump(date('y-m-d H:i:s',time()).':'.$res->getBody());
-            }
-        });
+//        CrontabModel::getHump()->each(function ($model){
+//            if ($model->status == 1){
+//                $client = new Client();
+//                $res = $client->request('GET', $model->action);
+//                var_dump(date('y-m-d H:i:s',time()).':'.$res->getBody());
+//            }
+//        });
     }
 }
