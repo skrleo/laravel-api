@@ -17,7 +17,6 @@
         "endroid/qrcode": "^3.5",
         "fideloper/proxy": "~4.0",
         "gregwar/captcha": "^1.1",
-        "hhxsv5/laravel-s": "~3.5.0",
         "jacobcyl/ali-oss-storage": "^2.1",
         "laramall/laravel-system-info": "^1.0",
         "laravel/framework": "5.7.*",
@@ -35,10 +34,12 @@
     "autoload": {
         "classmap": [
             "database/seeds",
-            "database/factories"
+            "database/factories",
+            "app/Libraries/classes"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Lib\\": "app/Libraries/classes"
         }
     },
     "autoload-dev": {
