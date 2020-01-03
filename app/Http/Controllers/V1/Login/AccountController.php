@@ -14,6 +14,7 @@ use App\Http\Controllers\Exception;
 use App\Logic\V1\Common\Util\VerifyCommonLogic;
 use App\Logic\V1\Login\AccountLogic;
 use DdvPhp\DdvRestfulApi\Exception\RJsonError;
+use Illuminate\Http\Request;
 
 class AccountController extends Controller
 {
@@ -26,7 +27,7 @@ class AccountController extends Controller
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
-    public function login(){
+    public function login(Request $request){
         $this->validate(null, [
             'type' => 'required|integer',
             'account' => 'required|string',
@@ -34,7 +35,7 @@ class AccountController extends Controller
             'imgVerify' => 'string',
             'verifyGuid' => 'string',
         ]);
-        $codeData = (new VerifyCommonLogic())->checkShowCode($this->verifyData);
+        $codeData = (new VerifyCommonLogic())->checkShowCode($request);
         if (!empty($codeData) && $codeData['isShow'] == 1) {
             if (empty($this->verifyData['verifyGuid'])) {
                 throw new RJsonError("验证码错误",'VERIFY_GUID_ERROR');

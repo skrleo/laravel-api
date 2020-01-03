@@ -17,7 +17,6 @@ Route::group([
         // 图片上传
         Route::post('img','UploadController@uploadImg');
     });
-
     Route::group([
         'middleware' => [
             RestfulApi::class,
