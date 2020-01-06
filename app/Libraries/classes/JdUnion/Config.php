@@ -59,4 +59,14 @@ class Config
             'coupon' => 'jd.union.open.coupon.query'
         ];
     }
+
+    /**
+     * 京东详情地址
+     *
+     * @return string
+     */
+    public static function getJdDetailUrl()
+    {
+        return 'https://wqitem.jd.com/item/view?sku=';
+    }
 }

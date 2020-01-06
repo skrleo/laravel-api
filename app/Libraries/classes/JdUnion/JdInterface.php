@@ -98,21 +98,17 @@ class JdInterface
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getJdlmGoods()
+    public function execute()
     {
-        try {
-            $client = new Client(['timeout' => 0]);
-            $response = $client->request('POST', Config::API_URL, [
-                'form_params' => self::$param
-            ]);
-            $response = json_decode($response->getBody()->getContents(), true);
-            if (isset($response["error_response"])) {
-                Log::info("[" . date("Y-m-d H:i:s") . "]|error Info:" . $response["error_response"]["zh_desc"]);
-            }
-            $result = $response[strtr(self::$param["method"], '.', '_') . '_response']['result'];
-            return json_decode($result, true);
-        } catch (\Exception $e) {
-
+        $client = new Client(['timeout' => 0]);
+        $response = $client->request('POST', Config::API_URL, [
+            'form_params' => self::$param
+        ]);
+        $response = json_decode($response->getBody()->getContents(), true);
+        if (isset($response["error_response"])) {
+            Log::info("[" . date("Y-m-d H:i:s") . "]|error Info:" . $response["error_response"]["zh_desc"]);
         }
+        $result = $response[strtr(self::$param["method"], '.', '_') . '_response']['result'];
+        return json_decode($result, true);
     }
 }
