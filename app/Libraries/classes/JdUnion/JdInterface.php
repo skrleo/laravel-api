@@ -33,6 +33,12 @@ class JdInterface
      */
     public function __construct()
     {
+         $baseConfig = Config::baseConfig();
+         self::$param['app_key'] = $baseConfig["app_key"];
+         self::$param['timestamp'] = date("Y-m-d H:i:s");
+         self::$param['format'] = $baseConfig["format"];
+         self::$param['sign_method'] = $baseConfig["sign_method"];
+         self::$param['v'] = $baseConfig["version"];
     }
 
     /**
@@ -59,16 +65,12 @@ class JdInterface
     public function setRequestParam()
     {
         // 获取请求类型
-        $param["method"] = Config::getMethodType()[self::$param['methodType']];
+        self::$param["method"] = Config::getMethodType()[self::$param['methodType']];
+        unset(self::$param['methodType']);
         // 格式化参数
-        $paramJson = json_encode(self::$param["param_json"]);
-        // 合并传入参数和公共参数
-        $params = array_merge(self::$param["publicParams"], [
-            "method" => $param["method"],
-            "param_json" => $paramJson
-        ]);
+        self::$param["param_json"] = json_encode(self::$param["param_json"]);
         // 签名加密
-        self::$param["sign"] = $this->generateSign($params);
+        self::$param["sign"] = $this->generateSign(self::$param);
         return self::$instance;
     }
 

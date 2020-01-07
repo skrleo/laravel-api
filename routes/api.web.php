@@ -69,6 +69,14 @@ Route::group([
                 //删除标签
                 Route::delete('/{articleId}', 'TagController@destroy');
             });
+
+            Route::group([
+                'prefix'=>'jd',
+                'namespace'=>'Jdlm'
+            ],function(){
+                //京东商品列表
+                Route::get('/lists', 'GoodsController@getJdGoodsLists');
+            });
         });
 
     });
