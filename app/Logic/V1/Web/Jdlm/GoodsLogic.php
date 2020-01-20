@@ -10,6 +10,7 @@ namespace App\Logic\V1\Web\Jdlm;
 
 
 use App\Libraries\classes\JdUnion\Config;
+use App\Libraries\classes\JdUnion\FormatData;
 use App\Libraries\classes\JdUnion\JdInterface;
 use App\Logic\LoadDataLogic;
 use DdvPhp\DdvUtil\Exception;
@@ -24,8 +25,19 @@ class GoodsLogic extends LoadDataLogic
      */
     public function getJdGoodsLists()
     {
-        $param = ["methodType" => 'goods'];
-        return JdInterface::getInstance($param)->setRequestParam()->execute();
+        $param = ["methodType" => 'jingfen'];
+        $data = [
+            'eliteId' => 21,
+            'pageIndex' => 1,
+            'pageSize' => 20
+        ];
+        $param["param_json"]["goodsReq"] = $data;
+
+        $data = JdInterface::getInstance($param)->setRequestParam()->execute();
+        $lists = FormatData::getInit()->headleOptional($data["data"]);
+        return [
+            'lists' => $lists
+        ];
     }
 
     /**

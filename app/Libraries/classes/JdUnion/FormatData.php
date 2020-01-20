@@ -222,7 +222,7 @@ class FormatData
      */
     private function addRedis($data)
     {
-        Redis::connection('redis_jd')->hmset("goods:info:where:" . strval($data['sku_id']), $data);
-        Redis::connection('redis_jd')->expire("goods:info:where:" . strval($data['sku_id']), 60 * 60 * 2);
+        Redis::hmset("jdlm:goods:where:" . strval($data['sku_id']), $data);
+        Redis::expire("jdlm:goods:where:" . strval($data['sku_id']), 60 * 60 * 2);
     }
 }
