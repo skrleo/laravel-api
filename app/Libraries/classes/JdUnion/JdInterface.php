@@ -71,6 +71,7 @@ class JdInterface
         self::$param["param_json"] = json_encode(self::$param["param_json"]);
         // 签名加密
         self::$param["sign"] = $this->generateSign(self::$param);
+
         return self::$instance;
     }
 
