@@ -32,14 +32,6 @@ Route::group([
             'namespace'=>'Admin',
         ],function(){
 
-            Route::get('/task/test', function () {
-                var_dump('xxx');
-                $task = new \App\Jobs\TestTask('测试异步任务');
-                var_dump('111');
-                $success = \Hhxsv5\LaravelS\Swoole\Task\Task::deliver($task);  // 异步投递任务，触发调用任务类的 handle 方法
-                var_dump($success);
-            });
-
             Route::group([
                 'prefix'=>'base',
                 'namespace'=>'Base'
@@ -298,6 +290,20 @@ Route::group([
                     Route::put('user/role', 'PurviewController@userToRole');
                     // 添加角色节点关系
                     Route::put('role/node', 'PurviewController@roleToNode');
+                });
+            });
+
+            Route::group([
+                // path地址前缀
+                'prefix'=>'robot',
+                // 命名空间前缀
+                'namespace'=>'Robot'
+            ],function(){
+                Route::group([
+                    // path地址前缀
+                    'prefix'=>'login',
+                ],function(){
+                    Route::post('getQrCode', 'LoginController@getQrCode');
                 });
             });
         });
