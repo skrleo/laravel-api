@@ -15,12 +15,69 @@ use App\Logic\V1\Admin\Robot\LoginLogic;
 class LoginController extends Controller
 {
     /**
-     * @return mixed
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      */
     public function getQrCode()
     {
         $loginLogic = new LoginLogic();
-        return $loginLogic->getQrCode();
+        return [
+            'data' => $loginLogic->getQrCode()
+        ];
+    }
+
+    /**
+     * 检查是否登录
+     *
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     */
+    public function checkLogin()
+    {
+        $this->validate(null, [
+            'uuid' => 'required|string'
+        ]);
+        $loginLogic = new LoginLogic();
+        $loginLogic->load($this->verifyData);
+        return $loginLogic->checkLogin();
+    }
+
+    /**
+     * 退出登录
+     *
+     * @return mixed|\Psr\Http\Message\ResponseInterface|string
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     */
+    public function loginOut()
+    {
+        $this->validate(null, [
+            'wxId' => 'required|string'
+        ]);
+        $loginLogic = new LoginLogic();
+        $loginLogic->load($this->verifyData);
+        return $loginLogic->loginOut();
+    }
+
+    /**
+     * 心跳
+     *
+     * @return mixed|\Psr\Http\Message\ResponseInterface|string
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     */
+    public function heartBeat()
+    {
+        $this->validate(null, [
+            'wxId' => 'required|string'
+        ]);
+        $loginLogic = new LoginLogic();
+        $loginLogic->load($this->verifyData);
+        return $loginLogic->heartBeat();
     }
 }

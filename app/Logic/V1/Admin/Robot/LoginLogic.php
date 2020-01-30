@@ -9,6 +9,7 @@
 namespace App\Logic\V1\Admin\Robot;
 
 
+use App\Http\Middleware\ClientIp;
 use App\Logic\V1\Admin\Base\BaseLogic;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Log;
 class LoginLogic extends BaseLogic
 {
     protected $uuid = '';
+
+    protected $wxId = '';
 
     /**
      * 获取QRCode
@@ -27,11 +30,11 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/GetQrCode', [
-                'form_params' => ["getQrCode" => '{}']
+            $res = $client->request('POST', 'http://106.15.235.187:200/api/Login/GetQrCode', [
+                'form_params' => ["getQrCode" => json_encode(["proxyIp" => "183.21.80.1"])]
             ]);
-            $res = $res->getBody()->getContents();
-            return $res;
+            $res = json_decode($res->getBody()->getContents(),true);
+            return $res["Data"];
         } catch(\Throwable $e) {
             Log::info('Fail to call api');
         }
@@ -47,11 +50,17 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/CheckLogin', [
+            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/CheckLogin/'.$this->uuid, [
                 'form_params' => ["uuid" => $this->uuid]
             ]);
-            $res = $res->getBody()->getContents();
-            return $res;
+            $res = json_decode($res->getBody()->getContents(),true);
+            if ($res["Code"] == 401){
+                return ["code" => $res["Code"],"message" => $res['Message']];
+            }
+            if ($res["Data"]["WxId"] == null){
+                return ["code" => "4000","message" => "等待扫描!"];
+            }
+            return ["data" => $res["Data"]];
         } catch(\Throwable $e) {
             Log::info('Fail to call api');
         }
@@ -67,9 +76,7 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/LogOut', [
-                'form_params' => ["uuid" => $this->uuid]
-            ]);
+            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/LogOut/'.$this->wxId);
             $res = $res->getBody()->getContents();
             return $res;
         } catch(\Throwable $e) {
@@ -87,9 +94,7 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/HeartBeat', [
-                'form_params' => ["wxId" => $this->wxId]
-            ]);
+            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/HeartBeat/'.$this->wxId);
             $res = $res->getBody()->getContents();
             return $res;
         } catch(\Throwable $e) {
@@ -156,4 +161,6 @@ class LoginLogic extends BaseLogic
             Log::info('Fail to call api');
         }
     }
+
+
 }

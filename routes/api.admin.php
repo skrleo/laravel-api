@@ -303,7 +303,21 @@ Route::group([
                     // path地址前缀
                     'prefix'=>'login',
                 ],function(){
+                    // 获取登录二维码
                     Route::post('getQrCode', 'LoginController@getQrCode');
+                    // 检查是否登录
+                    Route::post('checkLogin', 'LoginController@checkLogin');
+                    // 退出登录
+                    Route::post('loginOut', 'LoginController@loginOut');
+                    // 检查心跳
+                    Route::post('heartBeat', 'LoginController@heartBeat');
+                });
+                Route::group([
+                    // path地址前缀
+                    'prefix'=>'message',
+                ],function(){
+                    // 同步消息消息
+                    Route::post('syncMessage', 'MessageController@syncMessage');
                 });
             });
         });
