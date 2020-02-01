@@ -10,6 +10,7 @@ namespace App\Logic\V1\Admin\Robot;
 
 
 use App\Http\Middleware\ClientIp;
+use App\Libraries\classes\ProxyIP\GetProxyIP;
 use App\Logic\V1\Admin\Base\BaseLogic;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
@@ -28,10 +29,12 @@ class LoginLogic extends BaseLogic
      */
     public function getQrcode()
     {
+        $data = ["num" => 1, "type" => 2, "pro" => 440000, "city" => 440900, "yys" => 0, "port" => 1, "pack" => 81937, "ts" => 0, "ys" => 0, "cs" => 0, "lb" => 1, "sb" => 0, "pb" => 4, "mr" => 1, "regions" => ''];
+        $getProxyIp = GetProxyIP::getInstance($data)->execute();
         $client = new Client();
         try {
             $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/GetQrCode', [
-                'form_params' => ["getQrCode" => '{"proxyIp": "183.51.190.56:4287","proxyUserName": "zhima","proxyPassword": "zhima","deviceID": "eedebe19-958b-4687-8096-d43a96fb51a7","deviceName": "ipad"}']
+                'form_params' => ["getQrCode" => '{"proxyIp": "'.$getProxyIp[0]['ip'].":".$getProxyIp[0]['port'].'","proxyUserName": "zhima","proxyPassword": "zhima","deviceID": "eedebe19-958b-4687-8096-d43a96fb51a7","deviceName": "ipad"}']
             ]);
             $res = json_decode($res->getBody()->getContents(),true);
             return $res["Data"];

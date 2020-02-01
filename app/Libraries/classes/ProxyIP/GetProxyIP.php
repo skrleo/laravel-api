@@ -12,7 +12,7 @@ namespace App\Libraries\classes\ProxyIP;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
-class ZhimaProxyIP
+class GetProxyIP
 {
 
     /**
@@ -30,7 +30,7 @@ class ZhimaProxyIP
     /**
      * 构造函数
      *
-     * ZhimaProxyIP constructor.
+     * GetProxyIP constructor.
      */
     public function __construct()
     {
@@ -41,7 +41,7 @@ class ZhimaProxyIP
      * 实例化对象
      *
      * @param $param
-     * @return ZhimaProxyIP
+     * @return GetProxyIP
      */
     public static function getInstance($param)
     {
@@ -61,7 +61,7 @@ class ZhimaProxyIP
     {
         $client = new Client(['timeout' => 0]);
         $response = $client->request('get', 'http://webapi.http.zhimacangku.com/getip', [
-            'form_params' => self::$param
+            'query' => self::$param
         ]);
         $response = json_decode($response->getBody()->getContents(), true);
         if ($response["code"] <> 0) {
