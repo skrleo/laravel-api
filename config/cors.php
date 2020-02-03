@@ -13,16 +13,15 @@ return [
     */
 
     'supportsCredentials' => true,
-
-    'allowedOrigins' => ['http://manage.17wangku.com'],
-
+    'allowedOrigins' => ['*'],
     'allowedOriginsPatterns' => [],
     // 授权请求头
-    'allowedHeaders' => ['Origin, Content-Type, Cookie, X-CSRF-TOKEN, Accept, Authorization, X-XSRF-TOKEN'],
+    'allowedHeaders' => ['*'],
     // 授权请求
-    'allowedMethods' => ['GET, POST, PATCH, PUT, OPTIONS'],
+    'allowedMethods' => ['*'],
     // 授权响应头读取
-    'exposedHeaders' => ['Authorization, authenticated'],
+    'exposedHeaders' => ['*'],
     // 缓存时间
     'maxAge' => 7200,
+
 ];
