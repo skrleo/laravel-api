@@ -38,6 +38,7 @@ class AccountLogic extends LoadDataLogic
      * @return string|int
      */
     public static function getLoginUid(){
+        dd(session('uid', null));
         return session('uid', null);
     }
     /**
