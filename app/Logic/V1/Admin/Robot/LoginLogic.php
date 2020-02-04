@@ -32,11 +32,17 @@ class LoginLogic extends BaseLogic
         $client = new Client();
         try {
             $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/GetQrCode', [
-                'form_params' => ["getQrCode" => '{"proxyIp": "183.51.190.162:4287","proxyUserName": "zhima","proxyPassword": "zhima","deviceID": "eedebe19-958b-4687-8096-d43a96fb51a7","deviceName": "ipad"}']
+                'form_params' => [
+                    "proxyIp" => "49.83.173.150:4232",
+                    "proxyUserName" => "zhima",
+                    "proxyPassword" => "zhima",
+                    "deviceID" => "243d854c-aaaf-4f4d-8c95-222825867ee8",
+                    "deviceName" => "iPad"
+                ]
             ]);
-            $res = json_decode($res->getBody()->getContents(),true);
+            $res = json_decode($res->getBody()->getContents(), true);
             return $res["Data"];
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }
     }
@@ -51,18 +57,18 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/CheckLogin/'.$this->uuid, [
+            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/CheckLogin/' . $this->uuid, [
                 'form_params' => ["uuid" => $this->uuid]
             ]);
-            $res = json_decode($res->getBody()->getContents(),true);
-            if ($res["Code"] == 401){
-                return ["code" => $res["Code"],"message" => $res['Message']];
+            $res = json_decode($res->getBody()->getContents(), true);
+            if ($res["Code"] == 401) {
+                return ["code" => $res["Code"], "message" => $res['Message']];
             }
-            if ($res["Data"]["WxId"] == null){
-                return ["code" => "4000","message" => "等待扫描!"];
+            if ($res["Data"]["WxId"] == null) {
+                return ["code" => "4000", "message" => "等待扫描!"];
             }
             return ["data" => $res["Data"]];
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }
     }
@@ -77,10 +83,10 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/LogOut/'.$this->wxId);
+            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/LogOut/' . $this->wxId);
             $res = $res->getBody()->getContents();
             return $res;
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }
     }
@@ -95,10 +101,10 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/HeartBeat/'.$this->wxId);
+            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/HeartBeat/' . $this->wxId);
             $res = $res->getBody()->getContents();
             return $res;
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }
     }
@@ -118,7 +124,7 @@ class LoginLogic extends BaseLogic
             ]);
             $res = $res->getBody()->getContents();
             return $res;
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }
     }
@@ -138,7 +144,7 @@ class LoginLogic extends BaseLogic
             ]);
             $res = $res->getBody()->getContents();
             return $res;
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }
     }
@@ -158,7 +164,7 @@ class LoginLogic extends BaseLogic
             ]);
             $res = $res->getBody()->getContents();
             return $res;
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }
     }
