@@ -60,7 +60,7 @@ class WeChatRobot extends Command
                 // 发送微信图片消息
                 (new MessageLogic())->sendImageMessage([
                     "toWxIds" => ["18232990803@chatroom"],
-                    "imgUrl" => "http://img.17wangku.com/201902110822025c6130aa48687.jpg",
+                    "imgUrl" => $v["goods_thumb"],
                     "wxId" => "wxid_jn6rqr7sx35322"
                 ]);
             }
