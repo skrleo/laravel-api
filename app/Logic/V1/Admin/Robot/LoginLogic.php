@@ -12,6 +12,7 @@ namespace App\Logic\V1\Admin\Robot;
 use App\Http\Middleware\ClientIp;
 use App\Libraries\classes\ProxyIP\GetProxyIP;
 use App\Logic\V1\Admin\Base\BaseLogic;
+use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
@@ -30,10 +31,9 @@ class LoginLogic extends BaseLogic
     public function getQrcode()
     {
         $client = new Client();
-        try {
             $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/GetQrCode', [
                 'form_params' => [
-                    "proxyIp" => "49.83.173.150:4232",
+                    "proxyIp" => "183.51.190.150:4287",
                     "proxyUserName" => "zhima",
                     "proxyPassword" => "zhima",
                     "deviceID" => "243d854c-aaaf-4f4d-8c95-222825867ee8",
@@ -41,10 +41,11 @@ class LoginLogic extends BaseLogic
                 ]
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
+            if ($res["Code"] == 500){
+                throw new Exception('代理超时','PROXY_TIME_OUT');
+            }
+
             return $res["Data"];
-        } catch (\Throwable $e) {
-            Log::info('Fail to call api');
-        }
     }
 
     /**

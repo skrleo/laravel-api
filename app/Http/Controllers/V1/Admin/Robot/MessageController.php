@@ -15,6 +15,8 @@ use App\Logic\V1\Admin\Robot\MessageLogic;
 class MessageController extends Controller
 {
     /**
+     * 同步微信消息
+     *
      * @return mixed
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -27,6 +29,8 @@ class MessageController extends Controller
         ]);
         $loginLogic = new MessageLogic();
         $loginLogic->load($this->verifyData);
-        return $loginLogic->syncMessage();
+        return [
+            'lists' => $loginLogic->syncMessage()
+        ];
     }
 }

@@ -76,7 +76,7 @@ class FormatData
             // 商品价格
             $data[$key]["goods_price"] = $goodsPrice;
             // 商品落地页
-            $data[$key]["material_url"] = $list["materialUrl"];
+            $data[$key]["material_url"] = $this->fix_url($list["materialUrl"]);
             // 券后价
             $data[$key]["coupon_price"] = bcsub($list["priceInfo"]["price"], $couponInfo["discount"], 2);
             // 是否自营

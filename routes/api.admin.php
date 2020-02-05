@@ -317,7 +317,17 @@ Route::group([
                     'prefix'=>'message',
                 ],function(){
                     // 同步消息消息
-                    Route::post('syncMessage', 'MessageController@syncMessage');
+                    Route::post('sync', 'MessageController@syncMessage');
+                });
+
+                Route::group([
+                    // path地址前缀
+                    'prefix'=>'friend',
+                ],function(){
+                    // 查找微信好友、群
+                    Route::post('searchWxName', 'FriendController@searchWxName');
+                    // 获取微信好友、群
+                    Route::post('contractList', 'FriendController@contractList');
                 });
             });
         });
