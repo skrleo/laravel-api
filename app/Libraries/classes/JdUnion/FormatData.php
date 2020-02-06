@@ -109,6 +109,8 @@ class FormatData
             $cache[$key]["coupon_price"] = $couponPrice;
             // 销售量
             $cache[$key]["sale_num"] = $list["inOrderCount30Days"];
+            // 商品落地页
+            $cache[$key]["material_url"] = "http://" . $list["materialUrl"];
             // 加入缓存
             $this->addRedis($cache[$key]);
         }

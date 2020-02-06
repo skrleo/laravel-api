@@ -33,7 +33,7 @@ class LoginLogic extends BaseLogic
         $client = new Client();
             $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/GetQrCode', [
                 'form_params' => [
-                    "proxyIp" => "183.51.190.150:4287",
+                    "proxyIp" => "183.21.105.255:4287",
                     "proxyUserName" => "zhima",
                     "proxyPassword" => "zhima",
                     "deviceID" => "243d854c-aaaf-4f4d-8c95-222825867ee8",
@@ -41,10 +41,6 @@ class LoginLogic extends BaseLogic
                 ]
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
-            if ($res["Code"] == 500){
-                throw new Exception('代理超时','PROXY_TIME_OUT');
-            }
-
             return $res["Data"];
     }
 
@@ -66,7 +62,7 @@ class LoginLogic extends BaseLogic
                 return ["code" => $res["Code"], "message" => $res['Message']];
             }
             if ($res["Data"]["WxId"] == null) {
-                return ["code" => "4000", "message" => "等待扫描!"];
+                return ["code" => "4000", "message" => "请扫描微信二维码登录"];
             }
             return ["data" => $res["Data"]];
         } catch (\Throwable $e) {
@@ -85,8 +81,11 @@ class LoginLogic extends BaseLogic
         $client = new Client();
         try {
             $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/LogOut/' . $this->wxId);
-            $res = $res->getBody()->getContents();
-            return $res;
+            $res = json_decode($res->getBody()->getContents(), true);
+            if ($res["Success"]){
+                return ["data" => $res["Data"]];
+            }
+            return ["code" => $res["Code"],"message" => $res["Message"]];
         } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }
@@ -103,8 +102,11 @@ class LoginLogic extends BaseLogic
         $client = new Client();
         try {
             $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/HeartBeat/' . $this->wxId);
-            $res = $res->getBody()->getContents();
-            return $res;
+            $res = json_decode($res->getBody()->getContents(), true);
+            if ($res["Success"]){
+                return ["data" => $res["Data"]];
+            }
+            return ["code" => $res["Code"],"message" => $res["Message"]];
         } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }

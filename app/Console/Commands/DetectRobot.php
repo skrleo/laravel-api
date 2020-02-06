@@ -5,19 +5,17 @@ namespace App\Console\Commands;
 use App\Libraries\classes\JdUnion\FormatData;
 use App\Libraries\classes\JdUnion\JdInterface;
 use App\Logic\V1\Admin\Robot\MessageLogic;
-use GuzzleHttp\Client;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
-class WeChatRobot extends Command
+class DetectRobot extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'detect-message';
+    protected $signature = 'detectRobot';
 
     /**
      * The console command description.
@@ -44,17 +42,25 @@ class WeChatRobot extends Command
      */
     public function handle()
     {
+        //
         try {
-            $param = ["methodType" => 'jingfen'];
-            $data = ['eliteId' => 21, 'pageIndex' => 1, 'pageSize' => 20];
-            $param["param_json"]["goodsReq"] = $data;
+            $param = [
+                "param_json" => [
+                    "goodsReqDTO" => [
+                        'pageIndex' => $param["page"] ?? 1,
+                        'pageSize' => $param["limit"] ?? 5,
+                        'keyword' => "手机",
+                    ]
+                ],
+                "methodType" => 'inquire'
+            ];
             $data = JdInterface::getInstance($param)->setRequestParam()->execute();
             $lists = FormatData::getInit()->headleOptional($data["data"]);
             foreach ($lists as $k => $v){
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => ["18232990803@chatroom"],
-                    "content" => $v["goods_name"] . "\n【原价】￥{$v["goods_price"]} \n【限时抢券后价】￥{$v["coupon_price"]}\n------------------\n【购买链接】{$v["material_url"]}\n【购买方式】长按图片『识别二维码』或点击『购买链接』即可领券下单",
+                    "content" => '『京东』' . $v["goods_name"] . "\n【原价】￥{$v["goods_price"]} \n【限时抢券后价】￥{$v["coupon_price"]}\n------------------\n【购买链接】{$v["material_url"]}\n【购买方式】点击链接即可下单购买",
                     "wxId" => "wxid_jn6rqr7sx35322"
                 ]);
                 // 发送微信图片消息
