@@ -17,6 +17,9 @@ class MessageLogic extends BaseLogic
     protected $wxId = '';
 
     /**
+     * 获取最新的消息
+     *
+     * @param $wxId
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */

@@ -33,7 +33,7 @@ class LoginLogic extends BaseLogic
         $client = new Client();
             $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/GetQrCode', [
                 'form_params' => [
-                    "proxyIp" => "183.21.105.255:4287",
+                    "proxyIp" => "113.94.123.203:4287",
                     "proxyUserName" => "zhima",
                     "proxyPassword" => "zhima",
                     "deviceID" => "243d854c-aaaf-4f4d-8c95-222825867ee8",
