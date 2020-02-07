@@ -10,18 +10,21 @@ namespace App\Logic\V1\Web\DuoDuolm;
 
 
 use App\Libraries\classes\DuoduoUnion\DuoduoInterface;
+use App\Libraries\classes\DuoduoUnion\FormatData;
 use App\Logic\LoadDataLogic;
 
 class GoodsLogic extends LoadDataLogic
 {
     /**
-     * @return mixed|\Psr\Http\Message\ResponseInterface|\Psr\Http\Message\StreamInterface
+     * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function searchGoods()
     {
-        $params = ["goods_id_list" =>["86904979089"]];
-        $data = DuoduoInterface::getInstance($params)->request('pdd.ddk.goods.basic.info.get');
-        return $data;
+        $params = ["keyword" =>"手机"];
+        $data = DuoduoInterface::getInstance($params)->request('pdd.ddk.goods.search');
+        $response = $data["goods_search_response"]["goods_list"];
+        $lists = FormatData::getInit()->headleOptional($response);
+        return ['lists' => $lists];
     }
 }

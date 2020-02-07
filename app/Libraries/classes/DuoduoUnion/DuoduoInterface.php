@@ -83,7 +83,6 @@ class DuoduoInterface
     public function request($method, $data_type = 'JSON') {
         self::$param['type'] = $method;
         self::$param['data_type'] = $data_type;
-        self::$param['goods_id_list'] = json_encode(self::$param["goods_id_list"]);
         ksort(self::$param);		// 按照键名对关联数组进行升序排序
         self::$param['sign'] = $this->signature(self::$param);
         $client = new Client();
@@ -92,7 +91,7 @@ class DuoduoInterface
                 'form_params' => self::$param,
                 'timeout' => 1.5,
             ]);
-            $res = $res->getBody();
+            $res = json_decode($res->getBody(),true);
             return $res;
         } catch(\Throwable $e) {
             Log::info('Fail to call api');
