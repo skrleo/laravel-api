@@ -33,6 +33,9 @@ class DuoduoInterface
      */
     public function __construct()
     {
+        self::$param['client_id'] = Config::baseConfig()["client_id"];
+        self::$param['sign_method'] = 'md5';
+        self::$param['timestamp'] = strval(time());
     }
 
     /**
@@ -56,7 +59,6 @@ class DuoduoInterface
      * @return string
      */
     private function signature($params) {
-        ksort($params);		// 按照键名对关联数组进行升序排序
         $paramsStr = '';
         array_walk($params, function ($item, $key) use (&$paramsStr) {
             $paramsStr .= sprintf('%s%s', $key, $item);
@@ -79,17 +81,15 @@ class DuoduoInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function request($method, $data_type = 'JSON') {
-        $params['client_id'] = Config::baseConfig()["client_id"];
-        $params['sign_method'] = 'md5';
-        $params['type'] = $method;
-        $params['data_type'] = $data_type;
-        $params['timestamp'] = strval(time());
-        $params['goods_id_list'] = self::$param["goods_id_list"];
-        $params['sign'] = $this->signature($params);
+        self::$param['type'] = $method;
+        self::$param['data_type'] = $data_type;
+        self::$param['goods_id_list'] = json_encode(self::$param["goods_id_list"]);
+        ksort(self::$param);		// 按照键名对关联数组进行升序排序
+        self::$param['sign'] = $this->signature(self::$param);
         $client = new Client();
         try {
             $res = $client->request('POST', Config::API_URL, [
-                'form_params' => $params,
+                'form_params' => self::$param,
                 'timeout' => 1.5,
             ]);
             $res = $res->getBody();
