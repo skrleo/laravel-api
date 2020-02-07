@@ -23,11 +23,11 @@ class MessageLogic extends BaseLogic
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function syncMessage()
+    public function syncMessage($wxId)
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Message/Sync/'. $this->wxId);
+            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Message/Sync/'. $wxId);
             $res = json_decode($res->getBody()->getContents(),true);
             return $res["Data"]["AddMsgs"];
         } catch(\Throwable $e) {

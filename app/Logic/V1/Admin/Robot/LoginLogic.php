@@ -12,7 +12,7 @@ namespace App\Logic\V1\Admin\Robot;
 use App\Http\Middleware\ClientIp;
 use App\Libraries\classes\ProxyIP\GetProxyIP;
 use App\Logic\V1\Admin\Base\BaseLogic;
-use Exception;
+use DdvPhp\DdvUtil\Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
@@ -27,13 +27,14 @@ class LoginLogic extends BaseLogic
      *
      * @return mixed|\Psr\Http\Message\ResponseInterface|string
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws Exception
      */
     public function getQrcode()
     {
         $client = new Client();
             $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/GetQrCode', [
                 'form_params' => [
-                    "proxyIp" => "113.94.123.203:4287",
+                    "proxyIp" => "183.21.106.85:4287",
                     "proxyUserName" => "zhima",
                     "proxyPassword" => "zhima",
                     "deviceID" => "243d854c-aaaf-4f4d-8c95-222825867ee8",
@@ -41,6 +42,9 @@ class LoginLogic extends BaseLogic
                 ]
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
+            if ($res["Success"] ==  false){
+                throw new Exception($res["Message"],'PROXY_TIME_OUT');
+            }
             return $res["Data"];
     }
 
@@ -58,13 +62,10 @@ class LoginLogic extends BaseLogic
                 'form_params' => ["uuid" => $this->uuid]
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
-            if ($res["Code"] == 401) {
-                return ["code" => $res["Code"], "message" => $res['Message']];
+            if ($res["Success"]) {
+                return ["data" => $res["Data"]];
             }
-            if ($res["Data"]["WxId"] == null) {
-                return ["code" => "4000", "message" => "请扫描微信二维码登录"];
-            }
-            return ["data" => $res["Data"]];
+            return ["code" => $res["Code"], "message" => $res['Message']];
         } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }
