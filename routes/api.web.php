@@ -77,6 +77,14 @@ Route::group([
                 //京东商品列表
                 Route::get('/lists', 'GoodsController@getJdGoodsLists');
             });
+
+            Route::group([
+                'prefix'=>'duoduo',
+                'namespace'=>'Duoduolm'
+            ],function(){
+                //拼多多商品列表
+                Route::get('/searchGoods', 'GoodsController@searchGoods');
+            });
         });
 
     });
