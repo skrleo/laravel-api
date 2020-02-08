@@ -48,6 +48,8 @@ class FormatData
             $data[$k]["goods_name"] = $v["goods_name"];
             $data[$k]["has_mall_coupon"] = $v["has_mall_coupon"];
             $data[$k]["mall_coupon_id"] = $v["mall_coupon_id"];
+            $data[$k]["min_group_price"] = $v["min_group_price"];
+            $data[$k]["min_normal_price"] = $v["min_normal_price"];
             $data[$k]["goods_desc"] = $v["goods_desc"];
             $data[$k]["goods_thumbnail_url"] = $v["goods_thumbnail_url"];
             $data[$k]["goods_image_url"] = $v["goods_image_url"];

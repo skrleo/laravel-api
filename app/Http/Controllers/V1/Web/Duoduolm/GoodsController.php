@@ -23,7 +23,9 @@ class GoodsController extends Controller
     }
 
     /**
+     * @return array
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      */
     public function searchGoods()
@@ -34,5 +36,21 @@ class GoodsController extends Controller
         $goodsLogic = new GoodsLogic();
         $goodsLogic->load($this->verifyData);
         return  $goodsLogic->searchGoods();
+    }
+
+    /**
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     */
+    public function plentyGoods()
+    {
+        $this->validate(null, [
+            'keyword' => 'string'
+        ]);
+        $goodsLogic = new GoodsLogic();
+        $goodsLogic->load($this->verifyData);
+        return  $goodsLogic->plentyGoods();
     }
 }

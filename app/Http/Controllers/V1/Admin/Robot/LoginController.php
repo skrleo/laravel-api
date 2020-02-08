@@ -16,6 +16,7 @@ class LoginController extends Controller
 {
     /**
      * @return array
+     * @throws \DdvPhp\DdvUtil\Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      */

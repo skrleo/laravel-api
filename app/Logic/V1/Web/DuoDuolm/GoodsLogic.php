@@ -27,4 +27,15 @@ class GoodsLogic extends LoadDataLogic
         $lists = FormatData::getInit()->headleOptional($response);
         return ['lists' => $lists];
     }
+
+    /**
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function plentyGoods()
+    {
+        $data = DuoduoInterface::getInstance($params =[])->request('pdd.ddk.goods.pid.query');
+        $response = $data["p_id_query_response"]["p_id_list"];
+        return ['lists' => $response];
+    }
 }
