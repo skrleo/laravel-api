@@ -10,6 +10,7 @@ namespace App\Logic\V1\Admin\Robot;
 
 
 use App\Http\Middleware\ClientIp;
+use App\Jobs\HeartBeatRobot;
 use App\Libraries\classes\ProxyIP\GetProxyIP;
 use App\Logic\V1\Admin\Base\BaseLogic;
 use App\Model\V1\Robot\HeartBeatModel;
@@ -35,7 +36,7 @@ class LoginLogic extends BaseLogic
         $client = new Client();
             $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/GetQrCode', [
                 'form_params' => [
-                    "proxyIp" => "183.21.105.93:4287",
+                    "proxyIp" => "113.64.197.199:4287",
                     "proxyUserName" => "zhima",
                     "proxyPassword" => "zhima",
                     "deviceID" => "243d854c-aaaf-4f4d-8c95-222825867ee8",
@@ -69,6 +70,8 @@ class LoginLogic extends BaseLogic
                 }
                 // 更新微信信息
                 (new HeartBeatModel())->checkWxInfo($res["Data"]);
+                // 心跳队列
+                dispatch((new HeartBeatRobot($res["Data"]["WxId"]))->onQueue('heartBeatRobot'));
                 return ["data" => $res["Data"]];
             }
             return ["code" => $res["Code"], "message" => $res['Message']];
