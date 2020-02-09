@@ -65,20 +65,50 @@ class LoginController extends Controller
     }
 
     /**
-     * 心跳
-     *
      * @return mixed|\Psr\Http\Message\ResponseInterface|string
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      */
-    public function heartBeat()
+    public function startHeartBeat()
     {
         $this->validate(null, [
             'wxId' => 'required|string'
         ]);
         $loginLogic = new LoginLogic();
         $loginLogic->load($this->verifyData);
-        return $loginLogic->heartBeat();
+        return $loginLogic->startHeartBeat();
+    }
+
+    /**
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     */
+    public function closeHeartBeat()
+    {
+        $this->validate(null, [
+            'wxId' => 'required|string'
+        ]);
+        $loginLogic = new LoginLogic();
+        $loginLogic->load($this->verifyData);
+        return $loginLogic->closeHeartBeat();
+    }
+
+    /**
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     */
+    public function stateHeartBeat()
+    {
+        $this->validate(null, [
+            'wxId' => 'required|string'
+        ]);
+        $loginLogic = new LoginLogic();
+        $loginLogic->load($this->verifyData);
+        return $loginLogic->stateHeartBeat();
     }
 }

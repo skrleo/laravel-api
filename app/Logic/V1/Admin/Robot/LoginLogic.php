@@ -17,6 +17,7 @@ use App\Model\V1\Robot\HeartBeatModel;
 use DdvPhp\DdvUtil\Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 class LoginLogic extends BaseLogic
 {
@@ -34,12 +35,13 @@ class LoginLogic extends BaseLogic
     public function getQrcode()
     {
         $client = new Client();
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/GetQrCode', [
+            $res = $client->request('POST', 'http://114.55.164.90/api/Login/GetQrCode', [
                 'form_params' => [
-                    "proxyIp" => "113.64.197.199:4287",
+                    "proxyIp" => "113.64.197.190:4287",
                     "proxyUserName" => "zhima",
                     "proxyPassword" => "zhima",
-                    "deviceID" => "243d854c-aaaf-4f4d-8c95-222825867ee8",
+                    "deviceId" => "243d854c-aaaf-4f4d-8c95-222825867ee8",
+                    "deviceMac" => "iPad Pro",
                     "deviceName" => "iPad"
                 ]
             ]);
@@ -60,7 +62,7 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/CheckLogin/' . $this->uuid, [
+            $res = $client->request('POST', 'http://114.55.164.90/api/Login/CheckLogin/' . $this->uuid, [
                 'form_params' => ["uuid" => $this->uuid]
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
@@ -71,7 +73,8 @@ class LoginLogic extends BaseLogic
                 // 更新微信信息
                 (new HeartBeatModel())->checkWxInfo($res["Data"]);
                 // 心跳队列
-                dispatch((new HeartBeatRobot($res["Data"]["WxId"]))->onQueue('heartBeatRobot'));
+                $client = new Client();
+                $client->request('POST', 'http://114.55.164.90/api/HeartBeat/StartHeartBeat/' .$res["Data"]["WxId"]);
                 return ["data" => $res["Data"]];
             }
             return ["code" => $res["Code"], "message" => $res['Message']];
@@ -90,7 +93,7 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/LogOut/' . $this->wxId);
+            $res = $client->request('POST', 'http://114.55.164.90/api/Login/LogOut/' . $this->wxId);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"]){
                 return ["data" => $res["Data"]];
@@ -102,16 +105,56 @@ class LoginLogic extends BaseLogic
     }
 
     /**
-     * 检查心跳
+     * 启动自动心跳
      *
      * @return mixed|\Psr\Http\Message\ResponseInterface|string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function heartBeat()
+    public function startHeartBeat()
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/HeartBeat/' . $this->wxId);
+            $res = $client->request('POST', 'http://114.55.164.90/api/HeartBeat/StartHeartBeat/' . $this->wxId);
+            $res = json_decode($res->getBody()->getContents(), true);
+            if ($res["Success"]){
+                return ["data" => $res["Data"]];
+            }
+            return ["code" => $res["Code"],"message" => $res["Message"]];
+        } catch (\Throwable $e) {
+            Log::info('Fail to call api');
+        }
+    }
+
+    /**
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function closeHeartBeat()
+    {
+        $client = new Client();
+        try {
+            $res = $client->request('POST', 'http://114.55.164.90/api/HeartBeat/CloseHeartBeat/' . $this->wxId);
+            $res = json_decode($res->getBody()->getContents(), true);
+            if ($res["Success"]){
+                return ["data" => $res["Data"]];
+            }
+            return ["code" => $res["Code"],"message" => $res["Message"]];
+        } catch (\Throwable $e) {
+            Log::info('Fail to call api');
+        }
+    }
+
+    /**
+     * 心跳状态
+     *
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function stateHeartBeat()
+    {
+        $client = new Client();
+        try {
+            $res = $client->request('POST', 'http://114.55.164.90/api/HeartBeat/StateHeartBeat/' . $this->wxId);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"]){
                 return ["data" => $res["Data"]];
@@ -132,7 +175,7 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/TwiceLogin', [
+            $res = $client->request('POST', 'http://114.55.164.90/api/Login/TwiceLogin', [
                 'form_params' => ["wxId" => $this->wxId]
             ]);
             $res = $res->getBody()->getContents();
@@ -152,7 +195,7 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/InitUser', [
+            $res = $client->request('POST', 'http://114.55.164.90/api/Login/InitUser', [
                 'form_params' => ["initMsg" => $this->initMsg]
             ]);
             $res = $res->getBody()->getContents();
@@ -172,7 +215,7 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/NewInit', [
+            $res = $client->request('POST', 'http://114.55.164.90/api/Login/NewInit', [
                 'form_params' => ["wxId" => $this->wxId]
             ]);
             $res = $res->getBody()->getContents();

@@ -27,7 +27,7 @@ class FriendLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Friend/Search/'. $this->wxId .'/'.$this->searchWxName);
+            $res = $client->request('POST', 'http://114.55.164.90/api/Friend/Search/'. $this->wxId .'/'.$this->searchWxName);
             $res = json_decode($res->getBody()->getContents(),true);
             return $res["Data"]["AddMsgs"];
         } catch(\Throwable $e) {
@@ -43,7 +43,7 @@ class FriendLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Friend/GetContractList',[
+            $res = $client->request('POST', 'http://114.55.164.90/api/Friend/GetContractList',[
                 'form_params' => [
                     "currentWxcontactSeq" => "0",
                     "currentChatRoomContactSeq" => "0",
@@ -64,7 +64,7 @@ class FriendLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Message/Sync/'. $this->wxId);
+            $res = $client->request('POST', 'http://114.55.164.90/api/Message/Sync/'. $this->wxId);
             $res = json_decode($res->getBody()->getContents(),true);
             return $res["Data"]["AddMsgs"];
         } catch(\Throwable $e) {

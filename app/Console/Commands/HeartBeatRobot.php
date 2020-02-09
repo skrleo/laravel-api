@@ -44,7 +44,7 @@ class HeartBeatRobot extends Command
         $heartBeatLists = (new HeartBeatModel())->where("status",1)->getHump();
         foreach ($heartBeatLists as $item){
             $client = new Client();
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/CheckLogin/' . $item["uuid"], [
+            $res = $client->request('POST', 'http://114.55.164.90/api/Login/CheckLogin/' . $item["uuid"], [
                 'form_params' => ["uuid" => $item["uuid"]]
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
@@ -57,7 +57,7 @@ class HeartBeatRobot extends Command
                 continue;
             }
             $client = new Client();
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Login/HeartBeat/' . $item["wxid"]);
+            $res = $client->request('POST', 'http://114.55.164.90/api/Login/HeartBeat/' . $item["wxid"]);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"] == false){
                 Log::info("[" . date("Y-m-d H:i:s") . "]|error Info:" . $res["Message"]);

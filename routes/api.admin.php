@@ -304,7 +304,7 @@ Route::group([
                     'prefix'=>'login',
                 ],function(){
                     // 获取登录二维码
-                    Route::post('getQrCode', 'LoginController@getQrCode');
+                    Route::get('getQrCode', 'LoginController@getQrCode');
                     // 检查是否登录
                     Route::post('checkLogin', 'LoginController@checkLogin');
                     // 退出登录
@@ -312,6 +312,19 @@ Route::group([
                     // 检查心跳
                     Route::post('heartBeat', 'LoginController@heartBeat');
                 });
+                
+                Route::group([
+                    // path地址前缀
+                    'prefix'=>'heartBeat',
+                ],function(){
+                    // 心跳状态
+                    Route::get('state', 'LoginController@stateHeartBeat');
+                    // 开启心跳
+                    Route::post('start', 'LoginController@startHeartBeat');
+                    // 关闭心跳
+                    Route::post('close', 'LoginController@closeHeartBeat');
+                });
+
                 Route::group([
                     // path地址前缀
                     'prefix'=>'message',

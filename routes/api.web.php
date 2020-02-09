@@ -84,6 +84,8 @@ Route::group([
             ],function(){
                 //拼多多商品列表
                 Route::get('/searchGoods', 'GoodsController@searchGoods');
+
+                Route::get('/plentyGoods', 'GoodsController@plentyGoods');
             });
         });
 

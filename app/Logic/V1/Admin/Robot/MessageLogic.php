@@ -27,7 +27,7 @@ class MessageLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Message/Sync/'. $wxId);
+            $res = $client->request('POST', 'http://114.55.164.90/api/Message/Sync/'. $wxId);
             $res = json_decode($res->getBody()->getContents(),true);
             return $res["Data"]["AddMsgs"];
         } catch(\Throwable $e) {
@@ -45,7 +45,7 @@ class MessageLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Message/SendTxtMessage',[
+            $res = $client->request('POST', 'http://114.55.164.90/api/Message/SendTxtMessage',[
                 'form_params' => [
                     "toWxIds" => $param["toWxIds"],
                     "content" => $param["content"],
@@ -71,7 +71,7 @@ class MessageLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://106.15.235.187:1925/api/Message/SendImageMessage',[
+            $res = $client->request('POST', 'http://114.55.164.90/api/Message/SendImageMessage',[
                 'form_params' => [
                     "toWxIds" => $param["toWxIds"],
                     "base64" => imgToBase64($param["imgUrl"]),
