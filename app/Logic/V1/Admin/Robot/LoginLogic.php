@@ -13,7 +13,7 @@ use App\Http\Middleware\ClientIp;
 use App\Jobs\HeartBeatRobot;
 use App\Libraries\classes\ProxyIP\GetProxyIP;
 use App\Logic\V1\Admin\Base\BaseLogic;
-use App\Model\V1\Robot\HeartBeatModel;
+use App\Model\V1\Robot\WxRobotModel;
 use DdvPhp\DdvUtil\Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
@@ -71,7 +71,7 @@ class LoginLogic extends BaseLogic
                     return ["code" => "402", "message" => "等待微信扫描"];
                 }
                 // 更新微信信息
-                (new HeartBeatModel())->checkWxInfo($res["Data"]);
+                (new WxRobotModel())->checkWxInfo($res["Data"]);
                 // 心跳队列
                 $client = new Client();
                 $client->request('POST', 'http://114.55.164.90/api/HeartBeat/StartHeartBeat/' .$res["Data"]["WxId"]);

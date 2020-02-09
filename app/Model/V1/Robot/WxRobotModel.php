@@ -10,9 +10,9 @@ namespace App\Model\V1\Robot;
 
 use App\Model\Model;
 
-class HeartBeatModel extends Model
+class WxRobotModel extends Model
 {
-    protected $table = 'robot_heart_beat';
+    protected $table = 'wx_robot';
 
     protected $primaryKey = 'id';
 

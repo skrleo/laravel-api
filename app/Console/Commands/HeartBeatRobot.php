@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Logic\V1\Admin\Robot\MessageLogic;
-use App\Model\V1\Robot\HeartBeatModel;
+use App\Model\V1\Robot\WxRobotModel;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -41,7 +41,7 @@ class HeartBeatRobot extends Command
     public function handle()
     {
         //
-        $heartBeatLists = (new HeartBeatModel())->where("status",1)->getHump();
+        $heartBeatLists = (new WxRobotModel())->where("status",1)->getHump();
         foreach ($heartBeatLists as $item){
             $client = new Client();
             $res = $client->request('POST', 'http://114.55.164.90/api/Login/CheckLogin/' . $item["uuid"], [
@@ -49,11 +49,11 @@ class HeartBeatRobot extends Command
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"] ==  false) {
-                (new HeartBeatModel())->where("wxid",$item["wxid"])->update(["status" => 0]);
+                (new WxRobotModel())->where("wxid",$item["wxid"])->update(["status" => 0]);
                 continue;
             }
             if (empty($res["Data"]["WxId"])){
-                (new HeartBeatModel())->where("wxid",$item["wxid"])->update(["status" => 0]);
+                (new WxRobotModel())->where("wxid",$item["wxid"])->update(["status" => 0]);
                 continue;
             }
             $client = new Client();

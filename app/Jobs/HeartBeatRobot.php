@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Model\V1\Robot\HeartBeatModel;
+use App\Model\V1\Robot\WxRobotModel;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
