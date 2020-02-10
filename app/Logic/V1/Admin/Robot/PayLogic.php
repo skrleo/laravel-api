@@ -26,7 +26,7 @@ class PayLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('GET', 'http://114.55.164.90/api/Pay/StateOpenRedEnvelopes/' . $this->wxId);
+            $res = $client->request('GET', 'http://114.55.164.90:1697/api/Pay/StateOpenRedEnvelopes/' . $this->wxId);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"]){
                 return ["data" => $res["Data"]];
@@ -45,7 +45,7 @@ class PayLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('GET', 'http://114.55.164.90/api/Pay/StartOpenRedEnvelopes/' . $this->wxId);
+            $res = $client->request('GET', 'http://114.55.164.90:1697/api/Pay/StartOpenRedEnvelopes/' . $this->wxId);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"]){
                 return ["data" => $res["Data"]];
@@ -64,7 +64,7 @@ class PayLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('GET', 'http://114.55.164.90/api/Pay/CloseOpenRedEnvelopes/' . $this->wxId);
+            $res = $client->request('GET', 'http://114.55.164.90:1697/api/Pay/CloseOpenRedEnvelopes/' . $this->wxId);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"]){
                 return ["data" => $res["Data"]];

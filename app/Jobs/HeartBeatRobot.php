@@ -38,7 +38,7 @@ class HeartBeatRobot implements ShouldQueue
         $isDoRun = true;
         do {
             $client = new Client();
-            $res = $client->request('POST', 'http://114.55.164.90/api/Login/HeartBeat/' .$this->wxid);
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/HeartBeat/' .$this->wxid);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"] == false){
                 $isDoRun = false;

@@ -53,7 +53,7 @@ class UserLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://114.55.164.90/api/user/UploadHeadImage',[
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/user/UploadHeadImage',[
                 'form_params' => [
                     "base64" => $this->userHeadImg,
                     "wxId" => $this->wxId
@@ -79,7 +79,7 @@ class UserLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://114.55.164.90/api/user/UpdateProfile',[
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/user/UpdateProfile',[
                 'form_params' => [
                     "nickName" => $this->nickName,
                     "sex" => $this->sex,
@@ -110,7 +110,7 @@ class UserLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://114.55.164.90/api/user/setAlisa',[
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/user/setAlisa',[
                 'form_params' => [
                     "alisa" => $this->alisa,
                     "wxId" => $this->wxId
@@ -136,7 +136,7 @@ class UserLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://114.55.164.90/api/user/BindEmail',[
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/user/BindEmail',[
                 'form_params' => [
                     "email" => $this->email,
                     "wxId" => $this->wxId
@@ -162,7 +162,7 @@ class UserLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://114.55.164.90/api/user/VerifyIdCard',[
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/user/VerifyIdCard',[
                 'form_params' => [
                     "realName" => $this->realName,
                     "idCardType" => $this->idCardType,
@@ -190,7 +190,7 @@ class UserLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://114.55.164.90/api/user/OneChangePassword',[
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/user/OneChangePassword',[
                 'form_params' => [
                     "password" => $this->password,
                     "newPassword" => $this->newPassword,

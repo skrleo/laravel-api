@@ -299,6 +299,9 @@ Route::group([
                 // 命名空间前缀
                 'namespace'=>'Robot'
             ],function(){
+
+                Route::get('lists', 'RobotController@lists');
+
                 Route::group([
                     // path地址前缀
                     'prefix'=>'login',
@@ -309,10 +312,26 @@ Route::group([
                     Route::post('checkLogin', 'LoginController@checkLogin');
                     // 退出登录
                     Route::post('loginOut', 'LoginController@loginOut');
-                    // 检查心跳
-                    Route::post('heartBeat', 'LoginController@heartBeat');
                 });
-                
+
+                Route::group([
+                    // path地址前缀
+                    'prefix'=>'user',
+                ],function(){
+                    // 修改头像
+                    Route::post('state', 'UserController@updateHeadImage');
+                    // 修改资料
+                    Route::post('updateProfile', 'UserController@updateProfile');
+                    // 设置微信号
+                    Route::post('setAlisa', 'UserController@setAlisa');
+                    // 绑定邮箱
+                    Route::post('bindEmail', 'UserController@bindEmail');
+                    // 实名认证
+                    Route::post('verifyIdCard', 'UserController@verifyIdCard');
+                    // 修改密码
+                    Route::post('changePassword', 'UserController@changePassword');
+                });
+
                 Route::group([
                     // path地址前缀
                     'prefix'=>'heartBeat',
@@ -341,6 +360,18 @@ Route::group([
                     Route::post('searchWxName', 'FriendController@searchWxName');
                     // 获取微信好友、群
                     Route::post('contractList', 'FriendController@contractList');
+                });
+
+                Route::group([
+                    // path地址前缀
+                    'prefix'=>'pay',
+                ],function(){
+                    // 是否抢红包状态
+                    Route::post('stateRedEnvelopes', 'PayController@stateRedEnvelopes');
+                    //  开启抢红包
+                    Route::post('startRedEnvelopes', 'PayController@startRedEnvelopes');
+                    //  关闭抢红包
+                    Route::post('closeRedEnvelopes', 'PayController@closeRedEnvelopes');
                 });
             });
         });
