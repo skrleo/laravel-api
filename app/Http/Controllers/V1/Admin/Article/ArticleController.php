@@ -10,11 +10,8 @@ namespace App\Http\Controllers\V1\Admin\Article;
 
 use App\HelpTrait\BroadcastHttpPush;
 use App\Http\Controllers\Controller;
-use App\Jobs\BaseJob;
 use App\Logic\V1\Admin\Article\ArticleLogic;
-use Endroid\QrCode\QrCode;
 use Orzcc\TopClient\Facades\TopClient;
-use TopClient\request\TbkItemGetRequest;
 use TopClient\request\TbkJuTqgGetRequest;
 
 class ArticleController extends Controller
@@ -82,6 +79,7 @@ class ArticleController extends Controller
             return[];
         }
     }
+    
     /**
      * @param $articleId
      * @return array
@@ -132,94 +130,5 @@ class ArticleController extends Controller
         if ($articleLogic->review()){
             return[];
         }
-    }
-
-    public function test(){
-        $broadcastChannel = array(
-            "channel" => "private-Message",   // 通道名，`private-`表示私有
-            "name" => "sayHello",    // 事件名
-            "data" => array(
-                "status" => 200,
-                "message" => "hello world!"
-            )
-        );
-        $this->push($broadcastChannel);
-    }
-
-    /**
-     * 文件导出下载
-     */
-    public function export(){
-        // 生成临时存储位置
-        $tempFile = tempnam(sys_get_temp_dir(), 'excel');
-
-        var_dump(sys_get_temp_dir());
-
-        //弹出下载对话框
-        header('Content-Type: application/vnd.ms-excel');
-        // 指定保存的名字
-        header('Content-Disposition: attachment; filename=test.xls');
-
-        // 读取那个临时文件，并且输出浏览器
-        readfile($tempFile);
-        // 删除那个临时文件
-        unlink($tempFile);
-    }
-
-    /**
-     *
-     */
-    public function getQrCode(){
-        $qrCode = new QrCode();
-        $qrCode->setText('123');
-        $qrCode->setSize(300);
-        $qrCode->setWriterByName('png');
-        $qrCode->setMargin(2);
-        $qrCode->setEncoding('UTF-8');
-        $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
-        $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
-        $qrCode->writeFile(public_path() . '/qrcode.png');
-
-        return [
-          'data' =>   public_path() . '/qrcode.png'
-        ];
-    }
-
-    /**
-     * 封装 swool 妙计定时任务器
-     *  see https://blog.csdn.net/m0_37082962/article/details/85991115
-     */
-//    public function ceshi(){
-////        dispatch(new BaseJob());
-//        $num = 0;
-//        $microTimer = new Timer();
-//        $microTimer->isMicro()->loop(function ()use ($microTimer){
-//            global $num;
-//            $num ++;
-//            if ($microTimer->stop()){
-//                $GLOBALS['num'] = 0;
-//                print '执行成功';
-//            }else{
-//                print '执行失败';
-//            }
-//        },1);
-//    }
-
-    /**
-     * @return mixed
-     */
-    public function ceshi(){
-        $topclient = TopClient::connection();
-        $req = new TbkJuTqgGetRequest;
-        $req->setAdzoneId("271206959");
-        $req->setFields("click_url,pic_url,reserve_price,zk_final_price,total_amount,sold_num,title,category_name,start_time,end_time");
-        $req->setStartTime("2019-08-09 09:00:00");
-        $req->setEndTime("2019-09-09 16:00:00");
-        $req->setPageNo("1");
-        $req->setPageSize("40");
-        $resp = $topclient->execute($req);
-        return [
-            'data' => $resp->results->results
-        ];
     }
 }

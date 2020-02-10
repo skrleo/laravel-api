@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Console\Crontabs\AlpacaDaemon;
 use Illuminate\Console\Command;
 
 class CrontabCommand extends Command
