@@ -20,9 +20,9 @@ class Config
      */
     public static function baseConfig()
     {
-        $baseConfig['app_key'] = '8b030f4766caee6a15a5fc562f802cbc';
+        $baseConfig['app_key'] = '3a82cacdef23dee9cb3dc7ab46c3e3f5';
 
-        $baseConfig['secret_key'] = '71bd11f72be04f68800d1bf6507bd684';
+        $baseConfig['secret_key'] = 'da6d7609a8db45c79f5efb9e4657ac7e';
         // 响应格式，暂时只支持json
         $baseConfig['format'] = 'json';
         // 签名的摘要算法，暂时只支持md5

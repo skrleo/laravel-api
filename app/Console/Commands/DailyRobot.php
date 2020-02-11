@@ -50,20 +50,20 @@ class DailyRobot extends Command
             $param["param_json"]["goodsReq"] = $data;
             $data = JdInterface::getInstance($param)->setRequestParam()->execute();
             $lists = FormatData::getInit()->headleOptional($data["data"]);
-            foreach ($lists as $k => $v){
+//            foreach ($lists as $k => $v){
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
-                    "toWxIds" => ["18232990803@chatroom"],
-                    "content" => '『京东』' . $v["goods_name"] . "\n【原价】￥{$v["goods_price"]} \n【限时抢券后价】￥{$v["coupon_price"]}\n------------------\n【购买链接】{$v["material_url"]}\n【购买方式】点击『购买链接』即可领券下单",
+                    "toWxIds" => ["23218879828@chatroom"],
+                    "content" => '『京东』' . $lists[0]["goods_name"] . "\n【原价】￥{$lists[0]["goods_price"]} \n【限时抢券后价】￥{$lists[0]["coupon_price"]}\n------------------\n【购买链接】{$lists[0]["material_url"]}\n【购买方式】点击『购买链接』即可领券下单",
                     "wxId" => "wxid_jn6rqr7sx35322"
                 ]);
                 // 发送微信图片消息
                 (new MessageLogic())->sendImageMessage([
-                    "toWxIds" => ["18232990803@chatroom"],
-                    "imgUrl" => $v["goods_thumb"],
+                    "toWxIds" => ["23218879828@chatroom"],
+                    "imgUrl" => $lists[0]["goods_thumb"],
                     "wxId" => "wxid_jn6rqr7sx35322"
                 ]);
-            }
+//            }
         } catch(\Throwable $e) {
             Log::info('Fail to call api');
         }

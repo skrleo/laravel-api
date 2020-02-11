@@ -37,7 +37,7 @@ class LoginLogic extends BaseLogic
         $client = new Client();
             $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/GetQrCode', [
                 'form_params' => [
-                    "proxyIp" => "183.21.106.102:4287",
+                    "proxyIp" => "183.21.104.152:4287",
                     "proxyUserName" => "zhima",
                     "proxyPassword" => "zhima",
                     "deviceId" => "243d854c-aaaf-4f4d-8c95-222825867ee8",
@@ -108,10 +108,10 @@ class LoginLogic extends BaseLogic
      * @return mixed|\Psr\Http\Message\ResponseInterface|string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function startHeartBeat($wxId)
+    public function startHeartBeat()
     {
         $client = new Client();
-        $res = $client->request('GET', 'http://114.55.164.90:1697/api/HeartBeat/StartHeartBeat/' . $wxId);
+        $res = $client->request('GET', 'http://114.55.164.90:1697/api/HeartBeat/StartHeartBeat/' . $this->wxId);
         $res = json_decode($res->getBody()->getContents(), true);
         return ["HeartBeatState" => $res["Message"] == "已启动" ? 1 : 0];
     }

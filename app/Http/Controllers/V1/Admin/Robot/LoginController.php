@@ -77,7 +77,9 @@ class LoginController extends Controller
         ]);
         $loginLogic = new LoginLogic();
         $loginLogic->load($this->verifyData);
-        return $loginLogic->startHeartBeat();
+        return [
+            "data" => $loginLogic->startHeartBeat()
+        ];
     }
 
     /**
