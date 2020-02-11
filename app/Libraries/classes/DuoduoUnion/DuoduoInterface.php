@@ -91,8 +91,7 @@ class DuoduoInterface
                 'form_params' => self::$param,
                 'timeout' => 1.5,
             ]);
-            $res = json_decode($res->getBody(),true);
-            return $res;
+            return json_decode($res->getBody(),true);
         } catch(\Throwable $e) {
             Log::info('Fail to call api');
         }

@@ -2,12 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Libraries\classes\JdUnion\FormatData;
-use App\Libraries\classes\JdUnion\JdInterface;
+use App\Libraries\classes\DuoduoUnion\DuoduoInterface;
 use App\Logic\V1\Admin\Robot\MessageLogic;
-use GuzzleHttp\Client;
+use App\Model\V1\Robot\WxRobotGoodsModel;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class DailyRobot extends Command
@@ -41,29 +39,30 @@ class DailyRobot extends Command
      *
      * @return bool
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
      */
     public function handle()
     {
         try {
-            $param = ["methodType" => 'jingfen'];
-            $data = ['eliteId' => 21, 'pageIndex' => 1, 'pageSize' => 20];
-            $param["param_json"]["goodsReq"] = $data;
-            $data = JdInterface::getInstance($param)->setRequestParam()->execute();
-            $lists = FormatData::getInit()->headleOptional($data["data"]);
-//            foreach ($lists as $k => $v){
+            $wxRobotGoodsModel = (new WxRobotGoodsModel())->where('status',0)->firstHump();
+            $params = ["p_id" => '9569620_127591192', "goods_id_list" => json_encode([$wxRobotGoodsModel["itemid"]])];
+            $generate = DuoduoInterface::getInstance($params)->request('pdd.ddk.goods.promotion.url.generate');
+            $generateLists = $generate["goods_promotion_url_generate_response"]["goods_promotion_url_list"];
+            foreach ($generateLists as $key => $list){
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => ["23218879828@chatroom"],
-                    "content" => '『京东』' . $lists[0]["goods_name"] . "\n【原价】￥{$lists[0]["goods_price"]} \n【限时抢券后价】￥{$lists[0]["coupon_price"]}\n------------------\n【购买链接】{$lists[0]["material_url"]}\n【购买方式】点击『购买链接』即可领券下单",
+                    "content" => '『拼夕夕』' . $wxRobotGoodsModel["name"] . "\n【原价】￥{$wxRobotGoodsModel["currentPrice"]} \n【限时抢券后价】￥{$wxRobotGoodsModel["couponPrice"]}\n------------------\n【购买链接】{$list["short_url"]}\n【购买方式】点击『购买链接』即可领券下单",
                     "wxId" => "wxid_jn6rqr7sx35322"
                 ]);
                 // 发送微信图片消息
                 (new MessageLogic())->sendImageMessage([
                     "toWxIds" => ["23218879828@chatroom"],
-                    "imgUrl" => $lists[0]["goods_thumb"],
+                    "imgUrl" => $wxRobotGoodsModel["picUrl"],
                     "wxId" => "wxid_jn6rqr7sx35322"
                 ]);
-//            }
+            }
+            (new WxRobotGoodsModel())->where("robot_goods_id",$wxRobotGoodsModel["robotGoodsId"])->update(["status" => 1]);
         } catch(\Throwable $e) {
             Log::info('Fail to call api');
         }
