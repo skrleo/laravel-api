@@ -8,6 +8,7 @@
 
 namespace App\Model\V1\Robot;
 
+use App\Logic\V1\Login\AccountLogic;
 use App\Model\Model;
 
 class WxRobotModel extends Model
@@ -24,6 +25,7 @@ class WxRobotModel extends Model
     public function checkWxInfo($data)
     {
         $heartBeatModel = (new self())->firstOrNew(["wxid" => $data["WxId"]]);
+        $heartBeatModel->uid = AccountLogic::getLoginUid();
         $heartBeatModel->uuid = $data["Uuid"];
         $heartBeatModel->wxid = $data["WxId"];
         $heartBeatModel->nickname = $data["NickName"];
