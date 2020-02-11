@@ -12,6 +12,7 @@ namespace App\Logic\V1\Admin\Robot;
 use App\Logic\V1\Admin\Base\BaseLogic;
 use App\Model\V1\Robot\WxRobotGoodsModel;
 use DdvPhp\DdvUtil\Exception;
+use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
 
 class RobotGoodsLogic extends BaseLogic
 {
@@ -34,6 +35,21 @@ class RobotGoodsLogic extends BaseLogic
     protected $currentPrice;
 
     protected $couponPrice;
+
+    /**
+     * @return \DdvPhp\DdvPage
+     */
+    public function lists()
+    {
+        $res = (new WxRobotGoodsModel())
+//            ->where("robot_id",$this->robotId)
+//            ->when(!empty($this->uid),function (EloquentBuilder $query){
+//                $query->where('uid',$this->uid);
+//            })
+            ->latest('created_at')
+            ->getDdvPage();
+        return $res->toHump();
+    }
 
     /**
      * @return bool

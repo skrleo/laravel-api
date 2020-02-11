@@ -115,13 +115,6 @@ Route::group([
                 // 删除文章
                 Route::delete('/{articleId}', 'ArticleController@destroy');
             });
-            //vbot 微信机器人
-            Route::group([
-                'prefix'=>'wechat',
-                'namespace'=>'Wechat'
-            ],function(){
-                Route::get('/', 'Vbot\VbotController@config');
-            });
 
             Route::group([
                 'prefix'=>'task',
@@ -307,6 +300,9 @@ Route::group([
                 Route::group([
                     'prefix'=>'goods',
                 ],function(){
+
+                    Route::get('lists', 'RobotGoodsController@lists');
+
                     Route::post('/', 'RobotGoodsController@store');
                 });
 

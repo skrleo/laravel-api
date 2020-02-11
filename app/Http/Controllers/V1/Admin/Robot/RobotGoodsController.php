@@ -15,6 +15,21 @@ use App\Logic\V1\Admin\Robot\RobotGoodsLogic;
 class RobotGoodsController extends Controller
 {
     /**
+     * @param $robotGoodsId
+     * @return RobotGoodsLogic
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function lists(){
+        $this->validate(null,  [
+            'robotGoodsId' => 'required|integer'
+        ]);
+        $robotGoodsLogic = new RobotGoodsLogic();
+        $robotGoodsLogic->load($this->verifyData);
+        return $robotGoodsLogic->lists();
+    }
+
+    /**
      * @return array
      * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
@@ -46,9 +61,9 @@ class RobotGoodsController extends Controller
      * @throws \DdvPhp\DdvUtil\Exception
      * @throws \ReflectionException
      */
-    public function show($messageId){
-        $this->validate(['messageId' => $messageId], [
-            'messageId' => 'required|integer'
+    public function show($robotGoodsId){
+        $this->validate(['robotGoodsId' => $robotGoodsId], [
+            'robotGoodsId' => 'required|integer'
         ]);
         $robotGoodsLogic = new RobotGoodsLogic();
         $robotGoodsLogic->load($this->verifyData);
