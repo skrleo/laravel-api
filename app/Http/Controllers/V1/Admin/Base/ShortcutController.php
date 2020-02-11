@@ -51,6 +51,7 @@ class ShortcutController extends Controller
 
     /**
      * 删除快捷方式
+     *
      * @param $shortcutId
      * @return array
      * @throws \App\Model\Exception

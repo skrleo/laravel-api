@@ -302,6 +302,14 @@ Route::group([
 
                 Route::get('lists', 'RobotController@lists');
 
+                Route::get('/{id}', 'RobotController@show');
+
+                Route::group([
+                    'prefix'=>'goods',
+                ],function(){
+                    Route::post('/', 'RobotGoodsController@store');
+                });
+
                 Route::group([
                     // path地址前缀
                     'prefix'=>'login',

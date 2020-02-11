@@ -45,11 +45,4 @@ class BaseController extends Controller
             'data' => $baseLogic->getConfig()
         ];
     }
-
-    /**
-     *
-     */
-    public function test(){
-        BaseJob::dispatch()->delay(10);
-    }
 }

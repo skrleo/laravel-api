@@ -11,11 +11,14 @@ namespace App\Logic\V1\Admin\Robot;
 
 use App\Logic\V1\Admin\Base\BaseLogic;
 use App\Model\V1\Robot\WxRobotModel;
+use DdvPhp\DdvUtil\Exception;
 use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
 
 class RobotLogic extends BaseLogic
 {
     protected $status;
+
+    protected $id;
 
     /**
      * @return \DdvPhp\DdvPage
@@ -33,4 +36,18 @@ class RobotLogic extends BaseLogic
         return $res->toHump();
     }
 
+    /**
+     * 机器人详情
+     *
+     * @return WxRobotModel|\DdvPhp\DdvUtil\Laravel\Model|null|object
+     * @throws Exception
+     */
+    public function show()
+    {
+        $wxRobotModel = (new WxRobotModel())->where('id',$this->id)->firstHump();
+        if (empty($wxRobotModel)){
+            throw new Exception('该机器人不存在','ROBOT_NOT_FIND');
+        }
+        return $wxRobotModel;
+    }
 }

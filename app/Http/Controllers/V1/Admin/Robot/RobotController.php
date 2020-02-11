@@ -27,4 +27,22 @@ class RobotController extends Controller
         $robotLogic->load($this->verifyData);
         return $robotLogic->lists();
     }
+
+    /**
+     * @param $id
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \DdvPhp\DdvUtil\Exception
+     * @throws \ReflectionException
+     */
+    public function show($id){
+        $this->validate(['id' => $id], [
+            'id' => 'required|integer'
+        ]);
+        $robotLogic = new RobotLogic();
+        $robotLogic->load($this->verifyData);
+        return [
+            "data" => $robotLogic->show()
+        ];
+    }
 }
