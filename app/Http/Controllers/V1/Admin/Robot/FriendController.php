@@ -37,6 +37,7 @@ class FriendController extends Controller
      *
      * @return array
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      */
     public function contractList()

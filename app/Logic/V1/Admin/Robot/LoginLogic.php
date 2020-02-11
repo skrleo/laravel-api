@@ -37,7 +37,7 @@ class LoginLogic extends BaseLogic
         $client = new Client();
             $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/GetQrCode', [
                 'form_params' => [
-                    "proxyIp" => "183.21.104.152:4287",
+                    "proxyIp" => "183.51.190.63:4287",
                     "proxyUserName" => "zhima",
                     "proxyPassword" => "zhima",
                     "deviceId" => "243d854c-aaaf-4f4d-8c95-222825867ee8",
@@ -94,6 +94,7 @@ class LoginLogic extends BaseLogic
             $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/LogOut/' . $this->wxId);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"]){
+                (new WxRobotModel())->where("wxid",$this->wxId)->update(["status" => 0]);
                 return ["data" => $res["Data"]];
             }
             return ["code" => $res["Code"],"message" => $res["Message"]];
