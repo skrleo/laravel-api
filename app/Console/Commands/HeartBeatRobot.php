@@ -41,27 +41,6 @@ class HeartBeatRobot extends Command
     public function handle()
     {
         //
-        $heartBeatLists = (new WxRobotModel())->where("status",1)->getHump();
-        foreach ($heartBeatLists as $item){
-            $client = new Client();
-            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/CheckLogin/' . $item["uuid"], [
-                'form_params' => ["uuid" => $item["uuid"]]
-            ]);
-            $res = json_decode($res->getBody()->getContents(), true);
-            if ($res["Success"] ==  false) {
-                (new WxRobotModel())->where("wxid",$item["wxid"])->update(["status" => 0]);
-                continue;
-            }
-            if (empty($res["Data"]["WxId"])){
-                (new WxRobotModel())->where("wxid",$item["wxid"])->update(["status" => 0]);
-                continue;
-            }
-            $client = new Client();
-            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/HeartBeat/' . $item["wxid"]);
-            $res = json_decode($res->getBody()->getContents(), true);
-            if ($res["Success"] == false){
-                Log::info("[" . date("Y-m-d H:i:s") . "]|error Info:" . $res["Message"]);
-            }
-        }
+        Log::info("[" . date("Y-m-d H:i:s") . "]|error Info: test");
     }
 }
