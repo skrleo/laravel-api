@@ -13,8 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\WsServer::class,
-        Commands\CrontabCommand::class
+
     ];
 
     /**

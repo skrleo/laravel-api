@@ -21,7 +21,7 @@ class UploadLogic extends LoadDataLogic
     public $baseImg = '';
 
     /**
-     *
+     * @return string
      */
     public function base64(){
         //  $base_img是获取到前端传递的src里面的值，也就是我们的数据流文件
