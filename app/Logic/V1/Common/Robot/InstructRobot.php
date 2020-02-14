@@ -33,6 +33,7 @@ class InstructRobot
                     "wxId" => $wxId
                 ]);
             }
+
             if (strpos($list["Content"]["String"],'我想要发单机器人') !== false) {
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
@@ -41,6 +42,7 @@ class InstructRobot
                     "wxId" => $wxId
                 ]);
             }
+
             if (strpos($list["Content"]["String"],'余额') !== false) {
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
@@ -53,18 +55,27 @@ class InstructRobot
             if (strpos($list["Content"]["String"],'提现') !== false) {
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
-                    "toWxIds" => ["wxid_ibhxst4mklvj22"],
+                    "toWxIds" => [$list["FromUserName"]["String"]],
                     "content" => "你的提现申请已收到，将在24小时内发送到你微信账户",
-                    "wxId" => "wxid_jn6rqr7sx35322"
+                    "wxId" => $wxId
                 ]);
             }
 
             if (strpos($list["Content"]["String"],'下级') !== false) {
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
-                    "toWxIds" => ["wxid_ibhxst4mklvj22"],
+                    "toWxIds" => [$list["FromUserName"]["String"]],
                     "content" => "你当前有2个用户，预计为你赚到240.00元",
-                    "wxId" => "wxid_jn6rqr7sx35322"
+                    "wxId" => $wxId
+                ]);
+            }
+
+            if (strpos($list["Content"]["String"],'帮助') !== false) {
+                //  发送微信文本消息
+                (new MessageLogic())->sendTxtMessage([
+                    "toWxIds" => [$list["FromUserName"]["String"]],
+                    "content" => "--------帮助--------\n\n发送 \"余额\"即可查询你当前账户的余额\n发送 \"提现\"即可提现你当前账户的余额\n发送 \"下级\"即可查询你当前账户的下级\n------------\n 如有疑问请留言:",
+                    "wxId" => $wxId
                 ]);
             }
         }
