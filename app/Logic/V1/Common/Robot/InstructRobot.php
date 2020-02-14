@@ -9,7 +9,9 @@
 namespace App\Logic\V1\Common\Robot;
 
 
+use App\Libraries\classes\CreateUnion;
 use App\Logic\V1\Admin\Robot\MessageLogic;
+use App\Model\V1\User\UserBaseModel;
 use Illuminate\Support\Facades\Redis;
 
 class InstructRobot
@@ -22,10 +24,10 @@ class InstructRobot
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      */
-    public static function basePoint($list,$wxId)
+    public static function basePoint($list, $wxId)
     {
-        if ($list["FromUserName"]["String"] <> $wxId && strpos($list["FromUserName"]["String"],'@chatroom') == false){
-            if (strpos($list["Content"]["String"],'查找') !== false) {
+        if ($list["FromUserName"]["String"] <> $wxId && strpos($list["FromUserName"]["String"], '@chatroom') == false) {
+            if (strpos($list["Content"]["String"], '查找') !== false) {
                 $keyWord = mb_substr(strstr($list["Content"]["String"], '查找'), 3);
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
@@ -35,7 +37,7 @@ class InstructRobot
                 ]);
             }
 
-            if (strpos($list["Content"]["String"],'我想要发单机器人') !== false) {
+            if (strpos($list["Content"]["String"], '我想要发单机器人') !== false) {
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
@@ -46,11 +48,19 @@ class InstructRobot
                 Redis::setex("applyRobot:" . $list["FromUserName"]["String"], 60 * 60 * 24, json_encode($data));
             }
 
-            if (strpos($list["Content"]["String"],'上级邀请码') !== false) {
+            if (strpos($list["Content"]["String"], '上级邀请码') !== false) {
                 // 判断是否申请微信机器人
                 $applyRobot = Redis::get("applyRobot:" . $list["FromUserName"]["String"]);
-                if (!empty($applyRobot)){
+                $userBaseModel = (new UserBaseModel())->where(["wxid" => $list["FromUserName"]["String"]])->firstHump();
+                if (!empty($applyRobot) && empty($userBaseModel)) {
                     $content = "已成功绑定你的上级" . $list["Content"]["String"];
+                    (new UserBaseModel())->insert([
+                        "wxid" => $list["Content"]["String"],
+                        "import_code" => mb_substr($list["Content"]["String"], 5),
+                        "invitation_code" => CreateUnion::invitation_code(6),
+                    ]);
+                } elseif (!empty($userBaseModel)) {
+                    $content = "你已经申请过发单机器人了，快拉群分享发单吧！";
                 }else{
                     $content = "你还未申请发单机器人，请回复\"我想要发单机器人\"来获取吧！";
                 }
@@ -61,15 +71,16 @@ class InstructRobot
                 ]);
             }
 
-            if (strpos($list["Content"]["String"],'我的邀请码') !== false) {
+            if (strpos($list["Content"]["String"], '我的邀请码') !== false) {
+                $userBaseModel = (new UserBaseModel())->where(["wxid" => $list["FromUserName"]["String"]])->firstHump();
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
-                    "content" => "你的邀请码是：FG1314, 快邀请好友一起来加入我们吧",
+                    "content" => "你的邀请码是：{$userBaseModel["invitation_code"]}, 快邀请好友一起来加入我们吧",
                     "wxId" => $wxId
                 ]);
             }
 
-            if (strpos($list["Content"]["String"],'余额') !== false) {
+            if (strpos($list["Content"]["String"], '余额') !== false) {
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
@@ -78,7 +89,7 @@ class InstructRobot
                 ]);
             }
 
-            if (strpos($list["Content"]["String"],'提现') !== false) {
+            if (strpos($list["Content"]["String"], '提现') !== false) {
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
@@ -87,7 +98,7 @@ class InstructRobot
                 ]);
             }
 
-            if (strpos($list["Content"]["String"],'下级') !== false) {
+            if (strpos($list["Content"]["String"], '下级') !== false) {
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
@@ -96,16 +107,16 @@ class InstructRobot
                 ]);
             }
 
-            if (strpos($list["Content"]["String"],'关于结算') !== false) {
+            if (strpos($list["Content"]["String"], '关于结算') !== false) {
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
-                    "content" => "每月的20月结算上个月的佣金金额，",
+                    "content" => "你当前账户有28.00元待结算，每月的20月结算上个月的佣金金额，还请你耐心等候。",
                     "wxId" => $wxId
                 ]);
             }
 
-            if (strpos($list["Content"]["String"],'帮助') !== false) {
+            if (strpos($list["Content"]["String"], '帮助') !== false) {
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
