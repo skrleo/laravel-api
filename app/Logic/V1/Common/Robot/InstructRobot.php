@@ -38,14 +38,19 @@ class InstructRobot
             }
 
             if (strpos($list["Content"]["String"], '我想要发单机器人') !== false) {
-                //  发送微信文本消息
+                $userBaseModel = (new UserBaseModel())->where(["wxid" => $list["FromUserName"]["String"]])->firstHump();
+                if (empty($userBaseModel)){
+                    $content = "--------如何躺赚--------\n\n首先你想拥有机器人必须绑定你的上级，所以你要发送上级邀请码，即可绑定你的上级。如：上级邀请码GF1314";
+                    $data = ["wxid" => $list["FromUserName"]["String"]];
+                    Redis::setex("applyRobot:" . $list["FromUserName"]["String"], 60 * 60 * 24, json_encode($data));
+                } else {
+                    $content = "你已经成功申请了发单机器人，快去发单赚钱吧！";
+                }
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
-                    "content" => "--------如何躺赚--------\n\n首先你想拥有机器人必须绑定你的上级，所以你要发送上级邀请码，即可绑定你的上级。如：上级邀请码GF1314",
+                    "content" => $content,
                     "wxId" => $wxId
                 ]);
-                $data = ["wxid" => $list["FromUserName"]["String"]];
-                Redis::setex("applyRobot:" . $list["FromUserName"]["String"], 60 * 60 * 24, json_encode($data));
             }
 
             if (strpos($list["Content"]["String"], '上级邀请码') !== false) {
@@ -62,7 +67,7 @@ class InstructRobot
                         "import_code" => mb_substr($info[1], 6),
                         "invitation_code" => $invitationCode,
                     ]);
-                    $content = "已成功绑定你的上级" . $list["Content"]["String"];
+                    $content = "已成功绑定你的上级邀请码" . mb_substr($info[1], 6);
                 } elseif (!empty($userBaseModel)) {
                     $content = "你已经申请过发单机器人了，快拉群分享发单吧！";
                 } else {
@@ -124,7 +129,7 @@ class InstructRobot
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
-                    "content" => "--------帮助--------\n\n发送 \"余额\"即可查询你的余额\n发送 \"提现\"即可提现你的余额\n发送 \"下级\"即可查询你的下级\n发送 \"关于结算\"即可查询结算明细\n\n----------------\n\n 如有疑问请留言:",
+                    "content" => "--------帮助--------\n\n发送 \"余额\"即可查询你的余额\n发送 \"提现\"即可提现你的余额\n发送 \"下级\"即可查询你的下级\n发送 \"关于结算\"即可查询结算",
                     "wxId" => $wxId
                 ]);
             }
