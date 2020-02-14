@@ -27,7 +27,7 @@ class MessageLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Message/Sync/'. $wxId);
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Sync/Message/'. $wxId);
             $res = json_decode($res->getBody()->getContents(),true);
             return $res["Data"]["AddMsgs"];
         } catch(\Throwable $e) {
