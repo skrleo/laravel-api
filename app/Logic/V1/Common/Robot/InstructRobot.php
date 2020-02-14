@@ -10,6 +10,7 @@ namespace App\Logic\V1\Common\Robot;
 
 
 use App\Logic\V1\Admin\Robot\MessageLogic;
+use Illuminate\Support\Facades\Redis;
 
 class InstructRobot
 {
@@ -38,7 +39,32 @@ class InstructRobot
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
-                    "content" => "--------如何躺赚--------\n\n首先你想拥有机器人必须绑定你的上级，所以你得输入你的上级邀请码，即可绑定你的上级。",
+                    "content" => "--------如何躺赚--------\n\n首先你想拥有机器人必须绑定你的上级，所以你得你的上级邀请码，即可绑定你的上级。如：上级邀请码GF1314",
+                    "wxId" => $wxId
+                ]);
+                $data = ["wxid" => $list["FromUserName"]["String"]];
+                Redis::setex("applyRobot:" . $list["FromUserName"]["String"], 60 * 60 * 24, json_encode($data));
+            }
+
+            if (strpos($list["Content"]["String"],'上级邀请码') !== false) {
+                // 判断是否申请微信机器人
+                $applyRobot = Redis::get("applyRobot:" . $list["FromUserName"]["String"]);
+                if (!empty($applyRobot)){
+                    $content = "已成功绑定你的上级" . $list["Content"]["String"];
+                }else{
+                    $content = "你还未申请发单机器人，请回复\"我想要发单机器人\"来获取吧！";
+                }
+                (new MessageLogic())->sendTxtMessage([
+                    "toWxIds" => [$list["FromUserName"]["String"]],
+                    "content" => $content,
+                    "wxId" => $wxId
+                ]);
+            }
+
+            if (strpos($list["Content"]["String"],'我的邀请码') !== false) {
+                (new MessageLogic())->sendTxtMessage([
+                    "toWxIds" => [$list["FromUserName"]["String"]],
+                    "content" => "你的邀请码是：FG1314, 快邀请好友一起来加入我们吧",
                     "wxId" => $wxId
                 ]);
             }
@@ -47,7 +73,7 @@ class InstructRobot
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
-                    "content" => "你当前的余额为 0 元，快分享商品赚钱吧",
+                    "content" => "你当前的余额为 18.00 元，可提现的金额为8.00元，快分享商品赚钱吧",
                     "wxId" => $wxId
                 ]);
             }
@@ -70,11 +96,20 @@ class InstructRobot
                 ]);
             }
 
+            if (strpos($list["Content"]["String"],'关于结算') !== false) {
+                //  发送微信文本消息
+                (new MessageLogic())->sendTxtMessage([
+                    "toWxIds" => [$list["FromUserName"]["String"]],
+                    "content" => "每月的20月结算上个月的佣金金额，",
+                    "wxId" => $wxId
+                ]);
+            }
+
             if (strpos($list["Content"]["String"],'帮助') !== false) {
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
-                    "content" => "--------帮助--------\n\n发送 \"余额\"即可查询你的余额\n发送 \"提现\"即可提现你的余额\n发送 \"下级\"即可查询你的下级\n------------------\n\n 如有疑问请留言:",
+                    "content" => "--------帮助--------\n\n发送 \"余额\"即可查询你的余额\n发送 \"提现\"即可提现你的余额\n发送 \"下级\"即可查询你的下级\n发送 \"关于结算\"即可查询结算明细\n\n----------------\n\n 如有疑问请留言:",
                     "wxId" => $wxId
                 ]);
             }
