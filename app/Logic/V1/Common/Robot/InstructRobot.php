@@ -53,18 +53,19 @@ class InstructRobot
                 $applyRobot = Redis::get("applyRobot:" . $list["FromUserName"]["String"]);
                 $userBaseModel = (new UserBaseModel())->where(["wxid" => $list["FromUserName"]["String"]])->firstHump();
                 if (!empty($applyRobot) && empty($userBaseModel)) {
+                    $info = explode(":", $list["PushContent"]);
                     $invitationCode = CreateUnion::invitation_code(6);
                     (new UserBaseModel())->insert([
-                        "wxid" => $list["Content"]["String"],
-                        "name" => explode(":",$list["PushContent"])["0"],
+                        "wxid" => $list["FromUserName"]["String"],
+                        "name" => $info["0"],
                         "password" => md5($invitationCode),
-                        "import_code" => mb_substr($list["Content"]["String"], 5),
+                        "import_code" => mb_substr($info[1], 6),
                         "invitation_code" => $invitationCode,
                     ]);
                     $content = "已成功绑定你的上级" . $list["Content"]["String"];
                 } elseif (!empty($userBaseModel)) {
                     $content = "你已经申请过发单机器人了，快拉群分享发单吧！";
-                }else{
+                } else {
                     $content = "你还未申请发单机器人，请回复\"我想要发单机器人\"来获取吧！";
                 }
                 (new MessageLogic())->sendTxtMessage([
