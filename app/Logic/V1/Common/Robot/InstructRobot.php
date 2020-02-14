@@ -41,7 +41,7 @@ class InstructRobot
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$list["FromUserName"]["String"]],
-                    "content" => "--------如何躺赚--------\n\n首先你想拥有机器人必须绑定你的上级，所以你得你的上级邀请码，即可绑定你的上级。如：上级邀请码GF1314",
+                    "content" => "--------如何躺赚--------\n\n首先你想拥有机器人必须绑定你的上级，所以你要发送上级邀请码，即可绑定你的上级。如：上级邀请码GF1314",
                     "wxId" => $wxId
                 ]);
                 $data = ["wxid" => $list["FromUserName"]["String"]];
@@ -53,12 +53,15 @@ class InstructRobot
                 $applyRobot = Redis::get("applyRobot:" . $list["FromUserName"]["String"]);
                 $userBaseModel = (new UserBaseModel())->where(["wxid" => $list["FromUserName"]["String"]])->firstHump();
                 if (!empty($applyRobot) && empty($userBaseModel)) {
-                    $content = "已成功绑定你的上级" . $list["Content"]["String"];
+                    $invitationCode = CreateUnion::invitation_code(6);
                     (new UserBaseModel())->insert([
                         "wxid" => $list["Content"]["String"],
+                        "name" => explode(":",$list["PushContent"])["0"],
+                        "password" => md5($invitationCode),
                         "import_code" => mb_substr($list["Content"]["String"], 5),
-                        "invitation_code" => CreateUnion::invitation_code(6),
+                        "invitation_code" => $invitationCode,
                     ]);
+                    $content = "已成功绑定你的上级" . $list["Content"]["String"];
                 } elseif (!empty($userBaseModel)) {
                     $content = "你已经申请过发单机器人了，快拉群分享发单吧！";
                 }else{
