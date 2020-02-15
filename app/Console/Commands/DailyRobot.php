@@ -47,7 +47,7 @@ class DailyRobot extends Command
         if (!in_array(Carbon::now()->hour, [0, 1, 2, 3, 4, 5, 6, 7])) {
             try {
                 $wxRobotGoodsModel = (new WxRobotGoodsModel())->where('status',0)->firstHump();
-                $couponPrice = bcsub($wxRobotGoodsModel["currentPrice"],$wxRobotGoodsModel["couponPrice"],2);
+                $couponPrice = bcsub($wxRobotGoodsModel["currentPrice"],$wxRobotGoodsModel["couponDiscount"],2);
                 $params = ["p_id" => '9569620_127591192', "goods_id_list" => json_encode([$wxRobotGoodsModel["itemid"]])];
                 $generate = DuoduoInterface::getInstance($params)->request('pdd.ddk.goods.promotion.url.generate');
                 $generateLists = $generate["goods_promotion_url_generate_response"]["goods_promotion_url_list"];

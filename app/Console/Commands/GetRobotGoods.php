@@ -51,7 +51,7 @@ class GetRobotGoods extends Command
             $data[$key]["description"] = $list["goods_desc"];
             $data[$key]["pic_url"] = $list["goods_thumbnail_url"];
             $data[$key]["thumb_url"] = $list["goods_image_url"];
-            $data[$key]["coupon_price"] = bcsub($list["min_normal_price"],$list["coupon_discount"],2);
+            $data[$key]["coupon_discount"] = $list["coupon_discount"];
             $data[$key]["current_price"] = $list["min_normal_price"];
         }
         (new WxRobotGoodsModel())->insert($data);
