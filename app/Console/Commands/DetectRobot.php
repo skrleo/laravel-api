@@ -45,9 +45,12 @@ class DetectRobot extends Command
             $wxId = "wxid_jn6rqr7sx35322";
             $lists = (new MessageLogic())->syncMessage($wxId);
             foreach ($lists as $list) {
-                if (!empty($list["Content"]["String"]) && !empty($list["PushContent"])) {
-                    InstructRobot::basePoint($list, $wxId);
-                }
+                // 机器人指令
+                InstructRobot::basePoint($list, $wxId);
+                // 机器人群管理
+                InstructRobot::groupPoint($list, $wxId);
+                // 是否有新的好友
+                InstructRobot::friendVerify($list, $wxId);
             }
             sleep(3);
         }
