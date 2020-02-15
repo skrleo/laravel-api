@@ -165,30 +165,26 @@ class InstructRobot
     {
         if ($list["ToUserName"]["String"] == $wxId && $list["MsgType"] == 37 ) {
             preg_match_all('/encryptusername=("[^"]*").*?ticket=("[^"]*")/i', $list["Content"]["String"], $matches);
-            $ret = array();
-            $ret["encryptusername"] = trim($matches[1][0], '"');
-            $ret["ticket"] = trim($matches[2][0], '"');
             // 通过微信好友
             $client = new Client();
             $res = $client->request('POST', 'http://114.55.164.90:1697/api/Friend/PassFriendVerify', [
                 'form_params' => [
                     "userNameV1" => $matches[1][0],
-                    "antispamTicket" => $matches[2][0],
+                    "antispamTicket" =>  $matches[2][0],
                     "content" => "测试",
                     "origin" => 3,
-                    "wxId" => $wxId,
+                    "wxId" => "wxid_jn6rqr7sx35322",
                 ]
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
-            if ($res["Success"] == false) {
-
+            if ($res["Success"]) {
+                //  发送微信文本消息
+                (new MessageLogic())->sendTxtMessage([
+                    "toWxIds" => [$res["Data"]],
+                    "content" => "你已经加我为好友！",
+                    "wxId" => $wxId
+                ]);
             }
-            //  发送微信文本消息
-            (new MessageLogic())->sendTxtMessage([
-                "toWxIds" => [$res["Data"]],
-                "content" => "你已经加我为好友！",
-                "wxId" => $wxId
-            ]);
         }
     }
 }
