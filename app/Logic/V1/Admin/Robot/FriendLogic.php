@@ -72,4 +72,31 @@ class FriendLogic extends BaseLogic
         }
     }
 
+    /**
+     * 通过好友验证
+     *
+     * @param $wxId
+     * @param $data
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function passFriendVerify($wxId,$data)
+    {
+        $client = new Client();
+        try {
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Friend/PassFriendVerify', [
+                'form_params' => [
+                    "userNameV1" => str_replace('"', '', $data[1][0]),
+                    "antispamTicket" => str_replace('"', '', $data[2][0]),
+                    "content" => "测试",
+                    "origin" => 3,
+                    "wxId" => $wxId,
+                ]
+            ]);
+            return json_decode($res->getBody()->getContents(), true);
+        } catch(\Throwable $e) {
+            Log::info('Fail to call api');
+        }
+    }
+
 }

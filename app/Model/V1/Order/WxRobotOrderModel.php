@@ -10,6 +10,7 @@ namespace App\Model\V1\Order;
 
 
 use App\Model\Model;
+use DB;
 
 class WxRobotOrderModel extends Model
 {
@@ -23,7 +24,7 @@ class WxRobotOrderModel extends Model
      */
     public function setTable($id)
     {
-        $this->table = 'wx_robot_order_' . $id % 3;
+        $this->table = 'wx_robot_order_' . intval($id)% 3;
         return $this;
     }
 
@@ -38,6 +39,25 @@ class WxRobotOrderModel extends Model
             $first = $this->setTable($i)->select('order_sn', 'uid', 'itemid')->whereIn('order_sn', $orderIds);
             $model = $model->unionAll($first);
         }
-        return $model->get()->groupBy('order_sn')->toArray();
+        return $model->get()->keyBy('order_sn')->toArray();
+    }
+
+    /**
+     * @param $uid
+     * @param $list
+     * @return bool
+     * @throws \Exception
+     */
+    public function batchInsertData($uid, $list)
+    {
+        if (empty($list)) {
+            return true;
+        }
+        $this->setTable($uid);
+        $result = DB::connection($this->connection)->table($this->getTable())->insert($list);
+
+        if (!$result) {
+            throw new \Exception('插入数据失败');
+        }
     }
 }
