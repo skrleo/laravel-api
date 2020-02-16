@@ -17,7 +17,7 @@ class WxRobotGroupModel extends Model
     protected $primaryKey = 'robot_group_id';
 
     public function hasManyRobotToGroupModel(){
-        return $this->hasMany(RobotToGroupModel::class,'group_id','robot_group_id');
+        return $this->hasMany(WxRobotToGroupModel::class,'group_id','robot_group_id');
     }
 
 }

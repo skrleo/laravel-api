@@ -11,10 +11,10 @@ namespace App\Model\V1\Robot;
 
 use App\Model\Model;
 
-class RobotToGroupModel extends Model
+class WxRobotToGroupModel extends Model
 {
 
-    protected $table = 'robot_to_group';
+    protected $table = 'wx_robot_to_group';
 
     protected $primaryKey = 'id';
 

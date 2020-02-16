@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Libraries\classes\DuoduoUnion\DuoduoInterface;
 use App\Logic\V1\Admin\Robot\MessageLogic;
-use App\Model\V1\Robot\RobotToGroupModel;
+use App\Model\V1\Robot\WxRobotToGroupModel;
 use App\Model\V1\Robot\WxRobotGoodsModel;
 use App\Model\V1\Robot\WxRobotGroupModel;
 use App\Model\V1\Robot\WxRobotModel;
