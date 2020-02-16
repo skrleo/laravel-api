@@ -91,7 +91,7 @@ class InstructRobot
                     $userBaseModel = (new UserBaseModel())->where(["wxid" => $list["FromUserName"]["String"]])->firstHump();
                     (new MessageLogic())->sendTxtMessage([
                         "toWxIds" => [$list["FromUserName"]["String"]],
-                        "content" => "你的邀请码是：{$userBaseModel["invitation_code"]}, 快邀请好友一起来加入我们吧",
+                        "content" => "你的邀请码是：{$userBaseModel["invitationCode"]}, 快邀请好友一起来加入我们吧",
                         "wxId" => $wxId
                     ]);
                 }
