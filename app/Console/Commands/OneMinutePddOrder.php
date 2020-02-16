@@ -36,9 +36,8 @@ class OneMinutePddOrder extends Command
     }
 
     /**
-     * pull pdd order
-     *
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
      */
     public function handle()
     {
