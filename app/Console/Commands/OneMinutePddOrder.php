@@ -3,8 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Libraries\classes\DuoduoUnion\DuoduoInterface;
+use App\Logic\V1\Admin\Robot\MessageLogic;
 use App\Model\V1\Order\WxRobotOrderModel;
 use App\Model\V1\User\UserBaseModel;
+use App\Model\V1\User\UserWalletsModel;
 use Illuminate\Console\Command;
 
 class OneMinutePddOrder extends Command
@@ -88,10 +90,20 @@ class OneMinutePddOrder extends Command
 
         }
         // 插入数据
-        foreach ($orderDatas as $key => $data){
-            (new WxRobotOrderModel())->batchInsertData($key,$data);
-            // 发送微信消息提醒
-
+        foreach ($orderDatas as $uid => $lists){
+            // 更新个人账户收益
+            $userWalletsModel = (new UserWalletsModel())->firstOrCreate(["uid" => $uid]);
+            foreach ($lists as $item){
+                $userWalletsModel->increment("balance",$item["promotion_amount"]);
+                // 发送微信消息提醒
+                (new MessageLogic())->sendTxtMessage([
+                    "toWxIds" => ["wxid_ibhxst4mklvj22"],
+                    "content" => "恭喜你，又有一笔购物收入！订单号{$item["order_sn"]},预计收入{$item["promotion_amount"]}元~",
+                    "wxId" => "wxid_jn6rqr7sx35322"
+                ]);
+            }
+            // 插入订单数据
+            (new WxRobotOrderModel())->batchInsertData($uid,$lists);
         }
         // 更新订单
         foreach ($orderUpdateDatas as $key => $value) {

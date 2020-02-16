@@ -13,6 +13,7 @@ use App\Libraries\classes\CreateUnion;
 use App\Logic\V1\Admin\Robot\FriendLogic;
 use App\Logic\V1\Admin\Robot\MessageLogic;
 use App\Model\V1\User\UserBaseModel;
+use App\Model\V1\User\UserWalletsModel;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
@@ -89,36 +90,58 @@ class InstructRobot
 
                 if (strpos($list["Content"]["String"], '我的邀请码') !== false) {
                     $userBaseModel = (new UserBaseModel())->where(["wxid" => $list["FromUserName"]["String"]])->firstHump();
+                    if(empty($userBaseModel)){
+                        $content = "你还未申请发单机器人，请回复\"我想要发单机器人\"来获取吧！";
+                    }else {
+                        $content = "你的邀请码是：{$userBaseModel["invitationCode"]}, 快邀请好友一起来加入我们吧";
+                    }
                     (new MessageLogic())->sendTxtMessage([
                         "toWxIds" => [$list["FromUserName"]["String"]],
-                        "content" => "你的邀请码是：{$userBaseModel["invitationCode"]}, 快邀请好友一起来加入我们吧",
+                        "content" => $content,
                         "wxId" => $wxId
                     ]);
                 }
 
                 if (strpos($list["Content"]["String"], '余额') !== false) {
-                    //  发送微信文本消息
+                    $userBaseModel = (new UserBaseModel())->where(["wxid" => $list["FromUserName"]["String"]])->firstHump();
+                    if(empty($userBaseModel)){
+                        $content = "你还未申请发单机器人，请回复\"我想要发单机器人\"来获取吧！";
+                    }else {
+                        $userWalletsModel = (new UserWalletsModel())->where("uid",$userBaseModel["uid"])->firstHump();
+
+                        $content = "你当前的余额为 ". isset($userWalletsModel["balance"]) ? $userWalletsModel["balance"] : 0.00 ." 元，可提现的金额为". isset($userWalletsModel["canWithdraw"]) ? $userWalletsModel["canWithdraw"] : 0.00 ."元，快分享商品赚钱吧";
+                    }
                     (new MessageLogic())->sendTxtMessage([
                         "toWxIds" => [$list["FromUserName"]["String"]],
-                        "content" => "你当前的余额为 18.00 元，可提现的金额为8.00元，快分享商品赚钱吧",
+                        "content" => $content,
                         "wxId" => $wxId
                     ]);
                 }
 
                 if (strpos($list["Content"]["String"], '提现') !== false) {
-                    //  发送微信文本消息
+                    $userBaseModel = (new UserBaseModel())->where(["wxid" => $list["FromUserName"]["String"]])->firstHump();
+                    if(empty($userBaseModel)){
+                        $content = "你还未申请发单机器人，请回复\"我想要发单机器人\"来获取吧！";
+                    }else {
+                        $content = "你的提现申请已收到，将在24小时内将通过微信红包发送到你微信账户";
+                    }
                     (new MessageLogic())->sendTxtMessage([
                         "toWxIds" => [$list["FromUserName"]["String"]],
-                        "content" => "你的提现申请已收到，将在24小时内发送到你微信账户",
+                        "content" => $content,
                         "wxId" => $wxId
                     ]);
                 }
 
                 if (strpos($list["Content"]["String"], '下级') !== false) {
-                    //  发送微信文本消息
+                    $userBaseModel = (new UserBaseModel())->where(["wxid" => $list["FromUserName"]["String"]])->firstHump();
+                    if(empty($userBaseModel)){
+                        $content = "你还未申请发单机器人，请回复\"我想要发单机器人\"来获取吧！";
+                    }else {
+                        $content = "你当前有两个下级用户，累计为你赚到152.00元，快推荐好友来为你赚钱吧";
+                    }
                     (new MessageLogic())->sendTxtMessage([
                         "toWxIds" => [$list["FromUserName"]["String"]],
-                        "content" => "你当前有2个用户，预计为你赚到240.00元",
+                        "content" => $content,
                         "wxId" => $wxId
                     ]);
                 }
@@ -127,7 +150,7 @@ class InstructRobot
                     //  发送微信文本消息
                     (new MessageLogic())->sendTxtMessage([
                         "toWxIds" => [$list["FromUserName"]["String"]],
-                        "content" => "你当前账户有28.00元待结算，每月的20月结算上个月的佣金金额，还请你耐心等候。",
+                        "content" => "每月的20月结算上个月的佣金金额，还请你耐心等候。",
                         "wxId" => $wxId
                     ]);
                 }
