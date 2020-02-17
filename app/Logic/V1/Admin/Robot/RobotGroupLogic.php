@@ -11,7 +11,9 @@ namespace App\Logic\V1\Admin\Robot;
 
 use App\Logic\V1\Admin\Base\BaseLogic;
 use App\Model\V1\Robot\WxRobotGroupModel;
+use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
 use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Support\Facades\Log;
 
 class RobotGroupLogic extends BaseLogic
@@ -22,13 +24,14 @@ class RobotGroupLogic extends BaseLogic
 
     protected $name;
 
+    protected $robotId;
+
     public function lists()
     {
         $res = (new WxRobotGroupModel())
-//            ->where("robot_id",$this->robotId)
-//            ->when(!empty($this->uid),function (EloquentBuilder $query){
-//                $query->where('uid',$this->uid);
-//            })
+            ->whereHas('hasManyRobotToGroupModel', function (EloquentBuilder $query){
+                $query->where('robot_id',$this->robotId);
+            })
             ->latest('created_at')
             ->getDdvPage();
         return $res->toHump();
@@ -56,6 +59,12 @@ class RobotGroupLogic extends BaseLogic
                     "name" => $this->name,
                     "group_alias" => $res["Data"],
                     "created_at" =>time()
+                ]);
+                // 入群通知
+                (new MessageLogic())->sendTxtMessage([
+                    "toWxIds" => [$res["Data"]],
+                    "content" => "大家好，我是『自购省钱，分享赚钱』的小助手~",
+                    "wxId" => $this->wxid
                 ]);
                 return [];
             }

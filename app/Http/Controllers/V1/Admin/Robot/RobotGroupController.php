@@ -22,7 +22,7 @@ class RobotGroupController extends Controller
      */
     public function lists(){
         $this->validate(null,  [
-//            'robotGoodsId' => 'required|integer'
+            'robotId' => 'required|integer'
         ]);
         $robotGroupLogic = new RobotGroupLogic();
         $robotGroupLogic->load($this->verifyData);
