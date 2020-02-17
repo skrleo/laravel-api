@@ -45,13 +45,13 @@ class AccountLogic extends LoadDataLogic
      * @throws Exception
      */
     public function login(){
-        $userBaseModel = (new UserBaseModel())->select("uid","phone","email","password","state")
+        $userBaseModel = (new UserBaseModel())->select("uid","phone","email","password","status")
             ->where(function ($query){
                 $query->where(["phone" => $this->account,"password" => md5($this->password)]);
             })->orWhere(function ($query){
                 $query->where(["email" => $this->account,"password" => md5($this->password)]);
             })->first();
-        if ($userBaseModel->state <> UserBaseModel::ACCOUNT_START_ENABLE){
+        if ($userBaseModel->status <> UserBaseModel::ACCOUNT_START_ENABLE){
             throw new Exception('账号异常,请联系管理员', 'ACCOUNT_ABNORMAL_ERROR');
         }
         // 判断传进来的密码跟基本信息表中的密码是否相等
