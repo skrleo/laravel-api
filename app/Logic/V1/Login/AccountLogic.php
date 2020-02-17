@@ -45,11 +45,12 @@ class AccountLogic extends LoadDataLogic
      * @throws Exception
      */
     public function login(){
-        $userAccountModel = (new UserAccountModel())->where('account',$this->account)->first();
-        if (empty($userAccountModel)){
-            throw new Exception('用户账号不存在', 'USER_NOT_FIND');
-        }
-        $userBaseModel = (new UserBaseModel())->where('uid',$userAccountModel->uid)->first();
+        $userBaseModel = (new UserBaseModel())->select("uid","phone","email","password","state")
+            ->where(function ($query){
+                $query->where(["phone" => $this->account,"password" => md5($this->password)]);
+            })->orWhere(function ($query){
+                $query->where(["email" => $this->account,"password" => md5($this->password)]);
+            })->first();
         if ($userBaseModel->state <> UserBaseModel::ACCOUNT_START_ENABLE){
             throw new Exception('账号异常,请联系管理员', 'ACCOUNT_ABNORMAL_ERROR');
         }
@@ -72,9 +73,7 @@ class AccountLogic extends LoadDataLogic
         VerifyCommonLogic::clearCache($this->account);
         //把uid存到session中
         \Session::put('uid', $userBaseModel->uid);
-        /**
-         * 判断是前台和后台登录
-         */
+        // 判断登录类型
         if ($this->type <> 0 ){
             $manageModel = (new ManageModel())->where('uid',$userBaseModel->uid)->first();
             if (empty($manageModel)){
