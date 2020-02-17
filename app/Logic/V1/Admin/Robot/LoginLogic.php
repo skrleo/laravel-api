@@ -35,16 +35,7 @@ class LoginLogic extends BaseLogic
     public function getQrcode()
     {
         $client = new Client();
-            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/GetQrCode', [
-                'form_params' => [
-                    "proxyIp" => "113.94.123.53:4287",
-                    "proxyUserName" => "zhima",
-                    "proxyPassword" => "zhima",
-                    "deviceId" => "243d854c-aaaf-4f4d-8c95-222825867ee8",
-                    "deviceMac" => "iPad Pro",
-                    "deviceName" => "iPad"
-                ]
-            ]);
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/GetQrCode');
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"] ==  false){
                 throw new Exception($res["Message"],'PROXY_TIME_OUT');
