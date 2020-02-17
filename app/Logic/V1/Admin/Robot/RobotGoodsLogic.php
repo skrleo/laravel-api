@@ -9,6 +9,8 @@
 namespace App\Logic\V1\Admin\Robot;
 
 
+use App\Libraries\classes\DuoduoUnion\DuoduoInterface;
+use App\Libraries\classes\DuoduoUnion\FormatData;
 use App\Logic\V1\Admin\Base\BaseLogic;
 use App\Model\V1\Robot\WxRobotGoodsModel;
 use DdvPhp\DdvUtil\Exception;
@@ -49,6 +51,29 @@ class RobotGoodsLogic extends BaseLogic
             ->latest('created_at')
             ->getDdvPage();
         return $res->toHump();
+    }
+
+    /**
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function syncGoods(){
+        $data = DuoduoInterface::getInstance($params = [])->request('pdd.ddk.top.goods.list.query');
+        $lists = FormatData::getInit()->headleOptional($data["top_goods_list_get_response"]["list"]);
+        $data = [];
+        foreach ($lists as $key => $list){
+            $data[$key]["itemid"] = $list["goods_id"];
+            $data[$key]["robot_id"] = 1;
+            $data[$key]["type"] = 1;
+            $data[$key]["name"] = $list["goods_name"];
+            $data[$key]["description"] = $list["goods_desc"];
+            $data[$key]["pic_url"] = $list["goods_thumbnail_url"];
+            $data[$key]["thumb_url"] = $list["goods_image_url"];
+            $data[$key]["coupon_discount"] = $list["coupon_discount"];
+            $data[$key]["current_price"] = $list["min_normal_price"];
+        }
+        (new WxRobotGoodsModel())->insert($data);
+        return true;
     }
 
     /**

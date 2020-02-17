@@ -303,7 +303,18 @@ Route::group([
 
                     Route::get('lists', 'RobotGoodsController@lists');
 
+                    Route::get('syncGoods', 'RobotGoodsController@syncGoods');
+
                     Route::post('/', 'RobotGoodsController@store');
+                });
+
+                Route::group([
+                    'prefix'=>'group',
+                ],function(){
+
+                    Route::get('lists', 'RobotGroupController@lists');
+
+                    Route::post('/', 'RobotGroupController@store');
                 });
 
                 Route::group([

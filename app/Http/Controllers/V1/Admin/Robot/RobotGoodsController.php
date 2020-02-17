@@ -15,8 +15,7 @@ use App\Logic\V1\Admin\Robot\RobotGoodsLogic;
 class RobotGoodsController extends Controller
 {
     /**
-     * @param $robotGoodsId
-     * @return RobotGoodsLogic
+     * @return \DdvPhp\DdvPage
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
@@ -27,6 +26,22 @@ class RobotGoodsController extends Controller
         $robotGoodsLogic = new RobotGoodsLogic();
         $robotGoodsLogic->load($this->verifyData);
         return $robotGoodsLogic->lists();
+    }
+
+    /**
+     * 更新商品信息
+     *
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     *
+     */
+    public function syncGoods(){
+        $robotGoodsLogic = new RobotGoodsLogic();
+        $robotGoodsLogic->load($this->verifyData);
+        if ($robotGoodsLogic->syncGoods()){
+            return [];
+        }
     }
 
     /**
