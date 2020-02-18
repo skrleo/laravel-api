@@ -40,7 +40,8 @@ class RobotGroupController extends Controller
     public function store(){
         $this->validate(null, [
             'name' => 'required|string',
-            'wxid' => 'required|string',
+            'uid' => 'required|integer',
+            'robotId' => 'required|integer',
             'groupUrl' => 'required|string'
         ]);
         $robotGroupLogic = new RobotGroupLogic();
