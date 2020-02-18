@@ -11,7 +11,10 @@ namespace App\Logic\V1\Admin\Robot;
 
 use App\Logic\V1\Admin\Base\BaseLogic;
 use App\Model\V1\Robot\WxRobotGroupModel;
+use App\Model\V1\Robot\WxRobotModel;
+use App\Model\V1\Robot\WxRobotToGroupModel;
 use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
+use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Support\Facades\Log;
@@ -25,6 +28,8 @@ class RobotGroupLogic extends BaseLogic
     protected $name;
 
     protected $robotId;
+
+    public $uid;
 
     public function lists()
     {
@@ -47,24 +52,32 @@ class RobotGroupLogic extends BaseLogic
     {
         $client = new Client();
         try {
+            $wxRobotModel = (new WxRobotModel())->where("id",$this->robotId)->firstHump();
+            if(empty($wxRobotModel)){
+                throw new Exception("微信机器人不存在","NOT_FIND_ROBOT");
+            }
             $res = $client->request('POST', 'http://114.55.164.90:1697/api/Group/ScanIntoGroupBase64', [
                 'form_params' => [
                     "base64" => imgToBase64($this->groupUrl),
-                    "wxId" => $this->wxid,
+                    "wxId" => $wxRobotModel->wxid,
                 ]
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"]) {
-                (new WxRobotGroupModel())->insert([
-                    "name" => $this->name,
-                    "group_alias" => $res["Data"],
-                    "created_at" =>time()
+                $wxRobotGroupModel = new WxRobotGroupModel();
+                $wxRobotGroupModel->uid = $this->uid;
+                $wxRobotGroupModel->name = $this->name;
+                $wxRobotGroupModel->group_alias = $res["Data"];
+                $wxRobotGroupModel->save();
+                (new WxRobotToGroupModel())->insert([
+                    "robot_id" => $this->robotId,
+                    "group_id" => $wxRobotGroupModel->getQueueableId()
                 ]);
                 // 入群通知
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$res["Data"]],
-                    "content" => "大家好，我是『自购省钱，分享赚钱』的小助手~",
-                    "wxId" => $this->wxid
+                    "content" => "大家好，我是『自购省钱，分享赚钱』的小助手,我将分享许多的优惠商品给大家~",
+                    "wxId" => $wxRobotModel->wxid
                 ]);
                 return [];
             }
