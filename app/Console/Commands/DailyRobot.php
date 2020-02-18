@@ -63,28 +63,32 @@ class DailyRobot extends Command
                         }
                     ])
                     ->getHump();
+                $wxRobotGoodsModel = (new WxRobotGoodsModel())->where('status',0)->firstHump();
+                $couponPrice = bcsub($wxRobotGoodsModel["currentPrice"],$wxRobotGoodsModel["couponDiscount"],2);
+                foreach ($wxRobotGroupModel as $item){
+                    $uids[] = $item["hasManyRobotToGroupModel"][0]["hasOneWxRobotModel"]["uid"];
+                }
+                $userBaseModel = (new UserBaseModel())->select("uid","p_id")->whereIn("uid",array_unique($uids))->getHump();
+                foreach ($userBaseModel as $item){
+                    $params = ["p_id" => $item["pId"], "goods_id_list" => json_encode([$wxRobotGoodsModel["itemid"]])];
+                    $generate = DuoduoInterface::getInstance($params)->request('pdd.ddk.goods.promotion.url.generate');
+                    $generateLists[$item["uid"]] = $generate["goods_promotion_url_generate_response"]["goods_promotion_url_list"];
+                }
                 foreach ($wxRobotGroupModel as $item){
                     foreach ($item["hasManyRobotToGroupModel"] as $v){
-                        $userBaseModel = (new UserBaseModel())->where("uid",$v["hasOneWxRobotModel"]["uid"])->firstHump()->toArray();
-                        $wxRobotGoodsModel = (new WxRobotGoodsModel())->where('status',0)->firstHump();
-                        $couponPrice = bcsub($wxRobotGoodsModel["currentPrice"],$wxRobotGoodsModel["couponDiscount"],2);
-                        $params = ["p_id" => $userBaseModel["pId"], "goods_id_list" => json_encode([$wxRobotGoodsModel["itemid"]])];
-                        $generate = DuoduoInterface::getInstance($params)->request('pdd.ddk.goods.promotion.url.generate');
-                        $generateLists = $generate["goods_promotion_url_generate_response"]["goods_promotion_url_list"];
-                        foreach ($generateLists as $key => $list){
-                            //  发送微信文本消息
-                            (new MessageLogic())->sendTxtMessage([
-                                "toWxIds" => [$item["groupAlias"]],
-                                "content" => '『拼夕夕』' . $wxRobotGoodsModel["name"] . "\n【原价】￥{$wxRobotGoodsModel["currentPrice"]} \n【限时抢券后价】￥{$couponPrice}\n------------------\n【购买链接】{$list["short_url"]}\n【购买方式】点击『购买链接』即可领券下单",
-                                "wxId" => $v["hasOneWxRobotModel"]["wxid"]
-                            ]);
-                            // 发送微信图片消息
-                            (new MessageLogic())->sendImageMessage([
-                                "toWxIds" => [$item["groupAlias"]],
-                                "imgUrl" => $wxRobotGoodsModel["picUrl"],
-                                "wxId" => $v["hasOneWxRobotModel"]["wxid"]
-                            ]);
-                        }
+                        $shortUrl = $generateLists[$v["hasOneWxRobotModel"]["uid"]][0]["short_url"];
+                        //  发送微信文本消息
+                        (new MessageLogic())->sendTxtMessage([
+                            "toWxIds" => [$item["groupAlias"]],
+                            "content" => '『拼夕夕』' . $wxRobotGoodsModel["name"] . "\n【原价】￥{$wxRobotGoodsModel["currentPrice"]} \n【限时抢券后价】￥{$couponPrice}\n------------------\n【购买链接】{$shortUrl}\n【购买方式】点击『购买链接』即可领券下单",
+                            "wxId" => $v["hasOneWxRobotModel"]["wxid"]
+                        ]);
+                        // 发送微信图片消息
+                        (new MessageLogic())->sendImageMessage([
+                            "toWxIds" => [$item["groupAlias"]],
+                            "imgUrl" => $wxRobotGoodsModel["picUrl"],
+                            "wxId" => $v["hasOneWxRobotModel"]["wxid"]
+                        ]);
                     }
                 }
                 (new WxRobotGoodsModel())->where("robot_goods_id",$wxRobotGoodsModel["robotGoodsId"])->update(["status" => 1]);
