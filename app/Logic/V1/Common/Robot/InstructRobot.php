@@ -63,9 +63,9 @@ class InstructRobot
                     // 判断是否申请微信机器人
                     $applyRobot = Redis::get("applyRobot:" . $list["FromUserName"]["String"]);
                     $info = explode(":", $list["PushContent"]);
-                    $codeIsExist = (new UserBaseModel())->where(["invitation_code" => mb_substr($info[1], 6)])->firstHump();
+                    $userBaseModel = (new UserBaseModel())->where(["invitation_code" => mb_substr($info[1], 6)])->firstHump();
                     $userToRobotModel = (new UserToRobotModel())->where(["wxid" => $list["FromUserName"]["String"]])->firstHump();
-                    if (empty($codeIsExist))  {
+                    if (empty($userBaseModel))  {
                         $content = "你输入的上级邀请码不存在，请查证之后再输入";
                     } elseif (!empty($applyRobot) && empty($userToRobotModel)){
                         $invitationCode = CreateUnion::invitation_code(6);

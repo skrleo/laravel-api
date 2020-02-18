@@ -5,7 +5,9 @@ namespace App\Console\Commands;
 use App\Libraries\classes\DuoduoUnion\DuoduoInterface;
 use App\Logic\V1\Admin\Robot\MessageLogic;
 use App\Model\V1\Order\WxRobotOrderModel;
+use App\Model\V1\Robot\WxRobotModel;
 use App\Model\V1\User\UserBaseModel;
+use App\Model\V1\User\UserToRobotModel;
 use App\Model\V1\User\UserWalletsModel;
 use Illuminate\Console\Command;
 
@@ -92,13 +94,16 @@ class OneMinutePddOrder extends Command
         foreach ($orderDatas as $uid => $lists){
             // 更新个人账户收益
             $userWalletsModel = (new UserWalletsModel())->firstOrCreate(["uid" => $uid]);
+            $userToRobotModel = (new UserToRobotModel())->where("uid",$uid)->firstHump()->toArray();
+            // 待改进 （应是平台机器人对应用户微信号）
+            $wxRobotModel = (new WxRobotModel())->where("uid",$uid)->firstHump()->toArray();
             foreach ($lists as $item){
                 $userWalletsModel->increment("balance",$item["promotion_amount"]);
                 // 发送微信消息提醒
                 (new MessageLogic())->sendTxtMessage([
-                    "toWxIds" => ["wxid_ibhxst4mklvj22"],
+                    "toWxIds" => [$userToRobotModel["wxid"]],
                     "content" => "恭喜你，又有一笔购物收入！订单号{$item["order_sn"]},预计收入{$item["promotion_amount"]}元~",
-                    "wxId" => "wxid_jn6rqr7sx35322"
+                    "wxId" => $wxRobotModel["wxid"]
                 ]);
             }
             // 插入订单数据

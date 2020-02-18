@@ -70,7 +70,7 @@ class RobotGoodsLogic extends BaseLogic
             $data[$key]["pic_url"] = $list["goods_thumbnail_url"];
             $data[$key]["thumb_url"] = $list["goods_image_url"];
             $data[$key]["coupon_discount"] = $list["coupon_discount"];
-            $data[$key]["current_price"] = $list["min_normal_price"];
+            $data[$key]["current_price"] = $list["min_group_price"];
         }
         (new WxRobotGoodsModel())->insert($data);
         return true;
