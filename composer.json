@@ -42,7 +42,8 @@
             "Lib\\": "app/Libraries/classes"
         },
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "app/Libraries/classes/OpenTaobao/TopSdk.php"
         ]
     },
     "autoload-dev": {

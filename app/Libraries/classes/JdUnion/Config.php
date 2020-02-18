@@ -56,7 +56,9 @@ class Config
             // 商品类目查询
             'category' => 'jd.union.open.category.goods.get',
             // 优惠券领取情况查询接口
-            'coupon' => 'jd.union.open.coupon.query'
+            'coupon' => 'jd.union.open.coupon.query',
+            // 优惠券领取情况查询接口
+            'promotion' => 'jd.union.open.promotion.common.get'
         ];
     }
 
