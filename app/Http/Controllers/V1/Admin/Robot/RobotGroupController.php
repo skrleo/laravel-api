@@ -50,14 +50,15 @@ class RobotGroupController extends Controller
     }
 
     /**
+     * @param $robotGroupId
      * @return array
+     * @throws \App\Logic\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      */
-    public function setStatus()
+    public function setStatus($robotGroupId)
     {
-        $this->validate(null, [
+        $this->validate(["robotGroupId"=>$robotGroupId], [
             'robotGroupId' => 'required|integer',
             'status' => 'required|integer'
         ]);
@@ -76,9 +77,9 @@ class RobotGroupController extends Controller
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
-    public function destroy()
+    public function destroy($robotGroupId)
     {
-        $this->validate(null, [
+        $this->validate(["robotGroupId"=>$robotGroupId], [
             'robotGroupId' => 'required|integer'
         ]);
         $robotGroupLogic = new RobotGroupLogic();

@@ -9,12 +9,12 @@
 namespace App\Logic\V1\Admin\Robot;
 
 
+use App\Logic\Exception;
 use App\Logic\V1\Admin\Base\BaseLogic;
 use App\Model\V1\Robot\WxRobotGroupModel;
 use App\Model\V1\Robot\WxRobotModel;
 use App\Model\V1\Robot\WxRobotToGroupModel;
 use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
-use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Support\Facades\Log;
@@ -30,6 +30,10 @@ class RobotGroupLogic extends BaseLogic
     protected $robotId;
 
     public $uid;
+
+    public $robotGroupId;
+
+    public $status;
 
     public function lists()
     {
@@ -64,15 +68,18 @@ class RobotGroupLogic extends BaseLogic
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"]) {
-                $wxRobotGroupModel = new WxRobotGroupModel();
-                $wxRobotGroupModel->uid = $this->uid;
-                $wxRobotGroupModel->name = $this->name;
-                $wxRobotGroupModel->group_alias = $res["Data"];
-                $wxRobotGroupModel->save();
-                (new WxRobotToGroupModel())->insert([
-                    "robot_id" => $this->robotId,
-                    "group_id" => $wxRobotGroupModel->getQueueableId()
-                ]);
+                $wxRobotGroupModel = (new WxRobotGroupModel())->where("group_alias",$res["Data"])->firstHump();
+                if (empty($wxRobotGroupModel)){
+                    $wxRobotGroupModel = (new WxRobotGroupModel());
+                    $wxRobotGroupModel->uid = $this->uid;
+                    $wxRobotGroupModel->name = $this->name;
+                    $wxRobotGroupModel->group_alias = $res["Data"];
+                    $wxRobotGroupModel->save();
+                    (new WxRobotToGroupModel())->insert([
+                        "robot_id" => $this->robotId,
+                        "group_id" => $wxRobotGroupModel->getQueueableId()
+                    ]);
+                }
                 // 入群通知
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$res["Data"]],
@@ -85,5 +92,40 @@ class RobotGroupLogic extends BaseLogic
         } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }
+    }
+
+    /**
+     * 设置群状态
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function setStatus()
+    {
+        $wxRobotGroupModel = (new WxRobotGroupModel())->where("robot_group_id",$this->robotGroupId)->firstHump();
+        if (empty($wxRobotGroupModel)){
+            throw new Exception("该微信群不存在","NOT_FIND_GROUP");
+        }
+        $wxRobotGroupModel->status = $this->status;
+        if (!$wxRobotGroupModel->save()){
+            throw new Exception("修改微信群状态失败","UPDATE_GROUP_STATUS_FAIL");
+        }
+        return true;
+    }
+
+    /**
+     * @return bool
+     * @throws Exception
+     */
+    public function destroy()
+    {
+        $wxRobotGroupModel = (new WxRobotGroupModel())->where("robot_group_id",$this->robotGroupId)->firstHump();
+        if (empty($wxRobotGroupModel)){
+            throw new Exception("该微信群不存在","NOT_FIND_GROUP");
+        }
+        if (!$wxRobotGroupModel->delete()){
+            throw new Exception("删除微信群失败","DELETE_GROUP_FAIL");
+        }
+        return true;
     }
 }
