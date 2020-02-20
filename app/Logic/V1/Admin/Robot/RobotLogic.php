@@ -9,9 +9,9 @@
 namespace App\Logic\V1\Admin\Robot;
 
 
+use App\Logic\Exception;
 use App\Logic\V1\Admin\Base\BaseLogic;
 use App\Model\V1\Robot\WxRobotModel;
-use DdvPhp\DdvUtil\Exception;
 use DdvPhp\DdvUtil\Laravel\EloquentBuilder;
 
 class RobotLogic extends BaseLogic
@@ -46,8 +46,45 @@ class RobotLogic extends BaseLogic
     {
         $wxRobotModel = (new WxRobotModel())->where('id',$this->id)->firstHump();
         if (empty($wxRobotModel)){
-            throw new Exception('该机器人不存在','ROBOT_NOT_FIND');
+            throw new Exception('该微信号不存在','ROBOT_NOT_FIND');
         }
         return $wxRobotModel;
+    }
+
+    /***
+     * 修改微信机器人状态
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function setStatus()
+    {
+        $wxRobotModel = (new WxRobotModel())->where('id',$this->id)->firstHump();
+        if (empty($wxRobotModel)){
+            throw new Exception('该微信号不存在','ROBOT_NOT_FIND');
+        }
+        $wxRobotModel->status = $this->status;
+        if (!$wxRobotModel->save()){
+            throw new Exception("修改微信状态失败","UPDATE_STATUS_FAIL");
+        }
+        return true;
+    }
+
+    /**
+     * 删除微信机器人
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function destroy()
+    {
+        $wxRobotModel = (new WxRobotModel())->where('id',$this->id)->firstHump();
+        if (empty($wxRobotModel)){
+            throw new Exception('该微信号不存在','ROBOT_NOT_FIND');
+        }
+        if (!$wxRobotModel->delete()){
+            throw new Exception("删除微信失败","DELETE_ROBOT_FAIL");
+        }
+        return true;
     }
 }

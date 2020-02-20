@@ -45,4 +45,40 @@ class RobotController extends Controller
             "data" => $robotLogic->show()
         ];
     }
+
+    /**
+     * @param $id
+     * @return array
+     * @throws \App\Logic\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function setStatus($id){
+        $this->validate(['id' => $id], [
+            'id' => 'required|integer'
+        ]);
+        $robotLogic = new RobotLogic();
+        $robotLogic->load($this->verifyData);
+        if ($robotLogic->setStatus()){
+            return [];
+        }
+    }
+
+    /**
+     * @param $id
+     * @return array
+     * @throws \App\Logic\Exception
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \ReflectionException
+     */
+    public function destroy($id){
+        $this->validate(['id' => $id], [
+            'id' => 'required|integer'
+        ]);
+        $robotLogic = new RobotLogic();
+        $robotLogic->load($this->verifyData);
+        if ($robotLogic->destroy()){
+            return [];
+        }
+    }
 }

@@ -292,29 +292,37 @@ Route::group([
                 // 命名空间前缀
                 'namespace'=>'Robot'
             ],function(){
-
+                // 微信列表
                 Route::get('lists', 'RobotController@lists');
-
+                // 详情
                 Route::get('/{id}', 'RobotController@show');
+                // 修改状态
+                Route::put('/{id}', 'RobotController@setStatus');
+                // 删除微信
+                Route::delete('/{id}', 'RobotController@destroy');
 
                 Route::group([
                     'prefix'=>'goods',
                 ],function(){
-
+                    // 待发商品列表
                     Route::get('lists', 'RobotGoodsController@lists');
-
+                    // 更新商品
                     Route::get('syncGoods', 'RobotGoodsController@syncGoods');
-
+                    // 添加商品
                     Route::post('/', 'RobotGoodsController@store');
                 });
 
                 Route::group([
                     'prefix'=>'group',
                 ],function(){
-
+                    // 微信群列表
                     Route::get('lists', 'RobotGroupController@lists');
-
+                    // 添加微信群
                     Route::post('/', 'RobotGroupController@store');
+                    // 设置微信状态
+                    Route::put('/setStatus', 'RobotGroupController@setStatus');
+                    // 删除微信群
+                    Route::delete('/', 'RobotGroupController@destroy');
                 });
 
                 Route::group([
@@ -325,6 +333,8 @@ Route::group([
                     Route::get('getQrCode', 'LoginController@getQrCode');
                     // 检查是否登录
                     Route::post('checkLogin', 'LoginController@checkLogin');
+                    // 62 数据登录
+                    Route::post('data62Login', 'LoginController@data62Login');
                     // 退出登录
                     Route::post('loginOut', 'LoginController@loginOut');
                 });
