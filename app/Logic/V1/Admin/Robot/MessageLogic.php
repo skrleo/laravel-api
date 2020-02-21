@@ -8,6 +8,8 @@
 
 namespace App\Logic\V1\Admin\Robot;
 
+use App\Logic\Exception;
+use App\Model\V1\Robot\WxRobotModel;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use App\Logic\V1\Admin\Base\BaseLogic;
@@ -29,6 +31,11 @@ class MessageLogic extends BaseLogic
         try {
             $res = $client->request('POST', 'http://114.55.164.90:1697/api/Sync/Message/'. $wxId);
             $res = json_decode($res->getBody()->getContents(),true);
+            if ($res["Code"] == 401 && $res["Success"] == false){
+                // 更新微信状态
+                (new WxRobotModel())->where("wxid",$wxId)->update(["status" => 0]);
+                throw new Exception("用户可能退出,请重新登陆","USER_IS_LOGIN_OUT");
+            }
             return $res["Data"]["AddMsgs"];
         } catch(\Throwable $e) {
             Log::info('Fail to call api');

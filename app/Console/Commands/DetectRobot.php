@@ -6,6 +6,7 @@ use App\Libraries\classes\JdUnion\FormatData;
 use App\Libraries\classes\JdUnion\JdInterface;
 use App\Logic\V1\Admin\Robot\MessageLogic;
 use App\Logic\V1\Common\Robot\InstructRobot;
+use App\Model\V1\Robot\WxRobotModel;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -42,17 +43,19 @@ class DetectRobot extends Command
     public function handle()
     {
         for ($i = 1; $i <= 20; $i++) {
-            $wxId = "wxid_jn6rqr7sx35322";
-            $lists = (new MessageLogic())->syncMessage($wxId);
-            foreach ($lists as $list) {
-                // 机器人指令
-                InstructRobot::basePoint($list, $wxId);
-                // 机器人群管理
-                InstructRobot::groupPoint($list, $wxId);
-                // 是否有新的好友
-                InstructRobot::friendVerify($list, $wxId);
+            $wxRobotModel = (new WxRobotModel())->where("status",0)->get()->toArray();
+            foreach ($wxRobotModel as $item){
+                $lists = (new MessageLogic())->syncMessage($item["wxid"]);
+                foreach ($lists as $list) {
+                    // 机器人指令
+                    InstructRobot::basePoint($list, $item["wxid"]);
+                    // 机器人群管理
+                    InstructRobot::groupPoint($list, $item["wxid"]);
+                    // 是否有新的好友
+                    InstructRobot::friendVerify($list, $item["wxid"]);
+                }
+                sleep(3);
             }
-            sleep(3);
         }
     }
 }
