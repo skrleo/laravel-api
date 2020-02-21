@@ -25,6 +25,10 @@ class LoginLogic extends BaseLogic
 
     protected $wxId = '';
 
+    protected $userName;
+
+    protected $password;
+
     /**
      * 获取QRCode
      *
@@ -41,6 +45,42 @@ class LoginLogic extends BaseLogic
                 throw new Exception($res["Message"],'PROXY_TIME_OUT');
             }
             return $res["Data"];
+    }
+
+    /**
+     * 62 数据登录
+     *
+     * @return array|bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function data62Login()
+    {
+        $client = new Client();
+        try {
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/Get62Data/'. $this->wxId);
+            $res = json_decode($res->getBody()->getContents(), true);
+            if ($res["Success"]) {
+                $client = new Client();
+                $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/Data62Login', [
+                    'form_params' => [
+                        "userName" => $this->userName,
+                        "password" => $this->password,
+                        "data62" => $res["Data"],
+                        "proxyIp" => "113.94.123.53:4287",
+                        "proxyUserName" => "zhima",
+                        "proxyPassword" => "zhima",
+                    ]
+                ]);
+                $res = json_decode($res->getBody()->getContents(), true);
+                if ($res["Success"]) {
+                    return true;
+                }
+                return ["code" => $res["Code"], "message" => $res['Message']];
+            }
+            return ["code" => $res["Code"], "message" => $res['Message']];
+        } catch (\Throwable $e) {
+            Log::info('Fail to call api');
+        }
     }
 
     /**

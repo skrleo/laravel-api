@@ -12,6 +12,8 @@ namespace App\Logic\V1\Common\Robot;
 use App\Libraries\classes\CreateUnion;
 use App\Logic\V1\Admin\Robot\FriendLogic;
 use App\Logic\V1\Admin\Robot\MessageLogic;
+use App\Model\V1\Robot\WxRobotGroupModel;
+use App\Model\V1\Robot\WxRobotToGroupModel;
 use App\Model\V1\User\UserBaseModel;
 use App\Model\V1\User\UserToRobotModel;
 use App\Model\V1\User\UserWalletsModel;
@@ -186,7 +188,9 @@ class InstructRobot
      */
     public static function groupPoint($list, $wxId)
     {
+        if (strpos($list["FromUserName"]["String"], '@chatroom')) {
 
+        }
     }
 
     /**

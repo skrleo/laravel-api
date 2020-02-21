@@ -320,9 +320,9 @@ Route::group([
                     // 添加微信群
                     Route::post('/', 'RobotGroupController@store');
                     // 设置微信状态
-                    Route::put('/setStatus', 'RobotGroupController@setStatus');
+                    Route::put('/{id}', 'RobotGroupController@setStatus');
                     // 删除微信群
-                    Route::delete('/', 'RobotGroupController@destroy');
+                    Route::delete('/{id}', 'RobotGroupController@destroy');
                 });
 
                 Route::group([
