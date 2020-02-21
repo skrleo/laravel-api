@@ -198,10 +198,10 @@ class UserLogic extends BaseLogic
                 ]
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
-            if ($res["Success"]){
-                return ["data" => $res["Data"]];
+            if ($res["Success"] == false){
+                return ["code" => $res["Code"],"message" => $res["Message"]];
             }
-            return ["code" => $res["Code"],"message" => $res["Message"]];
+            return ["data" => $res["Data"]];
         } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }

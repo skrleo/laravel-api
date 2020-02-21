@@ -49,6 +49,8 @@ class RobotGoodsLogic extends BaseLogic
 //                $query->where('uid',$this->uid);
 //            })
             ->latest('created_at')
+            ->latest('robot_goods_id')
+            ->oldest('status')
             ->getDdvPage();
         return $res->toHump();
     }
