@@ -308,8 +308,12 @@ Route::group([
                     Route::get('lists', 'RobotGoodsController@lists');
                     // 更新商品
                     Route::get('syncGoods', 'RobotGoodsController@syncGoods');
-                    // 添加商品
+                    // 添加商品changeSort
                     Route::post('/', 'RobotGoodsController@store');
+                    // 删除商品
+                    Route::delete('/{id}', 'RobotGoodsController@destroy');
+                    // 修改商品排序
+                    Route::put('/changeSort', 'RobotGoodsController@changeSort');
                 });
 
                 Route::group([

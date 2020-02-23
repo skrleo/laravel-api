@@ -21,7 +21,7 @@ class RobotGoodsController extends Controller
      */
     public function lists(){
         $this->validate(null,  [
-            'robotGoodsId' => 'required|integer'
+//            'robotGoodsId' => 'required|integer'
         ]);
         $robotGoodsLogic = new RobotGoodsLogic();
         $robotGoodsLogic->load($this->verifyData);
@@ -88,27 +88,40 @@ class RobotGoodsController extends Controller
     }
 
     /**
-     * @param $messageId
+     * @param $robotGoodsId
      * @return array
-     * @throws \App\Model\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \DdvPhp\DdvUtil\Exception
      * @throws \ReflectionException
      */
     public function destroy($robotGoodsId){
         $this->validate(['robotGoodsId' => $robotGoodsId], [
-            'itemid' => 'required|string',
-            'robotId' => 'required|integer',
-            'type' => 'required|integer',
-            'name' => 'required|string',
-            'description' => 'required',
-            'picUrl' => 'required|string',
-            'thumbUrl' => 'required',
-            'currentPrice' => 'required|string',
-            'couponPrice' => 'required|string',
+            'robotGoodsId' => 'required|integer'
         ]);
         $robotGoodsLogic = new RobotGoodsLogic();
         $robotGoodsLogic->load($this->verifyData);
         if ($robotGoodsLogic->destroy()){
+            return [];
+        }
+    }
+
+    /**
+     * 修改商品排序
+     *
+     * @param $robotGoodsId
+     * @return array
+     * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
+     * @throws \DdvPhp\DdvUtil\Exception
+     * @throws \ReflectionException
+     */
+    public function changeSort(){
+        $this->validate(null, [
+            'robotGoodsId' => 'required|integer',
+            'sort' => 'required|integer',
+        ]);
+        $robotGoodsLogic = new RobotGoodsLogic();
+        $robotGoodsLogic->load($this->verifyData);
+        if ($robotGoodsLogic->changeSort()){
             return [];
         }
     }

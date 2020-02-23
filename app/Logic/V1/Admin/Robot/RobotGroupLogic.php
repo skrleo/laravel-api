@@ -102,7 +102,7 @@ class RobotGroupLogic extends BaseLogic
      */
     public function setStatus()
     {
-        $wxRobotGroupModel = (new WxRobotGroupModel())->where("robot_group_id",$this->robotGroupId)->firstHump();
+        $wxRobotGroupModel = (new WxRobotGroupModel())->where("robot_group_id",$this->robotGroupId)->first();
         if (empty($wxRobotGroupModel)){
             throw new Exception("该微信群不存在","NOT_FIND_GROUP");
         }
