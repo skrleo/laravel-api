@@ -8,11 +8,8 @@
 
 namespace App\Logic\V1\Admin\Robot;
 
-
 use App\Libraries\classes\DuoduoUnion\DuoduoInterface;
-//use App\Libraries\classes\DuoduoUnion\FormatData;
-use App\Libraries\classes\JdUnion\FormatData;
-use App\Libraries\classes\JdUnion\JdInterface;
+use App\Libraries\classes\DuoduoUnion\FormatData;
 use App\Logic\V1\Admin\Base\BaseLogic;
 use App\Model\V1\Robot\WxRobotGoodsModel;
 use DdvPhp\DdvUtil\Exception;
@@ -42,6 +39,8 @@ class RobotGoodsLogic extends BaseLogic
 
     protected $sort;
 
+    protected $status;
+
     /**
      * @return \DdvPhp\DdvPage
      */
@@ -49,13 +48,12 @@ class RobotGoodsLogic extends BaseLogic
     {
         $res = (new WxRobotGoodsModel())
 //            ->where("robot_id",$this->robotId)
-//            ->when(!empty($this->uid),function (EloquentBuilder $query){
-//                $query->where('uid',$this->uid);
-//            })
+            ->when(isset($this->status),function (EloquentBuilder $query){
+                $query->where('status',$this->status);
+            })
             ->latest('sort')
             ->latest('created_at')
             ->latest('robot_goods_id')
-            ->oldest('status')
             ->getDdvPage();
         return $res->toHump();
     }
@@ -65,28 +63,19 @@ class RobotGoodsLogic extends BaseLogic
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function syncGoods(){
-//        $data = DuoduoInterface::getInstance($params = [])->request('pdd.ddk.top.goods.list.query');
-//        $lists = FormatData::getInit()->headleOptional($data["top_goods_list_get_response"]["list"]);
-        $param = ["methodType" => 'promotion'];
-        $data = [
-            'materialId' => "https://item.jd.com/23484023378.html",
-            'siteId' => 138815
-        ];
-        $param["param_json"]["promotionCodeReq"] = $data;
-
-        $data = JdInterface::getInstance($param)->setRequestParam()->execute();
-        $lists = FormatData::getInit()->headleOptional($data["data"]);
+        $data = DuoduoInterface::getInstance($params = [])->request('pdd.ddk.top.goods.list.query');
+        $lists = FormatData::getInit()->headleOptional($data["top_goods_list_get_response"]["list"]);
         $data = [];
         foreach ($lists as $key => $list){
-            $data[$key]["itemid"] = $list["sku_id"];
+            $data[$key]["itemid"] = $list["goods_id"];
             $data[$key]["robot_id"] = 2;
-            $data[$key]["type"] = 2;
+            $data[$key]["type"] = 1;
             $data[$key]["name"] = $list["goods_name"];
             $data[$key]["description"] = $list["goods_desc"];
-            $data[$key]["pic_url"] = $list["goods_thumbnail_url"];
-            $data[$key]["thumb_url"] = $list["goods_image_url"];
+            $data[$key]["thumb_url"] = $list["goods_thumbnail_url"];
             $data[$key]["coupon_discount"] = $list["coupon_discount"];
             $data[$key]["current_price"] = $list["min_group_price"];
+            $data[$key]["created_at"] = time();
         }
         (new WxRobotGoodsModel())->insert($data);
         return true;

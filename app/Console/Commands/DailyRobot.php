@@ -63,7 +63,8 @@ class DailyRobot extends Command
                         }
                     ])
                     ->getHump();
-                $wxRobotGoodsModel = (new WxRobotGoodsModel())->where('status',0)->firstHump();
+                $wxRobotGoodsModel = (new WxRobotGoodsModel())->latest('sort')
+                    ->latest('created_at')->where('status',0)->firstHump();
                 $couponPrice = bcsub($wxRobotGoodsModel["currentPrice"],$wxRobotGoodsModel["couponDiscount"],2);
                 foreach ($wxRobotGroupModel as $item){
                     $uids[] = $item["hasManyRobotToGroupModel"][0]["hasOneWxRobotModel"]["uid"];
@@ -86,7 +87,7 @@ class DailyRobot extends Command
                         // 发送微信图片消息
                         (new MessageLogic())->sendImageMessage([
                             "toWxIds" => [$item["groupAlias"]],
-                            "imgUrl" => $wxRobotGoodsModel["picUrl"],
+                            "imgUrl" => $wxRobotGoodsModel["thumbUrl"],
                             "wxId" => $v["hasOneWxRobotModel"]["wxid"]
                         ]);
                     }
