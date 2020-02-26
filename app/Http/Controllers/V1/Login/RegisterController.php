@@ -13,13 +13,16 @@ use App\Logic\V1\Login\RegisterLogic;
 class RegisterController extends Controller
 {
     /**
+     * 用户注册
+     *
      * @return array
+     * @throws \App\Logic\Exception
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \ReflectionException
      */
     public function register(){
         $this->validate(null, [
-            'account' => 'required|string',
+            'phone' => 'required|string',
             'password' => 'required|string',
             'headimg' => 'string',
             'name' => 'string',

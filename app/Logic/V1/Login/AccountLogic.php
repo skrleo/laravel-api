@@ -51,6 +51,9 @@ class AccountLogic extends LoadDataLogic
             })->orWhere(function ($query){
                 $query->where(["email" => $this->account,"password" => md5($this->password)]);
             })->first();
+        if (empty($userBaseModel)) {
+            throw new Exception('账号或密码错误', 'ACCOUNT_OR_PASSWORD_ERROR');
+        }
         if ($userBaseModel->status <> UserBaseModel::ACCOUNT_START_ENABLE){
             throw new Exception('账号异常,请联系管理员', 'ACCOUNT_ABNORMAL_ERROR');
         }
