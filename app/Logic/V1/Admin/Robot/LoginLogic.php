@@ -39,12 +39,12 @@ class LoginLogic extends BaseLogic
     public function getQrcode()
     {
         $client = new Client();
-            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/GetQrCode');
-            $res = json_decode($res->getBody()->getContents(), true);
-            if ($res["Success"] ==  false){
-                throw new Exception($res["Message"],'PROXY_TIME_OUT');
-            }
-            return $res["Data"];
+        $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/GetQrCode');
+        $res = json_decode($res->getBody()->getContents(), true);
+        if ($res["Success"] == false) {
+            throw new Exception($res["Message"], 'PROXY_TIME_OUT');
+        }
+        return $res["Data"];
     }
 
     /**
@@ -57,7 +57,7 @@ class LoginLogic extends BaseLogic
     {
         $client = new Client();
         try {
-            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/Get62Data/'. $this->wxId);
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/Get62Data/' . $this->wxId);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"]) {
                 $client = new Client();
@@ -98,13 +98,14 @@ class LoginLogic extends BaseLogic
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
             if ($res["Success"]) {
-                if (empty($res["Data"]["WxId"])){
+                if (empty($res["Data"]["WxId"])) {
                     return ["code" => "402", "message" => "等待微信扫描"];
                 }
                 // 更新微信信息
+                $accountData = $this->newInit($res["Data"]["WxId"]);
                 (new WxRobotModel())->checkWxInfo($res["Data"]);
-                $heartBeatState = $this->stateHeartBeat($res["Data"]["WxId"]);
-                return ["data" => array_merge($res["Data"],$heartBeatState)];
+                $heartBeatState = array_merge($this->stateHeartBeat($res["Data"]["WxId"]), $res["Data"]);
+                return ["data" => array_merge($accountData["ModUserInfos"][0], $heartBeatState)];
             }
             return ["code" => $res["Code"], "message" => $res['Message']];
         } catch (\Throwable $e) {
@@ -124,11 +125,11 @@ class LoginLogic extends BaseLogic
         try {
             $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/LogOut/' . $this->wxId);
             $res = json_decode($res->getBody()->getContents(), true);
-            if ($res["Success"]){
-                (new WxRobotModel())->where("wxid",$this->wxId)->update(["status" => 0]);
+            if ($res["Success"]) {
+                (new WxRobotModel())->where("wxid", $this->wxId)->update(["status" => 0]);
                 return ["data" => $res["Data"]];
             }
-            return ["code" => $res["Code"],"message" => $res["Message"]];
+            return ["code" => $res["Code"], "message" => $res["Message"]];
         } catch (\Throwable $e) {
             Log::info('Fail to call api');
         }
@@ -215,23 +216,20 @@ class LoginLogic extends BaseLogic
     }
 
     /**
-     * 初始化用户
+     * 初始化用户数据
      *
-     * @return mixed|\Psr\Http\Message\ResponseInterface|string
+     * @param $wxId
+     * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function newInit()
+    public function newInit($wxId)
     {
         $client = new Client();
-        try {
-            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/NewInit', [
-                'form_params' => ["wxId" => $this->wxId]
-            ]);
-            $res = $res->getBody()->getContents();
-            return $res;
-        } catch (\Throwable $e) {
-            Log::info('Fail to call api');
-        }
+        $res = $client->request('POST', 'http://114.55.164.90:1697/api/Login/NewInit/'.$wxId, [
+            'form_params' => ["WxId" => $wxId]
+        ]);
+        $res = json_decode($res->getBody()->getContents(), true);
+        return $res["Data"];
     }
 
 

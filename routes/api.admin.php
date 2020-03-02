@@ -348,7 +348,7 @@ Route::group([
                     'prefix'=>'user',
                 ],function(){
                     // 修改头像
-                    Route::post('state', 'UserController@updateHeadImage');
+                    Route::post('updateHeadImage', 'UserController@updateHeadImage');
                     // 修改资料
                     Route::post('updateProfile', 'UserController@updateProfile');
                     // 设置微信号

@@ -25,7 +25,8 @@ class UserController extends Controller
     public function updateHeadImage()
     {
         $this->validate(null, [
-            'wxId' => 'required|string'
+            'wxId' => 'required|string',
+            'headImageUrl' => 'required|string',
         ]);
         $loginLogic = new UserLogic();
         $loginLogic->load($this->verifyData);

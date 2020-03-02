@@ -74,7 +74,7 @@ class FriendController extends Controller
     /**
      * 批量添加好友
      *
-     * @return array
+     * @return bool
      * @throws \DdvPhp\DdvRestfulApi\Exception\RJsonError
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
@@ -87,8 +87,8 @@ class FriendController extends Controller
         ]);
         $friendLogic = new FriendLogic();
         $friendLogic->load($this->verifyData);
-        return [
-            'data' => $friendLogic->batchAddFriend()
-        ];
+        if ($friendLogic->batchAddFriend()) {
+            return true;
+        }
     }
 }
