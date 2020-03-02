@@ -211,7 +211,7 @@ class InstructRobot
                 //  发送微信文本消息
                 (new MessageLogic())->sendTxtMessage([
                     "toWxIds" => [$res["Data"]],
-                    "content" => "你已经加我为好友！",
+                    "content" => "您好，我是省钱小助手，我将教会大家自购省钱，分享赚钱的小窍门。回复 \"帮助\" 查询更多功能",
                     "wxId" => $wxId
                 ]);
             }

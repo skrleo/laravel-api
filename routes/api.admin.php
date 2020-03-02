@@ -389,6 +389,8 @@ Route::group([
                     Route::post('searchWxName', 'FriendController@searchWxName');
                     // 获取微信好友、群
                     Route::post('contractList', 'FriendController@contractList');
+                    // 批量添加好友
+                    Route::post('batchAddFriend', 'FriendController@batchAddFriend');
                 });
 
                 Route::group([

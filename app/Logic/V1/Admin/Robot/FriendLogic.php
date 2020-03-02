@@ -9,6 +9,7 @@
 namespace App\Logic\V1\Admin\Robot;
 
 
+use App\Logic\Exception;
 use App\Logic\V1\Admin\Base\BaseLogic;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
@@ -18,6 +19,8 @@ class FriendLogic extends BaseLogic
     protected $wxId;
 
     protected $searchWxName;
+
+    protected $friends = [];
 
     /**
      * @return mixed
@@ -97,6 +100,61 @@ class FriendLogic extends BaseLogic
         } catch(\Throwable $e) {
             Log::info('Fail to call api');
         }
+    }
+
+    /**
+     * 批量添加微信好友
+     *
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function batchAddFriend()
+    {
+        try {
+            $friendDates = $this->getFriendDetail($this->wxId,$this->friends);
+            $client = new Client();
+            $res = $client->request('POST', 'http://114.55.164.90:1697/api/Friend/AddFriendRequestList', [
+                'form_params' => [
+                    "content" => $this->content ?? '添加你为好友',
+                    "origin" => $this->origin ?? 3,
+                    "friends" => $friendDates,
+                    "wxId" => $this->wxId,
+                ]
+            ]);
+            $res =  json_decode($res->getBody()->getContents(), true);
+            if ($res["Success"] ==  false){
+                throw new Exception("添加微信好友失败","ADD_FRIEND_FAIL");
+            }
+            return true;
+        } catch(\Throwable $e) {
+            Log::info('Fail to call api');
+        }
+    }
+
+    /**
+     * 获取微信好友信息
+     *
+     * @param $wxId
+     * @param $friends
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getFriendDetail($wxId,$friends)
+    {
+        foreach ($friends as $key => $friend){
+            $client = new Client();
+            $res = $client->request('POST', "http://114.55.164.90:1697/api/Friend/SearchContract/{$wxId}/{$friend["account"]}", [
+                'form_params' => [
+                    "WxId" => $wxId,
+                    "SearchWxName" => $friend["account"]
+                ]
+            ]);
+            $res = json_decode($res->getBody()->getContents(), true);
+            $data[$key]["userNameV1"] = $res["Data"]["userName"]["string"];
+            $data[$key]["antispamTicket"] = $res["Data"]["antispamTicket"];
+            $data[$key]["origin"] = 3;
+        }
+        return $data;
     }
 
 }

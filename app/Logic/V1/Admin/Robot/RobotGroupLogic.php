@@ -51,6 +51,7 @@ class RobotGroupLogic extends BaseLogic
      *
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
      */
     public function store()
     {
