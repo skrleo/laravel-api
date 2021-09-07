@@ -13,13 +13,13 @@ return  array(
         //地区是深圳oss
         'region'      =>'cn-shenzhen',
         //bucket 地区的访问接口
-        'endpoint'      =>'http://oss-cn-shenzhen.aliyuncs.com',
+        'endpoint'      =>'',
         //默认cdn域名
-        'urlRoot'     =>'http://img.17wangku.com/',
+        'urlRoot'     =>'',
         //阿里云的api 授权id
-        'accessKeyId'   =>'LTAI6IHtbuqWFxic',
+        'accessKeyId'   =>'',
         //阿里云的api 授权key
-        'accessKeySecret' =>'mQBMlo4qulyYtnnBtguNZUpvtWstBn',
+        'accessKeySecret' =>'',
         //阿里云的api 授权角色
         'roleArn'      =>'',
         //生成授权信息的授权时间
