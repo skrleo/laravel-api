@@ -17,9 +17,9 @@ return  array(
         //默认cdn域名
         'urlRoot'     =>'http://img.17wangku.com/',
         //阿里云的api 授权id
-        'accessKeyId'   =>'LTAI6IHtbuqWFxic',
+        'accessKeyId'   =>'',
         //阿里云的api 授权key
-        'accessKeySecret' =>'mQBMlo4qulyYtnnBtguNZUpvtWstBn',
+        'accessKeySecret' =>'',
         //阿里云的api 授权角色
         'roleArn'      =>'',
         //生成授权信息的授权时间
